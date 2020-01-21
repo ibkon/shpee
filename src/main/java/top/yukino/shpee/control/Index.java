@@ -22,7 +22,8 @@ public class Index {
 			paths = root.listFiles();
 			for (File f : paths) {
 				for (File s : f.listFiles()) {
-					flist.add(s);
+					if(s.getPath().indexOf(".jpg")>0||s.getPath().indexOf(".png")>0||s.getPath().indexOf(".gif")>0)
+						flist.add(s);
 				}
 			}
 			Random random = new Random();
