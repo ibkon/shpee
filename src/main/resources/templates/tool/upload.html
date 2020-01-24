@@ -3,6 +3,8 @@
 
 <head>
 	<meta charset="UTF-8">
+	<meta name="_csrf" th:content="${_csrf.token}">
+	<meta name="_csrf_header" th:content="${_csrf.headerName}">
 	<title>upload</title>
 	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
 	<link rel="stylesheet" href="/layui/css/layui.css" media="all">
@@ -43,6 +45,11 @@
 			var $ = layui.jquery
 				, upload = layui.upload;
 			//普通图片上传
+			var token	= $("meta[name='_csrf']").attr("content");
+			var	header	= $("meta[name='_csrf_header']").attr("content");
+			$(document).ajaxSend(function(e,xhr,options){
+					xhr.setRequestHeader(header,token);
+			});
 			var uploadInst = upload.render({
 				elem: '#test1'
 				, url: '/upload/save' //改成您自己的上传接口

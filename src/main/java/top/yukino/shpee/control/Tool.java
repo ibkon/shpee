@@ -61,7 +61,6 @@ public class Tool {
 			fcache.mkdirs();
 		}
 		if(upfile==null) {
-			System.out.println("上传参数为空");
 			rmap.put("code",1);
 			rmap.put("msg","上传参数为空");
 			return rmap;
@@ -74,8 +73,8 @@ public class Tool {
 		while((length=in.read(buffer, 0, 0x4000))!=-1) {
 			out.write(buffer,0,length);
 		}
-		in.close();
 		out.close();
+		in.close();
 		rmap.put("code",0);
 		return rmap;
 	}

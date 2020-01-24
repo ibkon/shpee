@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 
 <head>
 	<meta charset="UTF-8">
 	<title>Index</title>
+	<meta name="viewport"
+		content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<link rel="icon" href="favicon.ico" type="image/x-icon" />
-	<link rel="stylesheet" href="layui/css/layui.css" media="all">
+	<link th:if="${device}=='mobile'" rel="stylesheet" href="layui/css/layui.mobile.css" media="all">
+	<link th:if="${device}=='comput'" rel="stylesheet" href="layui/css/layui.css" media="all">
 </head>
 
 <body>

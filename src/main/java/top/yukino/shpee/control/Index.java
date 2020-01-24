@@ -6,14 +6,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-public class Index {
+public class Index extends Super{
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String indexPage(Map<String, Object> map) {
+	public String indexPage(HttpServletRequest request, Map<String, Object> map) {
 		File root = new File("upload");
 		File[] paths = null;
 		if (root.exists()) {
@@ -22,7 +24,7 @@ public class Index {
 			paths = root.listFiles();
 			for (File f : paths) {
 				for (File s : f.listFiles()) {
-					if(s.getPath().indexOf(".jpg")>0||s.getPath().indexOf(".png")>0||s.getPath().indexOf(".gif")>0)
+					//if(s.getPath().indexOf(".jpg")>0||s.getPath().indexOf(".png")>0||s.getPath().indexOf(".gif")>0)
 						flist.add(s);
 				}
 			}
@@ -43,6 +45,13 @@ public class Index {
 			
 			map.put("imageList",clist);
 		}
+		if(request.getHeader("User-Agent").contains("iPhone")||request.getHeader("User-Agent").contains("Android")) {
+			map.put("device", "mobile");
+		}
+		else {
+			map.put("device","comput");
+		}
+		System.out.println(mapper.select("select * from test").toString());
 		return "index";
 	}
 }
