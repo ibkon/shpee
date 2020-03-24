@@ -26,10 +26,13 @@ public class Index extends Super {
 		String path, hash, type;
 		for (int i = 0; i < (3 > lMaps.size() ? lMaps.size() : 3); i++) {
 			mbuffer = lMaps.get(random.nextInt(lMaps.size()));
+			if(mbuffer==null)
+				break;
 			path = mbuffer.get("PATH").toString();
 			hash = mbuffer.get("HASH").toString();
 			type = mbuffer.get("TYPE").toString();
-			paths.add(path.replaceAll("upload", "static")+"/"+DigestUtils.md5Hex(hash)+"."+type);
+			paths.add(path.replaceAll("upload", "static")+"/"+DigestUtils.md5Hex(hash).toUpperCase()+"."+type);
+			lMaps.remove(mbuffer);
 		}
 
 		map.put("imageList", paths);
