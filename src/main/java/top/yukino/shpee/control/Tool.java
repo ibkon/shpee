@@ -9,15 +9,18 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+
 
 /***
  * 通用工具类
@@ -26,7 +29,8 @@ import org.springframework.web.multipart.MultipartFile;
  *
  */
 @Controller
-public class Tool {
+public class Tool extends Super{
+	private String	upLoadPath	="upload/";
 	/**
 	 * 文件上传页面
 	 * @param request
@@ -52,20 +56,30 @@ public class Tool {
 	@ResponseBody
 	@PostMapping("/upload/save")
 	public Map<String, Object> uploadSave(HttpServletRequest request,@RequestParam("file")MultipartFile upfile) throws IOException{
-		String				uploadPath			= "upload/";
-		SimpleDateFormat	simpleDateFormat	= new SimpleDateFormat("yyyy_MM_dd");
 		Map<String, Object> 	rmap	= new HashMap<>();
-		uploadPath	+= simpleDateFormat.format(new Date());
-		File				fcache				= new File(uploadPath);
-		if(!fcache.exists()) {
-			fcache.mkdirs();
-		}
 		if(upfile==null) {
 			rmap.put("code",1);
 			rmap.put("msg","上传参数为空");
 			return rmap;
 		}
-		fcache	= new File(uploadPath+"/"+upfile.getOriginalFilename());
+		//数据库表必备信息
+		String				uid		= UUID.randomUUID().toString().replaceAll("-", "").toUpperCase();
+		String				fileName= upfile.getOriginalFilename();
+		String				hash	= DigestUtils.sha256Hex(upfile.getInputStream()).toUpperCase();
+		String				type	= fileName.substring(fileName.lastIndexOf('.')+1);
+		Date				update	= new Date();
+		long				size	= upfile.getSize();
+		String				path	= this.upLoadPath + new SimpleDateFormat("yyyy_MM_dd").format(update);
+		
+		//根据年月日创建目录
+		File				fcache	= new File(path);
+		if(!fcache.exists()) {
+			fcache.mkdirs();
+		}
+		//文件保存前将信息存入数据库
+		mapper.insert("INSERT INTO T_UPLOAD(uid,name,hash,path,type,size,uptime,isdelete) values('"+
+		uid+"','"+fileName+"','"+hash+"','"+path+"','"+type+"',"+size+",'"+new java.sql.Timestamp(update.getTime())+"',0"+")");
+		fcache	= new File(path+"/"+DigestUtils.md5Hex(hash).toUpperCase()+"."+type);
 		InputStream		in		= upfile.getInputStream();
 		OutputStream	out		= new FileOutputStream(fcache);
 		byte[]			buffer	= new byte[0x4000];

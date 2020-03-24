@@ -1,57 +1,43 @@
 package top.yukino.shpee.control;
 
-import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-public class Index extends Super{
+public class Index extends Super {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String indexPage(HttpServletRequest request, Map<String, Object> map) {
-		File root = new File("upload");
-		File[] paths = null;
-		if (root.exists()) {
-			List<File> flist = new ArrayList<>();
-			List<String> clist = new ArrayList<>();
-			paths = root.listFiles();
-			for (File f : paths) {
-				for (File s : f.listFiles()) {
-					//if(s.getPath().indexOf(".jpg")>0||s.getPath().indexOf(".png")>0||s.getPath().indexOf(".gif")>0)
-						flist.add(s);
-				}
-			}
-			Random random = new Random();
-			int length = 0;
-			if(flist.size()>6) {
-				for (int i = 0; i < 7; i++) {
-					length = random.nextInt(flist.size());
-					clist.add(flist.get(length).getPath().replaceAll("upload", "static"));
-					flist.remove(length);
-				}
-			}
-			else {
-				for(int i=0;i<flist.size();i++) {
-					clist.add(flist.get(i).getPath().replaceAll("upload", "static"));
-				}
-			}
-			
-			map.put("imageList",clist);
+
+		List<Map<String, Object>> lMaps = mapper.select(
+				"SELECT path,hash,type FROM T_UPLOAD WHERE isdelete=0 AND (type='png' OR type='jpg' OR type='jpeg' OR type='gif') AND size<0x100000");
+		List<String> paths = new ArrayList<String>();
+		Map<String, Object> mbuffer = new HashMap<String, Object>();
+		Random random = new Random();
+		String path, hash, type;
+		for (int i = 0; i < (3 > lMaps.size() ? lMaps.size() : 3); i++) {
+			mbuffer = lMaps.get(random.nextInt(lMaps.size()));
+			path = mbuffer.get("PATH").toString();
+			hash = mbuffer.get("HASH").toString();
+			type = mbuffer.get("TYPE").toString();
+			paths.add(path.replaceAll("upload", "static")+"/"+DigestUtils.md5Hex(hash)+"."+type);
 		}
-		if(request.getHeader("User-Agent").contains("iPhone")||request.getHeader("User-Agent").contains("Android")) {
+
+		map.put("imageList", paths);
+		if (request.getHeader("User-Agent").contains("iPhone") || request.getHeader("User-Agent").contains("Android")) {
 			map.put("device", "mobile");
+		} else {
+			map.put("device", "comput");
 		}
-		else {
-			map.put("device","comput");
-		}
-		System.out.println(mapper.select("select * from test").toString());
 		return "index";
 	}
 }

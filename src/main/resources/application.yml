@@ -1,17 +1,27 @@
 server:
   port: 8080
+  address: 127.0.0.1
 spring:
   thymeleaf:
     cache: false
   servlet:
     multipart:
-      max-file-size: 5MB
+      max-file-size: 10MB
+#   Mysql configure
+#  datasource:
+#    username: root
+#    password: 654321^dcba
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/shpee?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+#    type: com.mchange.v2.c3p0.ComboPooledDataSource
+#   H2 configure
   datasource:
-    username: root
-    password: 654321^dcba
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/shpee?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
-    type: com.mchange.v2.c3p0.ComboPooledDataSource
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:./shpeedb
+    schema:    - classpath:conf/table.sql
+#    data:#    - classpath:conf/insert.sql    username: sa
+    password: sa
+  h2:    console:      enabled: true
 mybatis:
   mapper-locations: classpath:conf/mapper.xml
   type-aliases-package: top.yukino.config.Mapper
