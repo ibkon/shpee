@@ -15,7 +15,12 @@
 	<div class="layui-carousel box-center" id="img-box">
 		<div carousel-item="" id="img-show">
 			<div th:each="ilist:${imageList}">
-				<div><img th:src="${ilist}" width="100%" alt=""></div>
+				<div style="text-align: center;">
+					<div style="width: 100%; position: absolute;left: 0;top: 0;">		
+						<img th:src="${ilist}" alt="" style="position: initial;filter: blur(5px);width: 100%;">
+					</div>
+					<img th:src="${ilist}" class="image-show" alt="" style="filter: blur(0px);">
+				</div>
 			</div>
 		</div>
 	</div>
@@ -30,6 +35,7 @@
 			$('#upimage').on("click", function () {
 				upload('image');
 			});
+			$('.image-show').css("height",$(window).height() + 'px');
 			carousel.render({
 				elem: '#img-box'
 				, width: $(window).width() + 'px'
