@@ -15,6 +15,7 @@ public class Security extends WebSecurityConfigurerAdapter{
 		http.authorizeRequests().antMatchers("/**").permitAll()
 		.antMatchers("/upload/**").hasRole("ADMIN");
 		http.formLogin();
+		http.headers().frameOptions().disable();
 		//super.configure(http);
 	}
 

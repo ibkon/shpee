@@ -51,7 +51,7 @@ public class Index extends Super {
 					paths.add(path.replaceAll("upload", "static") + "/" + DigestUtils.md5Hex(hash).toUpperCase() + "."
 							+ type);
 				}
-				if(number.size()==3)
+				if(number.size()==1)
 					break;
 			}
 		}
