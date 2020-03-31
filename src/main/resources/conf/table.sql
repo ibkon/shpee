@@ -8,3 +8,18 @@ CREATE TABLE IF NOT EXISTS T_UPLOAD(
     ,uptime TIMESTAMP
     ,isdelete   int    
     );
+
+CREATE TABLE IF NOT EXISTS T_USER(
+  NAME   char(32)    not null,
+  PASSWORD  char(64)    not null
+    );
+
+CREATE TABLE IF NOT EXISTS T_ROLE(
+    RID char(32) not null,
+    ROLE    char(32) not null
+    );
+
+CREATE TABLE IF NOT EXISTS T_USER_ROLE(
+    NAME char(32) not null,
+    RID char(32) not null
+    );
