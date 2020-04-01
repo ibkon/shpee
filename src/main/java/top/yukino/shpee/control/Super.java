@@ -3,6 +3,7 @@ package top.yukino.shpee.control;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -27,5 +28,8 @@ public class Super {
 		jsonMap.put("data",lMap);
 		jsonMap.put("totalRow",totalRow);
 		return jsonMap;
+	}
+	public String	uuid(){
+		return UUID.randomUUID().toString().replaceAll("-","");
 	}
 }

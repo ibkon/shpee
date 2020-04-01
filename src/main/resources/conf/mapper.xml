@@ -6,6 +6,11 @@
 	  		${value}
 	  	]]>
     </select>
+    <select id="lSelect" resultType="java.util.List">
+        <![CDATA[
+	  		${value}
+	  	]]>
+    </select>
     <insert id="insert">
         <![CDATA[
 	  		${value}

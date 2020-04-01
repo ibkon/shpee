@@ -18,21 +18,16 @@ public class Security extends WebSecurityConfigurerAdapter{
 	}
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		// TODO Auto-generated method stub
 		http.authorizeRequests().antMatchers("/").permitAll()
-		.antMatchers("/upload/**").hasRole("ADMIN")
-				.antMatchers("/registered").permitAll()
-				.antMatchers("/layui/**").permitAll();
+		.antMatchers("/upload/**").hasRole("UPLOAD")
+				.antMatchers("/registered/**").permitAll();
 		http.formLogin();
 		http.headers().frameOptions().disable();
 	}
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		// TODO Auto-generated method stub
-		//auth.inMemoryAuthentication().passwordEncoder(new BCryptPasswordEncoder()).withUser("admin").password(new BCryptPasswordEncoder().encode("123456")).roles("ADMIN");
 		auth.userDetailsService(customUserService()).passwordEncoder(new BCryptPasswordEncoder());
-		//super.configure(auth);
 	}
 
 }

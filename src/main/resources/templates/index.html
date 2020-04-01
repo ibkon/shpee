@@ -9,38 +9,73 @@
 	<link rel="icon" href="favicon.ico" type="image/x-icon" />
 	<link th:if="${device}=='mobile'" rel="stylesheet" href="layui/css/layui.mobile.css" media="all">
 	<link th:if="${device}=='comput'" rel="stylesheet" href="layui/css/layui.css" media="all">
+	<style>
+		.image-show {
+			filter: blur(0px);
+		}
+		#img-box{
+			margin: 0 auto;
+		}
+		.layui-row{
+			height: 48px;
+			padding:2x;
+		}
+		.width-100{
+			width: 100%;
+		}
+		.layui-btn-containe{
+			float: right;
+			margin-right: 25px;
+			padding-top: 5px;
+		}
+	</style>
 </head>
 
 <body>
+	<div class="layui-row" th:if="${device}=='comput'">
+		<div class="layui-col-xs6 layui-col-sm6 layui-col-md4 width-100">
+			<div class="layui-btn-containe">
+				<a href="/login">
+					<button type="button" class="layui-btn layui-btn-radius layui-btn-normal">登录</button>
+				</a>
+				<a href="/registered">
+					<button type="button" class="layui-btn layui-btn-radius layui-btn-normal">注册</button>
+				</a>
+			</div>
+		</div>
+	</div>
+<!--轮播-->
 	<div class="layui-carousel box-center" id="img-box">
 		<div carousel-item="" id="img-show">
 			<div th:each="ilist:${imageList}">
 				<div style="text-align: center;">
-					<div th:if="${device}=='comput'" style="width: 100%; position: absolute;left: 0;top: 0;">		
-						<img th:src="${ilist}" alt="" style="position: initial;filter: blur(5px);width: 100%;">
+					<div th:if="${device}=='comput'" style="width: 100%; position: absolute;left: 0;top: 0;">
+						<img th:src="${ilist}" alt="" style="position: initial;filter: blur(5px);width: 100%;transform: scale(1.2)">
 					</div>
-					<img th:if="${device}=='comput'" th:src="${ilist}" class="image-show" alt="" style="filter: blur(0px);">
+					<img th:if="${device}=='comput'" th:src="${ilist}" class="image-show" alt="">
 					<img th:if="${device}=='mobile'" th:src="${ilist}" width="100%" alt="">
 				</div>
 			</div>
 		</div>
 	</div>
+	<div th:if="${device}=='comput'" id="comput"></div>
+	<div th:if="${device}=='mobile'" id="mobile"></div>
 
 	<script src="layui/layui.js"></script>
 	<script>
-		layui.use(['carousel', 'form'], function () {
+		layui.use(['carousel', 'form','element'], function () {
 			var carousel = layui.carousel, form = layui.form, $ = layui.jquery;
-			$('#upfile').on("click", function () {
-				upload('files');
-			});
-			$('#upimage').on("click", function () {
-				upload('image');
-			});
-			$('.image-show').css("height",$(window).height() + 'px');
+			var x=$(window).width(),
+					y=$(window).height();
+			if(document.getElementById("comput")!=null){
+				x*=0.45;
+				y*=0.45;
+			}
+			$('.image-show').css("height",y + 'px');
 			carousel.render({
 				elem: '#img-box'
-				, width: $(window).width() + 'px'
-				, height: $(window).height() + 'px'
+				, width:  x + 'px'
+				, height: y + 'px'
 				, interval: 2000
 			});
 		});
