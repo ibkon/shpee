@@ -45,8 +45,11 @@ public class Index extends Super {
 					paths.add(path.replaceAll("upload", "static") + "/" + DigestUtils.md5Hex(hash).toUpperCase() + "."
 							+ type);
 				}
+				//设置默认图片数量
+				if(getmConfig("indexImageCount")==null)
+					setmConfig("indexImageCount",3);
 				//控制首页轮播图片数
-				if(number.size()==3)
+				if(getmConfig("indexImageCount").equals(number.size()))
 					break;
 			}
 		}

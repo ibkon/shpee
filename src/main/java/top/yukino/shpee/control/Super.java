@@ -1,10 +1,12 @@
 package top.yukino.shpee.control;
 
+import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import top.yukino.shpee.conf.Mapper;
@@ -12,6 +14,28 @@ import top.yukino.shpee.conf.Mapper;
 public class Super {
 	@Autowired(required=true)
 	protected Mapper	mapper;
+
+	//存储配置信息
+	private static Map<String,Object>	mConfig;
+	private static String	configName	= "config.data";
+	static {
+		ObjectInputStream	objectInputStream;
+		File	file	= new File(configName);
+		if(file!=null&&!file.exists()&&file.isFile()){
+			try {
+				objectInputStream	= new ObjectInputStream(
+						new FileInputStream(file)
+				);
+				mConfig	= (Map<String, Object>) objectInputStream.readObject();
+				objectInputStream.close();
+			} catch (IOException | ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+		else{
+			mConfig	= new HashMap<>();
+		}
+	}
 	/**
 	 * 构建layui表格数据格式
 	 * @param lMap
@@ -32,4 +56,23 @@ public class Super {
 	public String	uuid(){
 		return UUID.randomUUID().toString().replaceAll("-","");
 	}
+
+	public static Object getmConfig(String key) {
+		return mConfig.get(key);
+	}
+
+	public static synchronized void setmConfig(String key,Object val){
+		mConfig.put(key,val);
+		try {
+			ObjectOutputStream	objectOutputStream	= new ObjectOutputStream(
+					new FileOutputStream(new File(configName))
+			);
+			objectOutputStream.writeObject(mConfig);
+			objectOutputStream.close();
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+	}
+
 }
