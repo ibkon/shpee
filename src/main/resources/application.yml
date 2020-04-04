@@ -3,7 +3,7 @@ server:
 #  address: 127.0.0.1
 spring:
   thymeleaf:
-    cache: false
+    cache: true
   servlet:
     multipart:
       max-file-size: 10MB
@@ -18,10 +18,15 @@ spring:
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:./shpeedb
-    schema:    - classpath:conf/table.sql
-#    data:#    - classpath:conf/insert.sql    username: sa
+    schema:
+    - classpath:conf/table.sql
+#    data:
+#    - classpath:conf/insert.sql
+    username: sa
     password: sa
-  h2:    console:      enabled: true
+  h2:
+    console:
+      enabled: true
 mybatis:
   mapper-locations: classpath:conf/mapper.xml
   type-aliases-package: top.yukino.config.Mapper
