@@ -5,8 +5,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import top.yukino.shpee.bean.TUpload;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -16,32 +20,18 @@ import java.util.UUID;
  */
 @Controller
 public class Registered extends Super{
+
     @RequestMapping("/registered")
     public String   registered(HttpServletRequest request,Map<String,Object> val){
-        if(getmConfig("registeredBackground")==null){
-            setmConfig("registeredBackground","512467649B974414804A4824A27BD620");
-        }
-        List<Map<String, Object>> lMaps = mapper.select(
-                "SELECT path,hash,type FROM T_UPLOAD WHERE uid='"+getmConfig("registeredBackground")+"'");
-        if(lMaps==null||lMaps.size()==0){
-            System.err.println("找不到注册背景图片");
-        }
-        String path, hash, type;
-        path = lMaps.get(0).get("PATH").toString();
-        hash = lMaps.get(0).get("HASH").toString();
-        type = lMaps.get(0).get("TYPE").toString();
-        String css="background-image: url('"+path.replaceAll("upload", "static") + "/" + DigestUtils.md5Hex(hash).toUpperCase() + "."
-                + type+"')";
-        val.put("registeredBackground",css);
         return "registered";
     }
 
     @RequestMapping("/registered/info")
     @ResponseBody
     public String   registeredInfo(HttpServletRequest request){
-        String  name    = request.getParameter("name");
+        String  name    = request.getParameter("username");
         String  password    = request.getParameter("password");
-        String  role        = request.getParameter("role");
+        String  role        = "ROLE_ADMIN";
         if(name==null||password==null||role==null){
             return "注册失败";
         }
