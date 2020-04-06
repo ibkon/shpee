@@ -57,6 +57,15 @@ public class Super {
 		return UUID.randomUUID().toString().replaceAll("-","");
 	}
 
+	public Map<String,Object>	retCode(int code,String msg,Object data){
+		Map<String,Object>	hMap	= new HashMap<>();
+		hMap.put("code",code);
+		hMap.put("msg",msg);
+		if(data!=null)
+			hMap.put("data",data);
+		return hMap;
+	}
+
 	public static Object getmConfig(String key) {
 		return mConfig.get(key);
 	}

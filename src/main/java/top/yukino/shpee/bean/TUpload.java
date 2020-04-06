@@ -123,14 +123,15 @@ public class TUpload extends BeanSqlWhere{
         builder.append(insertWhere(size));
         builder.append(insertWhere(isDelete));
         if(this.isWhere){
-            builder.append(",");
+            builder.append(",'");
             builder.append(uptime);
         }
         else{
+            builder.append("'");
             builder.append(uptime);
             this.isWhere=true;
         }
-        builder.append(") ");
+        builder.append("') ");
         return builder.toString();
     }
 
