@@ -8,12 +8,22 @@
 	<title>upload</title>
 	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
 	<link rel="stylesheet" href="/layui/css/layui.css" media="all">
+	<style>
+		body{
+			padding: 5px;
+		}
+		#bt-select-file{
+			float: right;
+		}
+		.layui-upload{
+			text-align: center;
+		}
+	</style>
 </head>
 
 <body>
 	<div th:switch="${uploadType}" class="layui-upload">
 		<div th:case="'files'">
-			<button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button>
 			<div class="layui-upload-list">
 				<table class="layui-table">
 					<thead>
@@ -28,12 +38,15 @@
 				</table>
 			</div>
 			<button type="button" class="layui-btn" id="testListAction">开始上传</button>
+			<button type="button" class="layui-btn layui-btn-normal" id="bt-select-file">选择多文件</button>
 		</div>
-		<div th:case="'image'" class="layui-upload">
-			<button type="button" class="layui-btn" id="test1">上传图片</button>
-			<div class="layui-upload-list">
-				<img class="layui-upload-img" id="demo1" width="100%">
-				<p id="demoText"></p>
+		<div th:case="'image'" class="layui-upload-drag" id="upload-image">
+
+			<i class="layui-icon"></i>
+			<p>点击上传，或将图片拖拽到此处</p>
+			<div class="layui-hide" id="uploadDemoView">
+				<hr>
+				<img src="" id="showImage" alt="图片加载失败">
 			</div>
 		</div>
 		<div th:case="*">请求上传窗口异常</div>
@@ -41,6 +54,7 @@
 	<script src="/layui/layui.js"></script>
 
 	<script th:if="${uploadType}=='image'">
+
 		layui.use('upload', function () {
 			var $ = layui.jquery
 				, upload = layui.upload;
@@ -50,31 +64,38 @@
 			$(document).ajaxSend(function(e,xhr,options){
 				xhr.setRequestHeader(header,token);
 			});
-			//普通图片上传
-			var uploadInst = upload.render({
-				elem: '#test1'
-				, url: '/upload/save'
+			var x=$(window).width(),y=$(window).height();
+			//初始化上传框大小和高度
+			$('#upload-image').css("width",x*0.6 + 'px');
+			$('#upload-image').css("height",y*0.4 + 'px');
+			$('#upload-image').css("top",y*0.25 + 'px');
+			$('#upload-image i').css("line-height",y*0.4 + 'px');
+			$('#upload-image p').css("margin-top",-(y*0.1)+ 'px');
+
+			upload.render({
+				elem: '#upload-image'
+				,url: '/upload/save'
 				, before: function (obj) {
 					//预读本地文件示例，不支持ie8
 					obj.preview(function (index, file, result) {
-						$('#demo1').attr('src', result); //图片链接（base64）
+						$('#upload-image i').css("disable","none");
+						$('#upload-image p').css("disable","none");
+						$('#showImage').attr('src', result); //图片链接（base64）
+						$('#showImage').css('max-width', x*0.6 + 'px');
+						$('#showImage').css('max-height', y*0.4 + 'px');
 					});
 				}
-				, done: function (res) {
-					//如果上传失败
-					if (res.code == 0) {
-						return layer.msg('上传成功');
+				,done: function(res){
+					if(res.code==0){
+						layer.msg("图片上传成功");
+					}else {
+						layer.msg(res.msg);
 					}
-					//上传成功
-					return layer.msg('上传失败');
-				}
-				, error: function () {
-					//演示失败状态，并实现重传
-					var demoText = $('#demoText');
-					demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
-					demoText.find('.demo-reload').on('click', function () {
-						uploadInst.upload();
-					});
+					console.log(res);
+				},
+				error: function(){
+					layer.msg("上传失败");
+					setTimeout(document.location.reload,5000);
 				}
 			});
 		})
@@ -92,7 +113,7 @@
 			//多文件列表示例
 			var demoListView = $('#demoList')
 				, uploadListIns = upload.render({
-					elem: '#testList'
+					elem: '#bt-select-file'
 					, url: '/upload/save' //改成您自己的上传接口
 					, accept: 'file'
 					, multiple: true
