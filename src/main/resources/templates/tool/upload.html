@@ -42,8 +42,8 @@
 		</div>
 		<div th:case="'image'" class="layui-upload-drag" id="upload-image">
 
-			<i class="layui-icon"></i>
-			<p>点击上传，或将图片拖拽到此处</p>
+			<i class="layui-icon show-hide"></i>
+			<p class="show-hide">点击上传，或将图片拖拽到此处</p>
 			<div class="layui-hide" id="uploadDemoView">
 				<hr>
 				<img src="" id="showImage" alt="图片加载失败">
@@ -71,18 +71,19 @@
 			$('#upload-image').css("top",y*0.25 + 'px');
 			$('#upload-image i').css("line-height",y*0.4 + 'px');
 			$('#upload-image p').css("margin-top",-(y*0.1)+ 'px');
-
 			upload.render({
 				elem: '#upload-image'
 				,url: '/upload/save'
 				, before: function (obj) {
 					//预读本地文件示例，不支持ie8
 					obj.preview(function (index, file, result) {
-						$('#upload-image i').css("disable","none");
-						$('#upload-image p').css("disable","none");
+						var icons	= document.getElementsByClassName('show-hide');
+						icons[0].style.display='none';
+						icons[1].style.display='none';
 						$('#showImage').attr('src', result); //图片链接（base64）
 						$('#showImage').css('max-width', x*0.6 + 'px');
 						$('#showImage').css('max-height', y*0.4 + 'px');
+						$("#uploadDemoView").removeClass("layui-hide");
 					});
 				}
 				,done: function(res){
