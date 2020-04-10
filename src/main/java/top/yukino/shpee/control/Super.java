@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import top.yukino.shpee.conf.Mapper;
@@ -41,18 +40,19 @@ public class Super {
 	 * @param lMap
 	 * @return
 	 */
-	protected Map<String, Object> buildJson(List<Map<String,Object>> lMap,String msg) {
+	protected Map<String, Object> buildJson(List<Map<String,Object>> data,String msg) {
 		Map<String, Object> 	jsonMap		= new HashMap<String, Object>();
 		Map<String, String> 	totalRow	= new HashMap<String, String>();
 		totalRow.put("score","666");
 		totalRow.put("experience","999");
 		jsonMap.put("code", 0);
 		jsonMap.put("msg",msg);
-		jsonMap.put("count",lMap.size());
-		jsonMap.put("data",lMap);
+		jsonMap.put("count",data.size());
+		jsonMap.put("data",data);
 		jsonMap.put("totalRow",totalRow);
 		return jsonMap;
 	}
+
 	public String	uuid(){
 		return UUID.randomUUID().toString().replaceAll("-","");
 	}

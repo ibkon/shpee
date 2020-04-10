@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 
 @Controller
-public class Admin {
+public class Admin  {
 	@RequestMapping("/admin")
 	public String getAdminPage(HttpServletRequest request,Map<String, Object> setVal) {
 		if (request.getHeader("User-Agent").contains("iPhone") || request.getHeader("User-Agent").contains("Android")) {
@@ -17,4 +17,5 @@ public class Admin {
 		}
 		return "admin/admin";
 	}
+
 }

@@ -73,7 +73,7 @@ public class TUpload extends BeanSqlWhere{
         builder.append(insertWhere("path='"+path+"'",path));
         builder.append(insertWhere("type='"+type+"'",type));
         builder.append(insertWhere("size="+size+"",size==0?null:Long.toString(size)));
-        builder.append(insertWhere("isdelete="+isDelete,size==0?null:Integer.toString(isDelete)));
+        builder.append(insertWhere("isdelete="+isDelete,size!=0?null:Integer.toString(isDelete)));
         if(this.uptime==null){
             this.uptime=new Timestamp(System.currentTimeMillis());
         }
