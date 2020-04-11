@@ -7,7 +7,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -104,5 +106,47 @@ public class ResourcesInfo extends Super{
 			return retCode(0,"文件删除成功",null);
 		}
 		return retCode(1,"删除失败",null);
+	}
+
+	@GetMapping("/admin/resources/show")
+	public String showResources(HttpServletRequest request,Map<String,Object> val){
+		String	uid	= request.getParameter("uid");
+		if(uid==null||uid.equals("")){
+			val.put("type","msg");
+			val.put("msg","文件UID为空，无法查询！！！");
+		}
+		else {
+			TUpload	upload	= new TUpload();
+			upload.setUid(uid);
+			List<Map<String,Object>>	rMaps	= mapper.select(upload.select());
+			if(rMaps==null||rMaps.size()==0){
+				val.put("type","msg");
+				val.put("msg","找不到该文件");
+			}
+			else {
+				Map<String,Object>	map	= rMaps.get(0);
+				String	type=map.get("TYPE").toString();
+				String	path=map.get("PATH").toString();
+				if(type!=null&&path!=null) {
+					path=path.replaceAll("upload","/static")+"/"+ DigestUtils.md5Hex(map.get("HASH").toString()).toUpperCase() + "."
+							+ type;
+					type = type.toUpperCase();
+				}
+
+				switch (type){
+					case	"JPG":;
+					case 	"JPEG":;
+					case 	"PNG":;
+					case 	"GIF":
+						val.put("type","image");
+						val.put("src",path);
+						break;
+					default:
+						val.put("type","other");
+						val.put("src",path);
+				}
+			}
+		}
+		return "tool/showResources";
 	}
 }

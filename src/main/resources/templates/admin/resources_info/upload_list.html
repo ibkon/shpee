@@ -116,7 +116,18 @@
                 }
                 //查看文件
                 if(obj.event=='show'){
-
+                    if(data.UID!=null){
+                        layer.close(index);
+                        var index = layer.open({
+                            type: 2,
+                            title: '查看文件',
+                            shadeClose: true,
+                            shade: false,
+                            maxmin: true, //开启最大化最小化按钮
+                            area: ['560px', '440px'],
+                            content:"/admin/resources/show?uid="+data.UID,
+                        });
+                    }
                 }
             });
         });

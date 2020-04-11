@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8" xmlns:th="http://www.thymeleaf.org">
+</head>
+<body>
+    <div th:switch="${type}" style="width: 100%">
+        <img th:case="image" th:src="${src}" alt="" style="width: 100%">
+        <h1 th:case="msg" th:text="${msg}"></h1>
+        <a th:case="*" th:href="${src}">该文件无法在线查看，请点击此链接下载查看</a>
+    </div>
+</body>
+</html>
