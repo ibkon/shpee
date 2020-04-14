@@ -44,7 +44,7 @@ public class TUpload extends BeanSqlWhere{
             if(this.TYPE.indexOf(",")==-1){
                 builder.append(selectWhere("TYPE",this.TYPE));
             }else {
-                String[]    types   = this.PATH.split(",");
+                String[]    types   = this.TYPE.split(",");
                 if(this.isWhere)
                     builder.append(" AND ");
                 boolean fast    = true;
@@ -62,7 +62,7 @@ public class TUpload extends BeanSqlWhere{
         }
         //文件大小范围查找待更细
         if(this.FILE_SIZE>0)
-            builder.append(selectWhere("size",this.FILE_SIZE,"<="));
+            builder.append(selectWhere("FILE_SIZE",this.FILE_SIZE,"<="));
         //时间范围查找待更新
         if(this.UPTIME!=null){
             if(this.isWhere){
@@ -161,6 +161,20 @@ public class TUpload extends BeanSqlWhere{
     }
 
     @Override
+    public String toString() {
+        return "TUpload{" +
+                "UID='" + UID + '\'' +
+                ", FILE_NAME='" + FILE_NAME + '\'' +
+                ", HASH='" + HASH + '\'' +
+                ", PATH='" + PATH + '\'' +
+                ", TYPE='" + TYPE + '\'' +
+                ", FILE_SIZE=" + FILE_SIZE +
+                ", UPTIME=" + UPTIME +
+                ", ISDELETE=" + ISDELETE +
+                '}';
+    }
+
+    @Override
     public void setReturnListMap(List<Map<String, Object>> lMaps) {
         TUpload upload  = null;
         this.beans      = new ArrayList<>();
@@ -168,11 +182,11 @@ public class TUpload extends BeanSqlWhere{
             upload  = new TUpload();
             try {
                 upload.setUID(m.get("UID").toString());
-                upload.setFILE_NAME(m.get("NAME").toString());
+                upload.setFILE_NAME(m.get("FILE_NAME").toString());
                 upload.setHASH(m.get("HASH").toString());
                 upload.setPATH(m.get("PATH").toString());
                 upload.setTYPE(m.get("TYPE").toString());
-                upload.setFILE_SIZE(Long.parseLong(m.get("SIZE").toString()));
+                upload.setFILE_SIZE(Long.parseLong(m.get("FILE_SIZE").toString()));
                 upload.setUPTIME(Timestamp.valueOf(m.get("UPTIME").toString()));
                 upload.setISDELETE(0);
                 this.beans.add(upload);

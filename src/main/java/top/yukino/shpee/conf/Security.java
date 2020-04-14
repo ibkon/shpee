@@ -19,7 +19,8 @@ public class Security extends WebSecurityConfigurerAdapter{
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers("/").permitAll()
-		.antMatchers("/upload/**").hasRole("UPLOAD")
+		.antMatchers("/upload/**").hasRole("ADMIN")
+				.antMatchers("/admin/**").hasRole("ADMIN")
 				.antMatchers("/registered/**").permitAll();
 		http.formLogin();
 		http.headers().frameOptions().disable();

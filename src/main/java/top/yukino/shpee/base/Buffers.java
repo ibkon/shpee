@@ -42,7 +42,7 @@ public class Buffers extends Super{
     public static synchronized long  setData(String key,byte[] data){
         if(data==null||data.length==0||data.length>bufferSize)
             return -1;
-        if(dataMap.get(key).data.equals(data)) {
+        if(dataMap.get(key)!=null&&dataMap.get(key).equals(data)) {
             dataMap.get(key).time=System.currentTimeMillis();
             return data.length;
         }

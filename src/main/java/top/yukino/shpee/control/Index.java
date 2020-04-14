@@ -10,26 +10,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import top.yukino.shpee.base.DefaultConfigure;
 import top.yukino.shpee.base.Super;
+import top.yukino.shpee.bean.TUpload;
 
 @Controller
 public class Index extends Super {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String indexPage(HttpServletRequest request, Map<String, Object> map) {
 		checkLogin(map);
-		List<Map<String, Object>> lMaps = mapper.select(
-				"SELECT path,hash,type FROM T_UPLOAD WHERE isdelete=0 AND (type='png' OR type='jpg' OR type='jpeg' OR type='gif') AND size<0x200000");
+		List<Map<String, Object>> lMaps=null;
+		TUpload	upload	= new TUpload();
+		upload.setTYPE("png,jpg,jpeg");
+		upload.setFILE_SIZE(0x200000);
+
+		lMaps	= mapper.select(upload.select());
+		upload.setReturnListMap(lMaps);
+
 		List<String> paths = new ArrayList<String>();
-		Map<String, Object> mbuffer = new HashMap<String, Object>();
 		Set<Integer> 	number	= new TreeSet<Integer>();
 		Random random = new Random(System.currentTimeMillis());
-		String path, hash, type;
 		if(lMaps.size()<=3) {
-			for(Map<String, Object> m:lMaps) {
-				path = m.get("PATH").toString();
-				hash = m.get("HASH").toString();
-				type = m.get("TYPE").toString();
-				paths.add(path.replaceAll("upload", "static") + "/" + DigestUtils.md5Hex(hash).toUpperCase() + "."
-						+ type);
+			for(int i=0;i<lMaps.size();i++){
+				paths.add(((TUpload)upload.getBean(i)).getUrl());
 			}
 		}
 		else {
@@ -39,12 +40,7 @@ public class Index extends Super {
 				thisNumber=random.nextInt((int)System.currentTimeMillis())%lMaps.size();
 				if(number.add(thisNumber))
 				{
-					mbuffer = lMaps.get(thisNumber);
-					path = mbuffer.get("PATH").toString();
-					hash = mbuffer.get("HASH").toString();
-					type = mbuffer.get("TYPE").toString();
-					paths.add(path.replaceAll("upload", "static") + "/" + DigestUtils.md5Hex(hash).toUpperCase() + "."
-							+ type);
+					paths.add(((TUpload)upload.getBean(thisNumber)).getUrl());
 				}
 				//控制首页轮播图片数
 				if(DefaultConfigure.getIConfigure("indexImageCount").equals(number.size()))

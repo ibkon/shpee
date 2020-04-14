@@ -34,6 +34,7 @@ public class Upload extends Super {
 	 */
 	@RequestMapping("/upload")
 	public String upload(HttpServletRequest request, Map<String, Object> map) {
+		//获取上传文件类型，以渲染不同的上传文件页面
 		String	upLoadType	= request.getParameter("uploadtype");
 		if(upLoadType==null)
 			upLoadType ="";
@@ -72,7 +73,7 @@ public class Upload extends Super {
 		}
 		//文件保存前将信息存入数据库
 		mapper.insert(tUpload.insert());
-		fCache	= new File(tUpload.getPATH()+"/"+DigestUtils.md5Hex(tUpload.getHASH()).toUpperCase()+"."+tUpload.getTYPE());
+		fCache	= new File(tUpload.getPATH()+"/"+tUpload.getHASH());
 		InputStream in		= upfile.getInputStream();
 		OutputStream out		= new FileOutputStream(fCache);
 		byte[]			buffer	= new byte[0x4000];
