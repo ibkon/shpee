@@ -38,16 +38,15 @@
             </ul>
             <ul class="layui-nav layui-layout-right">
                 <li class="layui-nav-item">
-                    <a href="javascript:;">
+                    <a href="javascript:;" th:text="${username}">
                         <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
-                        贤心
                     </a>
                     <dl class="layui-nav-child">
                         <dd><a href="">基本资料</a></dd>
                         <dd><a href="">安全设置</a></dd>
                     </dl>
                 </li>
-                <li class="layui-nav-item"><a href="">退了</a></li>
+                <li class="layui-nav-item"><a href="/logout">退出</a></li>
             </ul>
         </div>
 
@@ -67,13 +66,13 @@
                     <li class="layui-nav-item">
                         <a href="javascript:;">用户管理</a>
                         <dl class="layui-nav-child">
-                            <dd><a href="javascript:;">列表一</a></dd>
-                            <dd><a href="javascript:;">列表二</a></dd>
+                            <dd><a href="javascript:;">用户组管理</a></dd>
+                            <dd><a href="javascript:;">用户管理</a></dd>
                             <dd><a href="">超链接</a></dd>
                         </dl>
                     </li>
                     <li class="layui-nav-item"><a href="">云市场</a></li>
-                    <li class="layui-nav-item"><a href="">发布商品</a></li>
+                    <li class="layui-nav-item"><a href="">站点设置</a></li>
                 </ul>
             </div>
         </div>

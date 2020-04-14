@@ -1,16 +1,12 @@
 package top.yukino.shpee.control;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import top.yukino.shpee.bean.TUpload;
+import top.yukino.shpee.base.Super;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -19,7 +15,7 @@ import java.util.UUID;
  * 注册
  */
 @Controller
-public class Registered extends Super{
+public class Registered extends Super {
 
     @RequestMapping("/registered")
     public String   registered(HttpServletRequest request,Map<String,Object> val){

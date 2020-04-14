@@ -1,16 +1,16 @@
 CREATE TABLE IF NOT EXISTS T_UPLOAD(
-    uid     char(32)    NOT NULL
-    ,name   varchar(64) NOT NULL
-    ,hash   char(64)    NOT NULL
-    ,path   char(32)    NOT NULL
-    ,type   char(32)
-    ,size   BIGINT
-    ,uptime TIMESTAMP
-    ,isdelete   int    
+    UID     char(32)    NOT NULL
+    ,FILE_NAME   varchar(128) NOT NULL
+    ,HASH   char(64)
+    ,PATH   varchar(128)    NOT NULL
+    ,TYPE   char(16)
+    ,FILE_SIZE   BIGINT
+    ,UPTIME TIMESTAMP
+    ,ISDELETE   int
     );
 
 CREATE TABLE IF NOT EXISTS T_USER(
-  NAME   char(32)    not null,
+  NAME   varchar(128)    not null,
   PASSWORD  char(64)    not null
     );
 

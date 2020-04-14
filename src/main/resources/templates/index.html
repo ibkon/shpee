@@ -33,17 +33,29 @@
 
 <body>
 	<div class="layui-row" th:if="${device}=='comput'">
-		<div class="layui-col-xs6 layui-col-sm6 layui-col-md4 width-100">
-			<div class="layui-btn-containe">
-				<a href="/login">
-					<button type="button" class="layui-btn layui-btn-radius layui-btn-normal">登录</button>
-				</a>
-				<a href="/registered">
-					<button type="button" class="layui-btn layui-btn-radius layui-btn-normal">注册</button>
-				</a>
+		<div class="layui-layout layui-layout-admin">
+			<div class="layui-header">
+				<ul class="layui-nav layui-layout-left">
+					<li class="layui-nav-item"><a href="/">首页</a></li>
+					<li class="layui-nav-item"><a href="">商品管理</a></li>
+					<li class="layui-nav-item"><a href="">用户</a></li>
+				</ul>
+				<ul class="layui-nav layui-layout-right" th:if="${login}=='true'">
+					<li class="layui-nav-item">
+						<a href="/admin" th:text="${username}">
+							<img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+						</a>
+					</li>
+					<li class="layui-nav-item"><a href="/logout">退出</a></li>
+				</ul>
+				<ul class="layui-nav layui-layout-right" th:if="${login}=='false'">
+					<li class="layui-nav-item">
+						<a href="/login">登录</a>
+					</li>
+					<li class="layui-nav-item"><a href="/registered">注册</a></li>
+				</ul>
 			</div>
-		</div>
-	</div>
+
 <!--轮播-->
 	<div class="layui-carousel box-center" id="img-box">
 		<div carousel-item="" id="img-show">

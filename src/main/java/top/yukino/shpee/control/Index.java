@@ -8,13 +8,14 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import top.yukino.shpee.base.DefaultConfigure;
+import top.yukino.shpee.base.Super;
 
 @Controller
 public class Index extends Super {
-	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String indexPage(HttpServletRequest request, Map<String, Object> map) {
-
+		checkLogin(map);
 		List<Map<String, Object>> lMaps = mapper.select(
 				"SELECT path,hash,type FROM T_UPLOAD WHERE isdelete=0 AND (type='png' OR type='jpg' OR type='jpeg' OR type='gif') AND size<0x200000");
 		List<String> paths = new ArrayList<String>();
@@ -45,20 +46,13 @@ public class Index extends Super {
 					paths.add(path.replaceAll("upload", "static") + "/" + DigestUtils.md5Hex(hash).toUpperCase() + "."
 							+ type);
 				}
-				//设置默认图片数量
-				if(getmConfig("indexImageCount")==null)
-					setmConfig("indexImageCount",3);
 				//控制首页轮播图片数
-				if(getmConfig("indexImageCount").equals(number.size()))
+				if(DefaultConfigure.getIConfigure("indexImageCount").equals(number.size()))
 					break;
 			}
 		}
 		map.put("imageList", paths);
-		if (request.getHeader("User-Agent").contains("iPhone") || request.getHeader("User-Agent").contains("Android")) {
-			map.put("device", "mobile");
-		} else {
-			map.put("device", "comput");
-		}
+		checkDriver(request,map);
 		return "index";
 	}
 }

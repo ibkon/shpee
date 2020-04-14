@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import top.yukino.shpee.bean.User;
-import top.yukino.shpee.control.Super;
+import top.yukino.shpee.base.Super;
 
 import java.util.ArrayList;
 import java.util.List;

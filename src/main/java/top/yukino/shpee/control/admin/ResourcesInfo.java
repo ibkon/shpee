@@ -1,7 +1,6 @@
 package top.yukino.shpee.control.admin;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import top.yukino.shpee.bean.TUpload;
-import top.yukino.shpee.control.Super;
+import top.yukino.shpee.base.Super;
 /***
  * 系统资源管理
  * @author Sagiri
@@ -79,7 +78,7 @@ public class ResourcesInfo extends Super{
 		if(rMaps!=null){
 			//如果未设置查询页面和一页条数，则返回全部查询结果
 			if(page==0||limit==0){
-				return buildJson(rMaps,"查询全部文件成功");
+				return buildJson(0,"查询全部文件成功",rMaps);
 			}
 			for(int i=0;i<limit;i++){
 				//判断是否查询到最后一个，是则退出
@@ -87,12 +86,12 @@ public class ResourcesInfo extends Super{
 					break;
 				lMaps.add(rMaps.get((page-1)*10+i));
 			}
-			Map<String,Object>	rMap	= buildJson(lMaps,"文件查询成功");
+			Map<String,Object>	rMap	= buildJson(0,"文件查询成功",lMaps);
 			//将count设置为总条目数
 			rMap.put("count",rMaps.size());
 			return rMap;
 		}
-		return retCode(1,"文件查询失败",null);
+		return buildJson(1,"上传文件查询失败",null);
 	}
 
 
@@ -101,11 +100,11 @@ public class ResourcesInfo extends Super{
 	public Map<String,Object> deleteFile(HttpServletRequest request){
 		String	uid	= request.getParameter("uid");
 		TUpload upload	= new TUpload();
-		upload.setUid(uid);
+		upload.setUID(uid);
 		if(mapper.delete(upload.delete())>0){
-			return retCode(0,"文件删除成功",null);
+			return buildJson(0,"文件删除成功",null);
 		}
-		return retCode(1,"删除失败",null);
+		return buildJson(1,"删除失败",null);
 	}
 
 	@GetMapping("/admin/resources/show")
@@ -117,7 +116,7 @@ public class ResourcesInfo extends Super{
 		}
 		else {
 			TUpload	upload	= new TUpload();
-			upload.setUid(uid);
+			upload.setUID(uid);
 			List<Map<String,Object>>	rMaps	= mapper.select(upload.select());
 			if(rMaps==null||rMaps.size()==0){
 				val.put("type","msg");
@@ -132,14 +131,14 @@ public class ResourcesInfo extends Super{
 							+ type;
 					type = type.toUpperCase();
 				}
-
+				upload.setReturnListMap(rMaps);
 				switch (type){
 					case	"JPG":;
 					case 	"JPEG":;
 					case 	"PNG":;
 					case 	"GIF":
 						val.put("type","image");
-						val.put("src",path);
+						val.put("src",((TUpload)upload.getBean(0)).getPATH());
 						break;
 					default:
 						val.put("type","other");

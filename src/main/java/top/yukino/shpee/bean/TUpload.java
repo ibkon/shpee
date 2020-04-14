@@ -1,51 +1,70 @@
 package top.yukino.shpee.bean;
 
-import top.yukino.shpee.control.Super;
-import top.yukino.shpee.control.Upload;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class TUpload extends BeanSqlWhere{
-    private String uid;
-    private String name;
-    private String hash;
-    private String path;
-    private String type;
-    private long   size;
-    private Timestamp   uptime;
-    private int    isDelete;
+    private String UID;
+    private String FILE_NAME;
+    private String HASH;
+    private String PATH;
+    private String TYPE;
+    private long   FILE_SIZE;
+    private Timestamp   UPTIME;
+    private int    ISDELETE;
+
+    private List<TUpload>   beans;
 
     public TUpload(){
-        this.isDelete   = 0;
-    }
-    public TUpload(String uid, String name, String hash, String path, String type, long size, Timestamp uptime, int isDelete) {
-        this.uid = uid;
-        this.name = name;
-        this.hash = hash;
-        this.path = path;
-        this.type = type;
-        this.size = size;
-        this.uptime = uptime;
-        this.isDelete = isDelete;
+        this.ISDELETE   = 0;
     }
 
+    /**
+     * 构建查询sql
+     * @return  sql语句
+     */
     @Override
     public String select() {
         StringBuilder   builder = new StringBuilder();
         this.isWhere    = false;
-        builder.append("SELECT uid,name,hash,path,type,size,uptime,isdelete FROM T_UPLOAD ");
-        builder.append(selectWhere("uid",uid));
-        builder.append(selectWhere("name",name));
-        builder.append(selectWhere("path",path));
-        builder.append(selectWhere("type",type));
-        builder.append(selectWhere("hash",hash));
-        builder.append(selectWhere("isdelete",isDelete));
-        if(size>0)
-            builder.append(selectWhere("size",size,"<="));
-        if(uptime!=null){
+        builder.append("SELECT UID,FILE_NAME,HASH,PATH,TYPE,FILE_SIZE,UPTIME FROM T_UPLOAD");
+        builder.append(selectWhere("UID",this.UID));
+        builder.append(selectWhere("FILE_NAME",this.FILE_NAME));
+        builder.append(selectWhere("HASH",this.HASH));
+        builder.append(selectWhere("PATH",this.PATH));
+        builder.append(selectWhere("ISDELETE",this.ISDELETE));
+        //根据多文件类型查询，并生成相应语句
+        if(this.TYPE!=null&&!this.TYPE.equals("")){
+            if(this.TYPE.indexOf(",")==-1){
+                builder.append(selectWhere("TYPE",this.TYPE));
+            }else {
+                String[]    types   = this.PATH.split(",");
+                if(this.isWhere)
+                    builder.append(" AND ");
+                boolean fast    = true;
+                builder.append("(");
+                for(String s:types){
+                    if(!fast)
+                        builder.append(" OR ");
+                    builder.append("TYPE='");
+                    builder.append(s.trim());
+                    builder.append("'");
+                    fast=false;
+                }
+                builder.append(") ");
+            }
+        }
+        //文件大小范围查找待更细
+        if(this.FILE_SIZE>0)
+            builder.append(selectWhere("size",this.FILE_SIZE,"<="));
+        //时间范围查找待更新
+        if(this.UPTIME!=null){
             if(this.isWhere){
                 builder.append(" AND ");
             }
@@ -53,8 +72,8 @@ public class TUpload extends BeanSqlWhere{
                 builder.append(" WHERE ");
                 this.isWhere=true;
             }
-            builder.append("TO_CHAR(uptime,'yyyy-MM-dd HH:mm:ss')>SUBSTR('");
-            builder.append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(uptime.getTime()));
+            builder.append("TO_CHAR(UPTIME,'yyyy-MM-dd HH:mm:ss')>SUBSTR('");
+            builder.append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(this.UPTIME.getTime()));
             builder.append("',0,19)");
         }
         return builder.toString();
@@ -63,72 +82,72 @@ public class TUpload extends BeanSqlWhere{
     @Override
     public String update() {
         //仅根据唯一ID进行修改文件名，若其条件都不存在则无法生成sql
-        if(this.uid==null)
+        if(this.UID==null)
             return null;
         StringBuilder   builder = new StringBuilder();
         this.isWhere = false;
         builder.append("UPDATE T_UPLOAD SET ");
-        builder.append(insertWhere("name='"+name+"'",name));
-        builder.append(insertWhere("hash='"+hash+"'",hash));
-        builder.append(insertWhere("path='"+path+"'",path));
-        builder.append(insertWhere("type='"+type+"'",type));
-        builder.append(insertWhere("size="+size+"",size==0?null:Long.toString(size)));
-        builder.append(insertWhere("isdelete="+isDelete,size!=0?null:Integer.toString(isDelete)));
-        if(this.uptime==null){
-            this.uptime=new Timestamp(System.currentTimeMillis());
+        builder.append(insertWhere("FILE_NAME='"+this.FILE_NAME+"'",this.FILE_NAME));
+        builder.append(insertWhere("HASH='"+this.HASH+"'",this.HASH));
+        builder.append(insertWhere("PATH='"+this.PATH+"'",this.PATH));
+        builder.append(insertWhere("TYPE='"+this.TYPE+"'",this.TYPE));
+        builder.append(insertWhere("FILE_SIZE="+this.FILE_SIZE+"",this.FILE_SIZE==0?null:Long.toString(this.FILE_SIZE)));
+        builder.append(insertWhere("ISDELETE="+this.ISDELETE,this.FILE_SIZE!=0?null:Integer.toString(this.ISDELETE)));
+        if(this.UPTIME==null){
+            this.UPTIME=new Timestamp(System.currentTimeMillis());
         }
         if(this.isWhere){
-            builder.append(",uptime='");
+            builder.append(",UPTIME='");
         }else {
-            builder.append("uptime='");
+            builder.append("UPTIME='");
         }
-        builder.append(uptime);
-        builder.append("' WHERE uid='");
-        builder.append(this.uid);
+        builder.append(this.UPTIME);
+        builder.append("' WHERE UID='");
+        builder.append(this.UID);
         builder.append("'");
         return builder.toString();
     }
 
     @Override
     public String insert() {
-        if(this.uid==null||this.uid.equals("")){
-            this.uid= UUID.randomUUID().toString().replaceAll("-","");
+        if(this.UID==null||this.UID.equals("")){
+            this.UID= UUID.randomUUID().toString().replaceAll("-","");
         }
-        if(this.uptime==null){
-            this.uptime = new Timestamp(System.currentTimeMillis());
+        if(this.UPTIME==null){
+            this.UPTIME = new Timestamp(System.currentTimeMillis());
         }
         StringBuilder   builder = new StringBuilder();
         builder.append("INSERT INTO T_UPLOAD(");
         this.isWhere  = false;
-        builder.append(insertWhere("uid",uid));
-        builder.append(insertWhere("name",name));
-        builder.append(insertWhere("hash",hash));
-        builder.append(insertWhere("path",path));
-        builder.append(insertWhere("type",type));
-        builder.append(insertWhere("size","not zero"));
-        builder.append(insertWhere("isdelete","not zero"));
+        builder.append(insertWhere("UID",this.UID));
+        builder.append(insertWhere("FILE_NAME",this.FILE_NAME));
+        builder.append(insertWhere("HASH",this.HASH));
+        builder.append(insertWhere("PATH",this.PATH));
+        builder.append(insertWhere("TYPE",this.TYPE));
+        builder.append(insertWhere("FILE_SIZE","not zero"));
+        builder.append(insertWhere("ISDELETE","not zero"));
         if(this.isWhere)
-            builder.append(",uptime");
+            builder.append(",UPTIME");
         else {
-            builder.append("uptime");
+            builder.append("UPTIME");
             this.isWhere=true;
         }
         builder.append(") VALUES(");
         this.isWhere=false;
-        builder.append(insertWhere(uid));
-        builder.append(insertWhere(name));
-        builder.append(insertWhere(hash));
-        builder.append(insertWhere(path));
-        builder.append(insertWhere(type));
-        builder.append(insertWhere(size));
-        builder.append(insertWhere(isDelete));
+        builder.append(insertWhere(this.UID));
+        builder.append(insertWhere(this.FILE_NAME));
+        builder.append(insertWhere(this.HASH));
+        builder.append(insertWhere(this.PATH));
+        builder.append(insertWhere(this.TYPE));
+        builder.append(insertWhere(this.FILE_SIZE));
+        builder.append(insertWhere(this.ISDELETE));
         if(this.isWhere){
             builder.append(",'");
-            builder.append(uptime);
+            builder.append(this.UPTIME);
         }
         else{
             builder.append("'");
-            builder.append(uptime);
+            builder.append(this.UPTIME);
             this.isWhere=true;
         }
         builder.append("') ");
@@ -137,71 +156,110 @@ public class TUpload extends BeanSqlWhere{
 
     @Override
     public String delete() {
-        this.isDelete   = -1;
+        this.ISDELETE   = -1;
         return update();
     }
 
-    public String getUid() {
-        return uid;
+    @Override
+    public void setReturnListMap(List<Map<String, Object>> lMaps) {
+        TUpload upload  = null;
+        this.beans      = new ArrayList<>();
+        for(Map<String,Object> m:lMaps){
+            upload  = new TUpload();
+            try {
+                upload.setUID(m.get("UID").toString());
+                upload.setFILE_NAME(m.get("NAME").toString());
+                upload.setHASH(m.get("HASH").toString());
+                upload.setPATH(m.get("PATH").toString());
+                upload.setTYPE(m.get("TYPE").toString());
+                upload.setFILE_SIZE(Long.parseLong(m.get("SIZE").toString()));
+                upload.setUPTIME(Timestamp.valueOf(m.get("UPTIME").toString()));
+                upload.setISDELETE(0);
+                this.beans.add(upload);
+            }catch (NullPointerException e){
+                System.err.println(m);
+                e.printStackTrace();
+            }
+        }
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
+    @Override
+    public BeanSql getBean(int id) {
+        if(this.beans==null||this.beans.size()<=id)
+            return null;
+        return this.beans.get(id);
     }
 
-    public String getName() {
-        return name;
+    public String getUrl() {
+        String  url ="/static/files?uid="+this.UID
+                +"&timeout="+(System.currentTimeMillis()+0x1400000);
+        String  hash=DigestUtils.md5Hex(url).substring(20);
+        return url+"&code="+hash;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getUID() {
+        return UID;
     }
 
-    public String getHash() {
-        return hash;
+    public void setUID(String UID) {
+        this.UID = UID;
     }
 
-    public void setHash(String hash) {
-        this.hash = hash;
+    public String getFILE_NAME() {
+        return FILE_NAME;
     }
 
-    public String getPath() {
-        return path;
+    public void setFILE_NAME(String FILE_NAME) {
+        this.FILE_NAME = FILE_NAME;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public String getHASH() {
+        return HASH;
     }
 
-    public String getType() {
-        return type;
+    public void setHASH(String HASH) {
+        this.HASH = HASH;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public String getPATH() {
+        return PATH;
     }
 
-    public long getSize() {
-        return size;
+    public void setPATH(String PATH) {
+        this.PATH = PATH;
     }
 
-    public void setSize(long size) {
-        this.size = size;
+    public String getTYPE() {
+        return TYPE;
     }
 
-    public Timestamp getUptime() {
-        return uptime;
+    public void setTYPE(String TYPE) {
+        this.TYPE = TYPE;
     }
 
-    public void setUptime(Timestamp uptime) {
-        this.uptime = uptime;
+    public long getFILE_SIZE() {
+        return FILE_SIZE;
     }
 
-    public int getIsDelete() {
-        return isDelete;
+    public void setFILE_SIZE(long FILE_SIZE) {
+        this.FILE_SIZE = FILE_SIZE;
     }
 
-    public void setIsDelete(int isDelete) {
-        this.isDelete = isDelete;
+    public Timestamp getUPTIME() {
+        return UPTIME;
+    }
+
+    public void setUPTIME(long  UPTIME) {
+        this.UPTIME = new Timestamp(UPTIME);
+    }
+    public void setUPTIME(Timestamp  UPTIME) {
+        this.UPTIME = UPTIME;
+    }
+    public int getISDELETE() {
+        return ISDELETE;
+    }
+
+    public void setISDELETE(int ISDELETE) {
+        this.ISDELETE = ISDELETE;
     }
 }
