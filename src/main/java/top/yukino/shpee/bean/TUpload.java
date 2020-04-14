@@ -206,7 +206,7 @@ public class TUpload extends BeanSqlWhere{
 
     public String getUrl() {
         String  url ="/static/files?uid="+this.UID
-                +"&timeout="+(System.currentTimeMillis()+0x1400000);
+                +"&timeout="+(System.currentTimeMillis()+0x1b7740);
         String  hash=DigestUtils.md5Hex(url).substring(20);
         return url+"&code="+hash;
     }

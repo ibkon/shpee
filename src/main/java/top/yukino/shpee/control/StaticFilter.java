@@ -1,5 +1,6 @@
 package top.yukino.shpee.control;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import top.yukino.shpee.base.Buffers;
@@ -19,13 +20,23 @@ public class StaticFilter extends Super {
     @GetMapping("/static/files")
     public void filter(HttpServletRequest request, HttpServletResponse response)throws IOException {
         String  uid = request.getParameter("uid");
-        Long    timeout=Long.parseLong(request.getParameter("timeout").toLowerCase());
+        Long    timeout=Long.parseLong(request.getParameter("timeout"));
         OutputStream    out = response.getOutputStream();
+        System.out.println(request.getRequestURL());
         if(timeout<System.currentTimeMillis()){
             out.write("403,Time out.".getBytes());
             out.close();
             return;
         }
+        String  url ="/static/files?uid="+uid
+                +"&timeout="+timeout;
+        String  code= DigestUtils.md5Hex(url).substring(20);
+        if(!code.equals(request.getParameter("code"))){
+            out.write("403,Bad request.".getBytes());
+            out.close();
+            return;
+        }
+
         TUpload upload=new TUpload();
         upload.setUID(uid);
         upload.setReturnListMap(mapper.select(upload.select()));
@@ -44,6 +55,7 @@ public class StaticFilter extends Super {
             response.setContentType(FileHtmlType.getmFileType(upload.getTYPE()));
             out.write(data);
             out.close();
+            return;
         }
         out.write("404".getBytes());
         out.close();

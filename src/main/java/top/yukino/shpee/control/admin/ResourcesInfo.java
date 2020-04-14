@@ -116,33 +116,26 @@ public class ResourcesInfo extends Super{
 		}
 		else {
 			TUpload	upload	= new TUpload();
+			TUpload	bean;
 			upload.setUID(uid);
-			List<Map<String,Object>>	rMaps	= mapper.select(upload.select());
-			if(rMaps==null||rMaps.size()==0){
+			upload.setReturnListMap(mapper.select(upload.select()));
+			bean	= (TUpload) upload.getBean(0);
+			if(bean==null){
 				val.put("type","msg");
 				val.put("msg","找不到该文件");
 			}
 			else {
-				Map<String,Object>	map	= rMaps.get(0);
-				String	type=map.get("TYPE").toString();
-				String	path=map.get("PATH").toString();
-				if(type!=null&&path!=null) {
-					path=path.replaceAll("upload","/static")+"/"+ DigestUtils.md5Hex(map.get("HASH").toString()).toUpperCase() + "."
-							+ type;
-					type = type.toUpperCase();
-				}
-				upload.setReturnListMap(rMaps);
-				switch (type){
+				switch (bean.getTYPE()){
 					case	"JPG":;
 					case 	"JPEG":;
 					case 	"PNG":;
 					case 	"GIF":
 						val.put("type","image");
-						val.put("src",((TUpload)upload.getBean(0)).getPATH());
+						val.put("src",bean.getUrl());
 						break;
 					default:
 						val.put("type","other");
-						val.put("src",path);
+						val.put("src",bean.getUrl());
 				}
 			}
 		}
