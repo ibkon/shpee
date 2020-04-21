@@ -11,7 +11,8 @@ CREATE TABLE IF NOT EXISTS T_UPLOAD(
 
 CREATE TABLE IF NOT EXISTS T_USER(
   NAME   varchar(128)    not null,
-  PASSWORD  char(64)    not null
+  PASSWORD  char(64)    not null,
+  CREATE_TIME   timestamp
     );
 
 CREATE TABLE IF NOT EXISTS T_ROLE(

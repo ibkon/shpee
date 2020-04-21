@@ -10,6 +10,7 @@ import java.util.Map;
 public class DefaultConfigure {
     private static Map<String,Object>  mConfigure;
     private static String   mConfigureFile  = "shpee.map";
+    private static boolean  init = false;
     static {
         File    configureFile   = new File(mConfigureFile);
         if(configureFile.exists()&&configureFile.isFile()){
@@ -22,6 +23,7 @@ public class DefaultConfigure {
                 );
                 mConfigure  = (Map<String, Object>) ois.readObject();
                 ois.close();
+                init=true;
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
@@ -108,5 +110,13 @@ public class DefaultConfigure {
         if(o==null)
             return null;
         return Double.parseDouble(o.toString());
+    }
+
+    public static boolean isInit() {
+        return init;
+    }
+
+    public static void setInit(boolean init) {
+        DefaultConfigure.init = init;
     }
 }

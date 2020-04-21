@@ -3,10 +3,10 @@ server:
 #  address: 127.0.0.1
 spring:
   thymeleaf:
-    cache: true
+    cache: false
   servlet:
     multipart:
-      max-file-size: 10MB
+      max-file-size: 100MB
 #   Mysql configure
 #  datasource:
 #    username: root
