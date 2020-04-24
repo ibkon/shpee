@@ -1,24 +1,22 @@
 package top.yukino.shpee.base;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import top.yukino.shpee.conf.Mapper;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /***
  *
  */
 public class Super {
 	@Autowired(required=true)
-	protected Mapper	mapper;
+	protected Mapper mapper;
 
 	/**
 	 * 构建默认Layui json对象

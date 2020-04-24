@@ -22,7 +22,6 @@ public class StaticFilter extends Super {
         String  uid = request.getParameter("uid");
         Long    timeout=Long.parseLong(request.getParameter("timeout"));
         OutputStream    out = response.getOutputStream();
-        System.out.println(request.getRequestURL());
         if(timeout<System.currentTimeMillis()){
             out.write("403,Time out.".getBytes());
             out.close();
@@ -37,12 +36,11 @@ public class StaticFilter extends Super {
             return;
         }
 
-        TUpload upload=new TUpload();
+        TUpload upload=new TUpload(mapper);
         upload.setUID(uid);
-        upload.setReturnListMap(mapper.select(upload.select()));
-        if(upload.getBean(0)!=null){
+        upload.select();
+        if(upload.getUPTIME()!=null){
             byte[]  data;
-            upload  = (TUpload) upload.getBean(0);
             data    = Buffers.getData(upload.getHASH());
             if(data==null){
                 FileInputStream in  = new FileInputStream(

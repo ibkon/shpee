@@ -1,15 +1,14 @@
 package top.yukino.shpee.control;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import top.yukino.shpee.base.Super;
+import top.yukino.shpee.bean.TUser;
+import top.yukino.shpee.bean.TUserRole;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /***
  * 注册
@@ -24,29 +23,26 @@ public class Registered extends Super {
 
     @RequestMapping("/registered/info")
     @ResponseBody
-    public String   registeredInfo(HttpServletRequest request){
+    public Map<String,Object>   registeredInfo(HttpServletRequest request){
+        //测试期间防止注册频率过快
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         String  name    = request.getParameter("username");
         String  password    = request.getParameter("password");
-        String  role        = "ROLE_ADMIN";
-        if(name==null||password==null||role==null){
-            return "注册失败";
-        }
-        List<Map<String,Object>>    lMap;
-        String  uuid;
-        lMap=mapper.select("select * from T_USER where NAME='"+name+"'");
-        if(lMap!=null&&lMap.size()>0){
-            uuid=UUID.randomUUID().toString().replaceAll("-","");
-            mapper.insert("insert into T_ROLE(RID,ROLE) values('"+ uuid +"','"+role+"')");
-            mapper.insert("insert into T_USER_ROLE(NAME,RID) values('"+name+"','"+uuid+"')");
-            return "用户"+name+"添加新权限成功";
-        }
-        else {
-            uuid=UUID.randomUUID().toString().replaceAll("-","");
-            password=new BCryptPasswordEncoder().encode(password);
-            mapper.insert("insert into T_USER(NAME,PASSWORD) values('"+name+"','"+password+"')");
-            mapper.insert("insert into T_ROLE(RID,ROLE) values('"+ uuid +"','"+role+"')");
-            mapper.insert("insert into T_USER_ROLE(NAME,RID) values('"+name+"','"+uuid+"')");
-            return "添加用户成功";
-        }
+        TUser   user    = new TUser(mapper);
+        TUserRole tus	= new TUserRole(mapper);
+        user.setNAME(name);
+        user.setPASSWORD(password);
+        tus.setNAME(name);
+        tus.setRID("USER");
+        tus.insert();
+        Integer retVal  = null;
+        retVal  = user.insert();
+        if(retVal==null||retVal==0)
+            return buildJson(1,"注册失败："+retVal,null);
+        return buildJson(0,"注册成功",null);
     }
 }

@@ -1,20 +1,17 @@
 package top.yukino.shpee.control.admin;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import top.yukino.shpee.bean.TUpload;
 import top.yukino.shpee.base.Super;
+import top.yukino.shpee.bean.TUpload;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 /***
  * 系统资源管理
  * @author Sagiri
@@ -69,27 +66,27 @@ public class ResourcesInfo extends Super{
 		String	sLimit	= request.getParameter("limit");
 		Integer	page	= Integer.parseInt(sPage==null?"0":sPage);
 		Integer	limit	= Integer.parseInt(sLimit==null?"0":sLimit);
-		//查询结果和返回结果缓存
-		List<Map<String,Object>>	rMaps;
-		List<Map<String,Object>>	lMaps	= new ArrayList<>();
+
+		Integer	retVal;
 		//构建查询选项
-		TUpload	upload	= new TUpload();
-		rMaps	= mapper.select(upload.select());
-		if(rMaps!=null){
+		TUpload	upload	= new TUpload(mapper);
+		upload.setISDELETE(1);
+		retVal	= upload.select();
+		if(retVal!=null&&retVal>0){
 			//如果未设置查询页面和一页条数，则返回全部查询结果
 			if(page==0||limit==0){
-				return buildJson(0,"查询全部文件成功",rMaps);
+				return buildJson(0,"查询全部文件成功",upload.getLMap());
 			}
+			List<Map<String,Object>>	maps	= new ArrayList<>();
 			for(int i=0;i<limit;i++){
 				//判断是否查询到最后一个，是则退出
-				if((((page-1)*10)+i)>=rMaps.size())
+				if((((page-1)*10)+i)>=upload.getLMap().size())
 					break;
-				lMaps.add(rMaps.get((page-1)*10+i));
+				maps.add(upload.getLMap().get((page-1)*10+i));
 			}
-			Map<String,Object>	rMap	= buildJson(0,"文件查询成功",lMaps);
-			//将count设置为总条目数
-			rMap.put("count",rMaps.size());
-			return rMap;
+			Map<String,Object>	rMaps	= buildJson(0,"文件查询成功",maps);
+			rMaps.put("count",upload.getLMap().size());
+			return rMaps;
 		}
 		return buildJson(1,"上传文件查询失败",null);
 	}
@@ -99,9 +96,9 @@ public class ResourcesInfo extends Super{
 	@ResponseBody
 	public Map<String,Object> deleteFile(HttpServletRequest request){
 		String	uid	= request.getParameter("uid");
-		TUpload upload	= new TUpload();
+		TUpload upload	= new TUpload(mapper);
 		upload.setUID(uid);
-		if(mapper.delete(upload.delete())>0){
+		if(upload.delete()>0){
 			return buildJson(0,"文件删除成功",null);
 		}
 		return buildJson(1,"删除失败",null);
@@ -115,27 +112,26 @@ public class ResourcesInfo extends Super{
 			val.put("msg","文件UID为空，无法查询！！！");
 		}
 		else {
-			TUpload	upload	= new TUpload();
-			TUpload	bean;
+			Integer	retVal	= null;
+			TUpload	upload	= new TUpload(mapper);
 			upload.setUID(uid);
-			upload.setReturnListMap(mapper.select(upload.select()));
-			bean	= (TUpload) upload.getBean(0);
-			if(bean==null){
+			retVal	= upload.select();
+			if(retVal==null||retVal==0){
 				val.put("type","msg");
 				val.put("msg","找不到该文件");
 			}
 			else {
-				switch (bean.getTYPE()){
+				switch (upload.getTYPE()){
 					case	"JPG":;
 					case 	"JPEG":;
 					case 	"PNG":;
 					case 	"GIF":
 						val.put("type","image");
-						val.put("src",bean.getUrl());
+						val.put("src",upload.getUrl());
 						break;
 					default:
 						val.put("type","other");
-						val.put("src",bean.getUrl());
+						val.put("src",upload.getUrl());
 				}
 			}
 		}

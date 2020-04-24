@@ -12,12 +12,12 @@ CREATE TABLE IF NOT EXISTS T_UPLOAD(
 CREATE TABLE IF NOT EXISTS T_USER(
   NAME   varchar(128)    not null,
   PASSWORD  char(64)    not null,
-  CREATE_TIME   timestamp
+  UPTIME   timestamp
     );
 
 CREATE TABLE IF NOT EXISTS T_ROLE(
-    RID char(32) not null,
-    ROLE    char(32) not null
+    RID    char(32) not null,
+    ROLE   char(32) not  null
     );
 
 CREATE TABLE IF NOT EXISTS T_USER_ROLE(
