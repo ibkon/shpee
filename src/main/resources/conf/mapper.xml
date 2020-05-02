@@ -6,11 +6,6 @@
 	  		${value}
 	  	]]>
     </select>
-    <select id="lSelect" resultType="java.util.List">
-        <![CDATA[
-	  		${value}
-	  	]]>
-    </select>
     <insert id="insert">
         <![CDATA[
 	  		${value}
@@ -26,4 +21,10 @@
 	  		${value}
 	  	]]>
     </update>
+
+    <select id="selsctTUpload" parameterType="java.lang.String" resultType="top.yukino.shpee.bean.Upload">
+        SELECT UID,FILE_NAME,HASH,PATH,TYPE,FILE_SIZE,UPTIME
+        FROM T_UPLOAD
+        WHERE ISDELETE=0 AND UID=#{uid}
+    </select>
 </mapper>

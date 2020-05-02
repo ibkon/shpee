@@ -7,6 +7,6 @@ import lombok.Data;
  */
 @Data
 public class TRole{
-    private String  RID;
-    private String  ROLE;
+    private String  rid;
+    private String  role;
 }

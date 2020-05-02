@@ -3,6 +3,7 @@ package top.yukino.shpee.base;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import top.yukino.shpee.conf.Mapper;
 
 import javax.servlet.http.HttpServletRequest;
@@ -78,5 +79,9 @@ public class Super {
 		} else {
 			mVal.put("device", "comput");
 		}
+	}
+
+	public String passwordEncode(String password){
+		return new BCryptPasswordEncoder().encode(password);
 	}
 }

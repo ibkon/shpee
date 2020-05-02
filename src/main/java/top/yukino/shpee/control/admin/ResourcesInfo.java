@@ -69,7 +69,7 @@ public class ResourcesInfo extends Super{
 
 		Integer	retVal;
 		//构建查询选项
-		TUpload	upload	= new TUpload(mapper);
+		TUpload	upload	= new TUpload();
 		upload.setISDELETE(1);
 		retVal	= upload.select();
 		if(retVal!=null&&retVal>0){

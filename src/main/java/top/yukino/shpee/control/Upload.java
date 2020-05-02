@@ -13,6 +13,7 @@ import top.yukino.shpee.bean.TUpload;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -54,36 +55,50 @@ public class Upload extends Super {
 		if(upfile==null) {
 			return buildJson(1,"不能上传空文件",null);
 		}
-		Integer	retVal	= null;
-		//数据库表必备信息
-		TUpload		tUpload	= new TUpload(mapper);
-		tUpload.setFILE_NAME(upfile.getOriginalFilename());
-		tUpload.setHASH(DigestUtils.sha256Hex(upfile.getInputStream()).toUpperCase());
-		tUpload.setTYPE(tUpload.getFILE_NAME().substring(tUpload.getFILE_NAME().lastIndexOf('.')+1));
-		tUpload.setFILE_SIZE(upfile.getSize());
-		tUpload.setPATH(this.upLoadPath + new SimpleDateFormat("yyyy_MM_dd").format(new Date()));
+		String	fileName	= upfile.getOriginalFilename();
+		String	hash		= DigestUtils.sha256Hex(upfile.getInputStream()).toUpperCase();
+		String	type		= fileName.substring(fileName.lastIndexOf('.')+1);
+		long	size		= upfile.getSize();
+		String	path		= this.upLoadPath+new SimpleDateFormat("yyyy_MM_dd").format(new Date());
 
-		retVal	= tUpload.select();
-		if(retVal==null||retVal>0){
-			return buildJson(0,"已存在相同文件",null);
+		TUpload	upload	= null;
+		if((upload=mapper.selectTHUpload(hash))!=null){
+			//快传
+			if(upload.getTYPE().equals(type)&&upload.getFILE_SIZE()==size){
+				upload.setUID(uuid());
+				upload.setUPTIME(new Timestamp(System.currentTimeMillis()));
+				if(mapper.insertTUpload(upload)==1){
+					return buildJson(0,"上传成功",null);
+				}
+			}
 		}
+		upload	= new TUpload();
+		upload.setUID(uuid());
+		upload.setUPTIME(new Timestamp(System.currentTimeMillis()));
+		upload.setISDELETE(0);
+		upload.setFILE_NAME(fileName);
+		upload.setTYPE(type);
+		upload.setHASH(hash);
+		upload.setPATH(path);
+
 		//根据年月日创建目录
-		File fCache	= new File(tUpload.getPATH());
+		File fCache	= new File(path);
 		if(!fCache.exists()) {
 			fCache.mkdirs();
 		}
-		//文件保存前将信息存入数据库
-		tUpload.insert();
-		fCache	= new File(tUpload.getPATH()+"/"+tUpload.getHASH());
-		InputStream in		= upfile.getInputStream();
-		OutputStream out		= new FileOutputStream(fCache);
-		byte[]			buffer	= new byte[0x4000];
-		int				length	= 0;
-		while((length=in.read(buffer, 0, 0x4000))!=-1) {
-			out.write(buffer,0,length);
+
+		if(mapper.insertTUpload(upload)==1){
+			fCache	= new File(path+"/"+hash);
+			InputStream in		= upfile.getInputStream();
+			OutputStream out		= new FileOutputStream(fCache);
+			byte[]			buffer	= new byte[0x4000];
+			int				length	= 0;
+			while((length=in.read(buffer, 0, 0x4000))!=-1) {
+				out.write(buffer,0,length);
+			}
+			out.close();
+			in.close();
 		}
-		out.close();
-		in.close();
-		return buildJson(0,"上传文件成功",null);
+		return buildJson(1,"上传文件失败",null);
 	}
 }

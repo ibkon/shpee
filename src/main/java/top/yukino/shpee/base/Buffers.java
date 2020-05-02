@@ -4,9 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /***
- * 缓存
- */
-public class Buffers extends Super{
+ * @Author Sagiri
+ * @Date 1:07 2020/5/1
+ * 运行缓存
+ **/
+public class Buffers{
     /***
      * 缓存节点
      */

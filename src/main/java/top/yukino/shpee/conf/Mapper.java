@@ -1,12 +1,25 @@
 package top.yukino.shpee.conf;
 
+import org.apache.ibatis.annotations.Param;
+import top.yukino.shpee.bean.TUpload;
+import top.yukino.shpee.bean.TUser;
+
 import java.util.List;
 import java.util.Map;
 
+
 public interface Mapper {
     public List<Map<String,Object>> select(String sql);
-    public List<Object> lSelect(String sql);
     public Integer  insert(String sql);
     public Integer  update(String sql);
     public Integer  delete(String sql);
+
+    public TUpload  selectTUpload(@Param("uid") String uid);
+    public TUpload  selectTHUpload(@Param("hash") String hash);
+    public TUser    selectTUser(@Param("username") String username);
+
+    public Integer  insertTUser(TUser user);
+    public Integer  insertTUserRole(@Param("username") String username,@Param("role") String role);
+    public Integer  insertTUpload(TUpload upload);
+
 }

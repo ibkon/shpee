@@ -1,9 +1,9 @@
 server:
   port: 8080
-#  address: 127.0.0.1
+  address: ::1
 spring:
   thymeleaf:
-    cache: true
+    cache: false
   servlet:
     multipart:
       max-file-size: 100MB
@@ -30,3 +30,5 @@ spring:
 mybatis:
   mapper-locations: classpath:conf/mapper.xml
   type-aliases-package: top.yukino.config.Mapper
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

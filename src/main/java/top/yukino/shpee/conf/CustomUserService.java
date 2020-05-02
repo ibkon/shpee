@@ -13,10 +13,9 @@ import java.util.List;
 public class CustomUserService extends Super implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-            TUser   user    = new TUser(mapper);
+            TUser   user    = new TUser();
             Integer retVal  = null;
             user.setNAME(username);
-            retVal  = user.select();
             if(retVal==null||retVal==0){
                 throw new UsernameNotFoundException("验证失败："+retVal);
             }

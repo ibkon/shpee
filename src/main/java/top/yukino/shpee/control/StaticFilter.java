@@ -31,15 +31,13 @@ public class StaticFilter extends Super {
                 +"&timeout="+timeout;
         String  code= DigestUtils.md5Hex(url).substring(20);
         if(!code.equals(request.getParameter("code"))){
-            out.write("403,Bad request.".getBytes());
+            out.write("Bad request.".getBytes());
             out.close();
             return;
         }
 
-        TUpload upload=new TUpload(mapper);
-        upload.setUID(uid);
-        upload.select();
-        if(upload.getUPTIME()!=null){
+        TUpload upload= null;
+        if((upload=mapper.selectTUpload(uid))!=null){
             byte[]  data;
             data    = Buffers.getData(upload.getHASH());
             if(data==null){
