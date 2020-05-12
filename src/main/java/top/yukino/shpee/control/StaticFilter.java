@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 
 @Controller
 public class StaticFilter extends Super {
@@ -37,7 +38,9 @@ public class StaticFilter extends Super {
         }
 
         TUpload upload= null;
-        if((upload=mapper.selectTUpload(uid))!=null){
+        List<TUpload>   tUploads=null;
+        if((tUploads=mapper.selectTUpload(buildMap("uid",uid)))!=null&&tUploads.size()>0){
+            upload  = tUploads.get(0);
             byte[]  data;
             data    = Buffers.getData(upload.getHASH());
             if(data==null){

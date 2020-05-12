@@ -62,7 +62,8 @@ public class Upload extends Super {
 		String	path		= this.upLoadPath+new SimpleDateFormat("yyyy_MM_dd").format(new Date());
 
 		TUpload	upload	= null;
-		if((upload=mapper.selectTHUpload(hash))!=null){
+		try {
+			upload	= mapper.selectTUpload(buildMap("hash",hash)).get(0);
 			//快传
 			if(upload.getTYPE().equals(type)&&upload.getFILE_SIZE()==size){
 				upload.setUID(uuid());
@@ -72,6 +73,9 @@ public class Upload extends Super {
 				}
 			}
 		}
+		catch (IndexOutOfBoundsException e){}
+
+
 		upload	= new TUpload();
 		upload.setUID(uuid());
 		upload.setUPTIME(new Timestamp(System.currentTimeMillis()));

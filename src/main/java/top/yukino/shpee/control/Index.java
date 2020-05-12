@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import top.yukino.shpee.base.DefaultConfigure;
 import top.yukino.shpee.base.Super;
 import top.yukino.shpee.bean.TUser;
-import top.yukino.shpee.bean.TUserRole;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -54,12 +53,9 @@ public class Index extends Super {
 		String	password	= request.getParameter("password");
 
 		TUser	user	= new TUser();
-		TUserRole	tus	= new TUserRole();
 		user.setNAME(username);
 		user.setPASSWORD(passwordEncode(password));
-		tus.setNAME(username);
-		tus.setRID("ADMIN");
-		if(mapper.insertTUser(user)==1&&mapper.insertTUserRole(tus)==1)
+		if(mapper.insertTUser(user)==1&&mapper.insertTUserRole(username,"ADMIN")==1)
 		{
 			DefaultConfigure.setConfigure("applicationName",appName);
 			DefaultConfigure.setInit(true);

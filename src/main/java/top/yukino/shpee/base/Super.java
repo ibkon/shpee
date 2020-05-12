@@ -84,4 +84,15 @@ public class Super {
 	public String passwordEncode(String password){
 		return new BCryptPasswordEncoder().encode(password);
 	}
+
+	public Map<String,Object>	buildMap(String...args) {
+		if(args.length<2||args.length%2!=0){
+			return null;
+		}
+		Map<String,Object>	map	= new HashMap<>();
+		for(int i=0;i<args.length;i+=2){
+			map.put(args[i],args[i+1]);
+		}
+		return map;
+	}
 }

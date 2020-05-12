@@ -1,7 +1,8 @@
 package top.yukino.shpee.control;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import top.yukino.shpee.base.Super;
 import top.yukino.shpee.bean.TUser;
@@ -11,24 +12,34 @@ import java.sql.Timestamp;
 import java.util.Map;
 
 /***
- * 注册
+ * @Author Sagiri
+ * @Date2020/5/3
+ * 用户注册处理
  */
 @Controller
 public class Registered extends Super {
-
-    @RequestMapping("/registered")
-    public String   registered(HttpServletRequest request,Map<String,Object> val){
+    /**
+     * @Author Sagiri
+     * @Description User registration controller
+     * @Date 0:47 2020/5/3
+     * @Param [request, val]
+     * @return java.lang.String
+     **/
+    @GetMapping("/registered")
+    public String   registered(HttpServletRequest request){
         return "registered";
     }
 
-    @RequestMapping("/registered/info")
     @ResponseBody
+    @PostMapping("/registered/info")
     public Map<String,Object>   registeredInfo(HttpServletRequest request){
         String  name    = request.getParameter("username");
         String  password    = request.getParameter("password");
-        TUser   user    = mapper.selsctTUser(name);
-        if(user!=null){
-            return buildJson(1,"注册失败",null);
+        TUser   user    = null;
+        try {
+            user    = mapper.selectTUser(buildMap("name",name)).get(0);
+        }catch (ArrayIndexOutOfBoundsException e){
+            return buildJson(1,"注册失败：",null);
         }
         user.setNAME(name);
         user.setPASSWORD(password);

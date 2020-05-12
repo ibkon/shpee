@@ -14,9 +14,9 @@ public interface Mapper {
     public Integer  update(String sql);
     public Integer  delete(String sql);
 
-    public TUpload  selectTUpload(@Param("uid") String uid);
-    public TUpload  selectTHUpload(@Param("hash") String hash);
-    public TUser    selectTUser(@Param("username") String username);
+    public List<TUpload>    selectTUpload(Map<String,Object> args);
+    public List<TUser>      selectTUser(Map<String,Object> args);
+    public List<String>     selectRole(@Param("username") String username);
 
     public Integer  insertTUser(TUser user);
     public Integer  insertTUserRole(@Param("username") String username,@Param("role") String role);
