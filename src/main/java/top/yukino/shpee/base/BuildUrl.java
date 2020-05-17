@@ -2,8 +2,8 @@ package top.yukino.shpee.base;
 
 
 import org.apache.commons.codec.digest.DigestUtils;
+import top.yukino.shpee.bean.TUpload;
 
-import java.util.Base64;
 import java.util.Random;
 
 /***
@@ -13,27 +13,29 @@ import java.util.Random;
  TODO:  Build url and handle related verification
  */
 public class BuildUrl {
-    final private static Base64.Decoder   decoder = Base64.getDecoder();
-    final private static Base64.Encoder   encoder = Base64.getEncoder();
     final private static String random  = Integer.toString(new Random().nextInt(0X7FFFFFFF));
-
-    /**
-     * @Author Sagiri
-     * @Description url add verification information
-     * @Date 0:52 2020/5/3
-     * @Param [url]
-     * @return java.lang.String
-     **/
-    public static String    enUrl(String url,Long timeout){
-        StringBuilder   builder = new StringBuilder();
-        builder.append("timeout=");
-        builder.append(System.currentTimeMillis()+timeout);
-        builder.append("&captcha=");
-        builder.append(DigestUtils.md5Hex(url+random));
-        return url+"&verification="+encoder.encodeToString(builder.toString().getBytes());
+    final private static String staticResourceAddress   =
+            DefaultConfigure.getSConfigure("staticResourceAddress")==null
+                    ?"":DefaultConfigure.getSConfigure("staticResourceAddress");
+    public static Long  timeoutHMS(int h,int m,int s)
+    {
+        return  (long)h*0X36EE80+m*0XEA60+s*0X3EE8;
     }
 
-    public static String    deUrl(String url){
-        return null;
+    public static String    buildUploadUrl(TUpload upload,Long timeout){
+        if(upload==null)
+            return "404";
+        //If the file is not saved locally, return the address in the upload.PATH .
+        if(upload.getPATH().indexOf("http")!=-1)
+            return upload.getPATH();
+        //Build url, add timeout, verification code
+        String  url = staticResourceAddress+"/static/image?uid="+upload.getUPTIME()
+                +"&timeout="+(System.currentTimeMillis()+timeout);
+        String  code   = DigestUtils.md5Hex(url+random);
+        return url+"&code="+code;
+    }
+
+    public static boolean   checkUrl(String url){
+        return true;
     }
 }
