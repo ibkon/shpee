@@ -5,12 +5,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import top.yukino.shpee.base.BuildUrl;
 import top.yukino.shpee.base.Super;
 import top.yukino.shpee.bean.TUpload;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 /***
@@ -95,27 +95,24 @@ public class ResourcesInfo extends Super{
 			val.put("msg","文件UID为空，无法查询！！！");
 		}
 		else {
-			Integer	retVal	= null;
-			TUpload	upload	= new TUpload(mapper);
-			upload.setUID(uid);
-			retVal	= upload.select();
-			if(retVal==null||retVal==0){
-				val.put("type","msg");
-				val.put("msg","找不到该文件");
-			}
-			else {
+			TUpload	upload	= null;
+
+			try {
+				upload	= mapper.selectTUpload(buildMap("uid",uid)).get(0);
 				switch (upload.getTYPE()){
 					case	"JPG":;
 					case 	"JPEG":;
 					case 	"PNG":;
 					case 	"GIF":
 						val.put("type","image");
-						val.put("src",upload.getUrl());
 						break;
 					default:
 						val.put("type","other");
-						val.put("src",upload.getUrl());
 				}
+				val.put("src", BuildUrl.buildUploadUrl(upload,BuildUrl.timeoutHMS(0,30,0)));
+			}catch (ArrayIndexOutOfBoundsException e){
+				val.put("type","msg");
+				val.put("msg","查询失败");
 			}
 		}
 		return "tool/showResources";

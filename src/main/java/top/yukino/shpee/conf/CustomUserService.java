@@ -1,7 +1,6 @@
 package top.yukino.shpee.conf;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,16 +18,19 @@ import java.util.List;
 public class CustomUserService extends Super implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        TUser   user    = mapper.selectTUser(username);
-        if(user==null)
-            throw new UsernameNotFoundException("验证失败：用户不存在");
-        String  userRole    = mapper.selectUserRole(user.getNAME());
+        TUser   user    = null;
         List<SimpleGrantedAuthority>    authorities = new ArrayList<>();
-        List<String>    roles   = null;
-        if(userRole==null||(roles = mapper.selectRole(userRole))==null)
-            return new User(user.getNAME(),user.getPASSWORD(),authorities);
-        for(String s:roles)
-            authorities.add(new SimpleGrantedAuthority(s));
+        try {
+            user  = mapper.selectTUser(buildMap("name",username)).get(0);
+            List<String>     userRole= mapper.selectRole(username);
+            for(String s:userRole){
+                authorities.add(new SimpleGrantedAuthority(s));
+            }
+        }catch (ArrayIndexOutOfBoundsException e){
+            throw new UsernameNotFoundException("验证失败：用户不存在");
+        }catch (NullPointerException e){
+            throw new UsernameNotFoundException("验证失败：用户权限异常");
+        }
         return new org.springframework.security.core.userdetails.User(user.getNAME(),user.getPASSWORD(),authorities);
     }
 }
