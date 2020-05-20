@@ -2,10 +2,11 @@ package top.yukino.shpee.bean;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Data
-public class TUpload{
+public class TUpload implements Serializable {
     private String UID;
     private String FILE_NAME;
     private String HASH;

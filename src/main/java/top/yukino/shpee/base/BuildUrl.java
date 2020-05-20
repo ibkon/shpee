@@ -29,7 +29,7 @@ public class BuildUrl {
         if(upload.getPATH().indexOf("http")!=-1)
             return upload.getPATH();
         //Build url, add timeout, verification code
-        String  url = staticResourceAddress+"/static/image?uid="+upload.getUPTIME()
+        String  url = staticResourceAddress+"/static/image?uid="+upload.getUID()
                 +"&timeout="+(System.currentTimeMillis()+timeout);
         String  code   = DigestUtils.md5Hex(url+random);
         return url+"&code="+code;

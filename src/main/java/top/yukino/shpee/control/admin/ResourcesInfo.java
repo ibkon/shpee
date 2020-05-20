@@ -98,7 +98,7 @@ public class ResourcesInfo extends Super{
 			TUpload	upload	= null;
 
 			try {
-				upload	= mapper.selectTUpload(buildMap("uid",uid)).get(0);
+				upload	= mapper.selectTUpload(buildMap("UID",uid)).get(0);
 				switch (upload.getTYPE()){
 					case	"JPG":;
 					case 	"JPEG":;

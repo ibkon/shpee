@@ -1,9 +1,9 @@
 package top.yukino.shpee.control;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import top.yukino.shpee.base.Buffers;
+import top.yukino.shpee.base.BuildUrl;
 import top.yukino.shpee.base.Super;
 import top.yukino.shpee.bean.TUpload;
 import top.yukino.shpee.conf.FileHtmlType;
@@ -14,49 +14,48 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.List;
 
 @Controller
 public class StaticFilter extends Super {
-    @GetMapping("/static/files")
+    @GetMapping("/static/image")
     public void filter(HttpServletRequest request, HttpServletResponse response)throws IOException {
+        System.out.println(request.getRequestURL().toString());
         String  uid = request.getParameter("uid");
+        String  code=request.getParameter("code");
         Long    timeout=Long.parseLong(request.getParameter("timeout"));
         OutputStream    out = response.getOutputStream();
         if(timeout<System.currentTimeMillis()){
-            out.write("403,Time out.".getBytes());
-            out.close();
-            return;
+            System.err.println("超时:"+uid);
+            out.write(403);
         }
-        String  url ="/static/files?uid="+uid
-                +"&timeout="+timeout;
-        String  code= DigestUtils.md5Hex(url).substring(20);
-        if(!code.equals(request.getParameter("code"))){
-            out.write("Bad request.".getBytes());
-            out.close();
-            return;
-        }
-
-        TUpload upload= null;
-        List<TUpload>   tUploads=null;
-        if((tUploads=mapper.selectTUpload(buildMap("uid",uid)))!=null&&tUploads.size()>0){
-            upload  = tUploads.get(0);
-            byte[]  data;
-            data    = Buffers.getData(upload.getHASH());
-            if(data==null){
-                FileInputStream in  = new FileInputStream(
-                        new File(upload.getPATH()+"/"+upload.getHASH())
-                );
-                data=in.readAllBytes();
-                in.close();
-                Buffers.setData(upload.getHASH(),data);
+        else if(BuildUrl.checkUrl("static/image?uid="+uid+"&timeout="+timeout+"&code="+code)){
+            try {
+                TUpload upload  = mapper.selectTUpload(buildMap("UID",uid)).get(0);
+                byte[]  data    = null;
+                data    = Buffers.getData(upload.getUID());
+                if(data==null){
+                    File    file   = new File(upload.getPATH()+"/"+upload.getFILE_NAME());
+                    if(file.isFile()){
+                        FileInputStream inputStream = new FileInputStream(file);
+                        data    = inputStream.readAllBytes();
+                        inputStream.close();
+                        Buffers.setData(upload.getUID(),data);
+                        response.setContentType(FileHtmlType.getmFileType(upload.getTYPE()));
+                        out.write(data);
+                    }else {
+                        System.err.println("找不到文件:"+file.getAbsolutePath());
+                        out.write(404);
+                    }
+                }
+            }catch (ArrayIndexOutOfBoundsException e){
+                System.err.println("数组越界:"+uid);
+                out.write(404);
             }
-            response.setContentType(FileHtmlType.getmFileType(upload.getTYPE()));
-            out.write(data);
-            out.close();
-            return;
+
+        }else {
+            System.err.println("验证失败:"+uid);
+            out.write(404);
         }
-        out.write("404".getBytes());
         out.close();
     }
 }

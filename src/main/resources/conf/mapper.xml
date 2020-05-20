@@ -23,9 +23,50 @@
 	  	]]>
     </update>
 
-    <select id="selsctTUpload" parameterType="java.lang.String" resultType="top.yukino.shpee.bean.Upload">
+    <!--Bean-->
+    <select id="selectTUpload" resultType="top.yukino.shpee.bean.TUpload">
         SELECT UID,FILE_NAME,HASH,PATH,TYPE,FILE_SIZE,UPTIME
         FROM T_UPLOAD
-        WHERE ISDELETE=0 AND UID=#{uid}
+        <where>
+            <if test="UID!=null">
+                UID=#{UID}
+            </if>
+            <if test="FILE_NAME!=null">
+                FILE_NAME=#{FILE_NAME}
+            </if>
+            <if test="HASH!=null">
+                HASH=#{HASH}
+            </if>
+            <if test="TYPE!=null">
+                TYPE=#{TYPE}
+            </if>
+            <if test="ISDELETE!=null">
+                ISDELETE=#{ISDELETE}
+            </if>
+            <if test="page!=null and limit!=null">
+                limit #{page},#{limit}
+            </if>
+        </where>
     </select>
+    <select id="selectTUser" resultType="top.yukino.shpee.bean.TUser">
+        SELECT NAME,PASSWORD,UPTIME FROM T_USER
+        <where>
+            <if test="NAME!=null">
+                NAME=#{NAME}
+            </if>
+        </where>
+    </select>
+    <select id="selectRole">
+        SELECT r.ROLE FROM T_USER_ROLE ur,T_ROLE r WHERE ur.NAME=#{NAME} AND ur.RID=r.RID
+    </select>
+    <insert id="insertTUser" parameterType="top.yukino.shpee.bean.TUser">
+        INSERT INTO T_USER(NAME,PASSWORD,UPTIME) VALUES (#{NAME},#{PASSWORD},#{UPTIME})
+    </insert>
+    <insert id="insertTUserRole">
+        INSERT INTO T_USER_ROLE(NAME,RID) VALUES (#{NAME},#{ROLE})
+    </insert>
+    <insert id="insertTUpload" parameterType="top.yukino.shpee.bean.TUpload">
+        INSERT INTO T_UPLOAD(UID,FILE_NAME,HASH,PATH,TYPE,FILE_SIZE,UPTIME,ISDELETE)
+        VALUES (#{UID},#{FILE_NAME},#{HASH},#{PATH},#{TYPE},#{FILE_SIZE},#{UPTIME},#{ISDELETE})
+    </insert>
 </mapper>

@@ -4,11 +4,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import top.yukino.shpee.base.BuildUrl;
 import top.yukino.shpee.base.DefaultConfigure;
 import top.yukino.shpee.base.Super;
+import top.yukino.shpee.bean.TUpload;
 import top.yukino.shpee.bean.TUser;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /***
@@ -34,7 +39,16 @@ public class Index extends Super {
 	 **/
 	public String indexPage(HttpServletRequest request, Map<String, Object> map) {
 		checkLogin(map);
-
+		List<TUpload>	tUploads	= mapper.selectTUpload(null);
+		List<String>	paths		= new ArrayList<>();
+		if(tUploads==null||tUploads.size()==0){
+			paths.add("images/index1.jpg");
+			paths.add("images/index2.jpeg");
+		}
+		for(TUpload t:tUploads){
+			paths.add(BuildUrl.buildUploadUrl(t,BuildUrl.timeoutHMS(0,30,0)));
+		}
+		map.put("imageList",paths);
 		checkDriver(request,map);
 		return "index";
 	}
@@ -55,6 +69,7 @@ public class Index extends Super {
 		TUser	user	= new TUser();
 		user.setNAME(username);
 		user.setPASSWORD(passwordEncode(password));
+		user.setUPTIME(new Timestamp(System.currentTimeMillis()));
 		if(mapper.insertTUser(user)==1&&mapper.insertTUserRole(username,"ADMIN")==1)
 		{
 			DefaultConfigure.setConfigure("applicationName",appName);

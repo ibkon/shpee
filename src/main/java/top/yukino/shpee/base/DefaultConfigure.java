@@ -73,7 +73,7 @@ public class DefaultConfigure {
      * @return
      */
     public static String    getSConfigure(String key){
-        return mConfigure.get(key).toString();
+        return (String) mConfigure.get(key);
     }
 
     /**
