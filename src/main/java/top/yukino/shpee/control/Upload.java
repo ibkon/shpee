@@ -65,7 +65,7 @@ public class Upload extends Super {
 		try {
 			upload	= mapper.selectTUpload(buildMap("hash",hash)).get(0);
 			//快传
-			if(upload.getTYPE().equals(type)&&upload.getFILE_SIZE()==size){
+			if(upload.getTYPE().equals(type)&&upload.getSIZE()==size){
 				upload.setUID(uuid());
 				upload.setUPTIME(new Timestamp(System.currentTimeMillis()));
 				if(mapper.insertTUpload(upload)==1){
@@ -80,17 +80,17 @@ public class Upload extends Super {
 		upload.setUID(uuid());
 		upload.setUPTIME(new Timestamp(System.currentTimeMillis()));
 		upload.setISDELETE(0);
-		upload.setFILE_NAME(fileName);
+		upload.setFILENAME(fileName);
 		upload.setTYPE(type);
 		upload.setHASH(hash);
 		upload.setPATH(path);
+		upload.setSIZE(size);
 
 		//根据年月日创建目录
 		File fCache	= new File(path);
 		if(!fCache.exists()) {
 			fCache.mkdirs();
 		}
-
 		if(mapper.insertTUpload(upload)==1){
 			fCache	= new File(path+"/"+hash);
 			InputStream in		= upfile.getInputStream();
@@ -102,6 +102,7 @@ public class Upload extends Super {
 			}
 			out.close();
 			in.close();
+			return buildJson(0,"File upload success.",null);
 		}
 		return buildJson(1,"上传文件失败",null);
 	}

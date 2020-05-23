@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS T_UPLOAD(
     ,HASH   char(64)
     ,PATH   varchar(128)    NOT NULL
     ,TYPE   char(16)
-    ,FILE_SIZE   BIGINT
+    ,SIZE   BIGINT
     ,UPTIME TIMESTAMP
     ,ISDELETE   int
     );

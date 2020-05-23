@@ -8,11 +8,11 @@ import java.sql.Timestamp;
 @Data
 public class TUpload implements Serializable {
     private String UID;
-    private String FILE_NAME;
+    private String FILENAME;
     private String HASH;
     private String PATH;
     private String TYPE;
-    private long   FILE_SIZE;
+    private long   SIZE;
     private Timestamp   UPTIME;
     private int    ISDELETE;
 }

@@ -40,7 +40,8 @@
                 type: 'POST',
                 data: data.field,
                 success:function (arg) {
-                    console.log(arg);
+                    layer.msg("站点初始化完成");
+                    location.reload();
                 },
             });
             return false;

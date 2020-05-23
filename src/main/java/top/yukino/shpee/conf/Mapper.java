@@ -16,7 +16,7 @@ public interface Mapper {
 
     public List<TUpload>    selectTUpload(Map<String,Object> args);
     public List<TUser>      selectTUser(Map<String,Object> args);
-    public List<String>     selectRole(@Param("NAME") String username);
+    public List<String>     selectRole(String name);
 
     public Integer  insertTUser(TUser user);
     public Integer  insertTUserRole(@Param("NAME") String username,@Param("ROLE") String role);
