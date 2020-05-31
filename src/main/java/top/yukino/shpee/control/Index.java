@@ -4,7 +4,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import top.yukino.shpee.base.BuildUrl;
 import top.yukino.shpee.base.DefaultConfigure;
 import top.yukino.shpee.base.Super;
 import top.yukino.shpee.bean.TUpload;
@@ -12,9 +11,7 @@ import top.yukino.shpee.bean.TUser;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /***
  * 主页跳转
@@ -45,8 +42,23 @@ public class Index extends Super {
 			paths.add("images/index1.jpg");
 			paths.add("images/index2.jpeg");
 		}
-		for(TUpload t:tUploads){
-			paths.add(BuildUrl.buildUploadUrl(t,BuildUrl.timeoutHMS(0,30,0)));
+		if(tUploads.size()<=3){
+			for(TUpload t:tUploads){
+				paths.add("static/"+t.getPATH().replaceAll("upload/","")+"/"+t.getHASH());
+			}
+		}
+		else {
+			HashSet<Integer>	set	=	new HashSet<>();
+			Random	random	= new Random(System.currentTimeMillis());
+			int		count	= 0;
+			for(int i=0;i<tUploads.size();i++){
+				count	= random.nextInt(tUploads.size());
+				if(set.add(count)){
+					paths.add("static/"+tUploads.get(count).getPATH().replaceAll("upload/","")+"/"+tUploads.get(count).getHASH());
+				}
+				if(set.size()==3)
+					break;
+			}
 		}
 		map.put("imageList",paths);
 		checkDriver(request,map);
