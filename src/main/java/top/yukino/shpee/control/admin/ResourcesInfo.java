@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import top.yukino.shpee.base.BuildUrl;
 import top.yukino.shpee.base.Super;
 import top.yukino.shpee.bean.TUpload;
 
@@ -100,16 +99,16 @@ public class ResourcesInfo extends Super{
 			try {
 				upload	= mapper.selectTUpload(buildMap("UID",uid)).get(0);
 				switch (upload.getTYPE()){
-					case	"JPG":;
-					case 	"JPEG":;
-					case 	"PNG":;
-					case 	"GIF":
+					case	"jpg":;
+					case 	"jpeg":;
+					case 	"png":;
+					case 	"gif":
 						val.put("type","image");
 						break;
 					default:
 						val.put("type","other");
 				}
-				val.put("src", BuildUrl.buildUploadUrl(upload,BuildUrl.timeoutHMS(0,30,0)));
+				val.put("src", "static/"+upload.getPATH().replaceAll("upload/","")+"/"+upload.getHASH());
 			}catch (ArrayIndexOutOfBoundsException e){
 				val.put("type","msg");
 				val.put("msg","查询失败");
