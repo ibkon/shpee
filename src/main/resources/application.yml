@@ -1,12 +1,12 @@
 server:
   port: 8080
-  address: ::1
+#  address: ::1
 spring:
   thymeleaf:
     cache: false
   servlet:
     multipart:
-      max-file-size: 10MB
+      max-file-size: 30MB
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://localhost:3306/shpee

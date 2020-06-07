@@ -89,4 +89,9 @@ public class Index extends Super {
 		}
 		return buildJson(0,"init",null);
 	}
+
+	@GetMapping("/login")
+	public String login(){
+		return "login";
+	}
 }

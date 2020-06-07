@@ -22,7 +22,8 @@ public class Security extends WebSecurityConfigurerAdapter{
 		.antMatchers("/upload/**").hasRole("UPLOAD")
 				.antMatchers("/admin/**").hasRole("ADMIN")
 				.antMatchers("/registered/**").permitAll();
-		http.formLogin();
+
+		http.formLogin().loginPage("/login");
 		http.headers().frameOptions().disable();
 	}
 

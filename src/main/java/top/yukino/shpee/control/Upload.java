@@ -49,6 +49,13 @@ public class Upload extends Super {
 		map.put("uploadType",upLoadType);
 		return "tool/upload";
 	}
+	/**
+	 * @Author ibkon
+	 * @Description Save the uploaded file to the server.
+	 * @Date 21:43 2020/5/31
+	 * @Param [request, upfile]
+	 * @return java.util.Map<java.lang.String,java.lang.Object>
+	 **/
 	@ResponseBody
 	@PostMapping("/upload/save")
 	public Map<String, Object> uploadSave(HttpServletRequest request,@RequestParam("file") MultipartFile upfile) throws IOException {
