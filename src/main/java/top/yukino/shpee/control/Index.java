@@ -4,7 +4,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import top.yukino.shpee.base.DefaultConfigure;
 import top.yukino.shpee.base.Super;
 import top.yukino.shpee.bean.TUpload;
 import top.yukino.shpee.bean.TUser;
@@ -20,7 +19,8 @@ import java.util.*;
 public class Index extends Super {
 	@GetMapping(value = "/")
 	public String indexController(HttpServletRequest request,Map<String,Object> mVal){
-		if(!DefaultConfigure.isInit()){
+		//根据站点名，判断站点是否初始化
+		if(mapper.getConfigure("ApplicationName")==null){
 			return "init";
 		}
 		return indexPage(request,mVal);
@@ -84,8 +84,7 @@ public class Index extends Super {
 		user.setUPTIME(new Timestamp(System.currentTimeMillis()));
 		if(mapper.insertTUser(user)==1&&mapper.insertTUserRole(username,"ADMIN")==1)
 		{
-			DefaultConfigure.setConfigure("applicationName",appName);
-			DefaultConfigure.setInit(true);
+			mapper.setConfigure("ApplicationName",appName);
 		}
 		return buildJson(0,"init",null);
 	}

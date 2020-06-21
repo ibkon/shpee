@@ -23,7 +23,8 @@ public class Security extends WebSecurityConfigurerAdapter{
 				.antMatchers("/admin/**").hasRole("ADMIN")
 				.antMatchers("/registered/**").permitAll();
 
-		http.formLogin().loginPage("/login");
+		//http.formLogin().loginPage("/login");
+		http.formLogin();
 		http.headers().frameOptions().disable();
 	}
 

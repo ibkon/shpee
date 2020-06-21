@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import top.yukino.shpee.base.DefaultConfigure;
 import top.yukino.shpee.base.Super;
 import top.yukino.shpee.bean.TUpload;
 
@@ -25,7 +24,7 @@ import java.util.Map;
  */
 @Controller
 public class Upload extends Super {
-	private String	upLoadPath	= DefaultConfigure.getSConfigure("uploadpath");
+	private static String	upLoadPath="upload";
 	/**
 	 * 文件上传页面
 	 * @param request

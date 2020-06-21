@@ -2,7 +2,6 @@ package top.yukino.shpee.control.admin;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import top.yukino.shpee.base.DefaultConfigure;
 import top.yukino.shpee.base.Super;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +16,7 @@ public class Admin  extends Super {
 			return "redirect:/";
 		}
 		checkLogin(setVal);
-		setVal.put("applicationName", DefaultConfigure.getSConfigure("applicationName"));
+		setVal.put("applicationName", mapper.getConfigure("ApplicationName"));
 		return "admin/admin";
 	}
 
