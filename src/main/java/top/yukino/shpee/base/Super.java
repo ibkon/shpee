@@ -74,6 +74,7 @@ public class Super {
 	 * @param mVal
 	 */
 	public void checkDriver(HttpServletRequest request, Map<String, Object> mVal){
+		System.err.println(request.getHeader("User-Agent"));
 		if (request.getHeader("User-Agent").contains("iPhone") || request.getHeader("User-Agent").contains("Android")) {
 			mVal.put("device", "mobile");
 		} else {

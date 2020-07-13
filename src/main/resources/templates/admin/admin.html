@@ -21,7 +21,7 @@
 <body>
     <div class="layui-layout layui-layout-admin">
         <div class="layui-header">
-            <div class="layui-logo"><i th:text="${applicationName}"></i>后台管理</div>
+            <a href="/"><div class="layui-logo"><i th:text="${applicationName}"></i>后台管理</div></a>
             <!-- 头部区域（可配合layui已有的水平导航） -->
             <ul class="layui-nav layui-layout-left">
                 <li class="layui-nav-item"><a href="">控制台</a></li>
@@ -59,7 +59,7 @@
                         <dl class="layui-nav-child">
                             <dd><a href="/admin/resources?class=upload" target="frame-page">上传文件管理</a></dd>
                             <dd><a href="javascript:;">资源使用设置</a></dd>
-                            <dd><a href="javascript:;">列表三</a></dd>
+                            <dd><a href="javascript:;">挂载资源</a></dd>
                             <dd><a href="">超链接</a></dd>
                         </dl>
                     </li>
