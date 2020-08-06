@@ -74,6 +74,10 @@ public class Index extends Super {
 	@PostMapping("/init")
 	@ResponseBody
 	public Map<String,Object> init(HttpServletRequest request,Map<String,Object> mVal){
+		if(mapper.getConfigure("ApplicationName")!=null)
+		{
+			return buildJson(1,"/",null);
+		}
 		String	appName		= request.getParameter("app-name");
 		String	username	= request.getParameter("username");
 		String	password	= request.getParameter("password");

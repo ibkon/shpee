@@ -7,12 +7,12 @@ spring:
   servlet:
     multipart:
       max-file-size: 30MB
-  datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3306/shpee
-    username: root
-    password: 654321^dcba
-    type: com.zaxxer.hikari.HikariDataSource
+#  datasource:
+#    driver-class-name: org.mariadb.jdbc.Driver
+#    url: jdbc:mariadb://localhost:3306/shpee
+#    username: root
+#    password: 654321^dcba
+#    type: com.zaxxer.hikari.HikariDataSource
 
 #   Mysql configure
 #  datasource:
@@ -23,19 +23,19 @@ spring:
 #    type: com.mchange.v2.c3p0.ComboPooledDataSource
 
 
-#   H2 configure
-#  datasource:
-#    driver-class-name: org.h2.Driver
-#    url: jdbc:h2:./shpeedb
-#    schema:
-#    - classpath:conf/table.sql
-#    data:
-#    - classpath:conf/insert.sql
-#    username: sa
-#    password: sa
-#  h2:
-#    console:
-#      enabled: true
+#H2 configure
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:./shpeedb
+    schema:
+    - classpath:conf/table.sql
+    data:
+    - classpath:conf/insert.sql
+    username: sa
+    password: sa
+  h2:
+    console:
+      enabled: true
 
 mybatis:
   mapper-locations: classpath:conf/mapper.xml

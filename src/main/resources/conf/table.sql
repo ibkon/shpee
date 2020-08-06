@@ -24,3 +24,8 @@ CREATE TABLE IF NOT EXISTS T_USER_ROLE(
     NAME char(32) not null,
     RID char(32) not null
     );
+
+CREATE TABLE IF NOT EXISTS T_CONFIGURE(
+  SKEY   char(64)    not null,
+  SVAL  char(64)    not null
+    );

@@ -60,7 +60,7 @@
         SELECT r.ROLE FROM T_USER_ROLE ur,T_ROLE r WHERE ur.NAME=#{NAME} AND ur.RID=r.RID
     </select>
     <select id="getConfigure" resultType="string">
-        SELECT shpee_val FROM T_CONFIGURE WHERE shpee_key=#{key}
+        SELECT SVAL FROM T_CONFIGURE WHERE SKEY=#{key}
     </select>
 
     <insert id="insertTUser" parameterType="top.yukino.shpee.bean.TUser">
@@ -74,9 +74,9 @@
         VALUES (#{UID},#{FILENAME},#{HASH},#{PATH},#{TYPE},#{SIZE},#{UPTIME},#{ISDELETE})
     </insert>
     <insert id="setConfigure">
-        INSERT INTO T_CONFIGURE(shpee_key,shpee_val) VALUES(#{key},#{values})
+        INSERT INTO T_CONFIGURE(SKEY,SVAL) VALUES(#{key},#{values})
     </insert>
     <update id="upConfigure">
-        UPDATE T_CONFIGURE SET VALUES = #{values} WHERE shpee_key=#{key}
+        UPDATE T_CONFIGURE SET SVAL = #{values} WHERE shpee_key=#{key}
     </update>
 </mapper>

@@ -24,7 +24,7 @@
     <script type="text/html" id="table-edit">
         <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
         <a class="layui-btn layui-btn-xs" lay-event="show">查看</a>
-        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">禁用</a>
     </script>
 
     <script src="/layui/layui.js"></script>
@@ -48,14 +48,14 @@
                 , cols: [
                     [
                         { type: 'checkbox', fixed: 'left' }
-                        , { field: 'UID', title: 'ID', width: 150, fixed: 'left', unresize: true, sort: true, totalRowText: '合计' }
-                        , { field: 'NAME', title: '文件名', width: 150, edit: 'text' }
-                        , { field: 'HASH', title: 'sha256', sort: true, totalRow: true }
-                        , { field: 'TYPE', title: '类型', width: 80}
-                        , { field: 'SIZE', title: '文件大小', width: 100 ,templet: function (res) {
+                        , { field: 'UID', title: 'MAC', width: 150, fixed: 'left', unresize: true, sort: true, totalRowText: '合计' }
+                        , { field: 'NAME', title: '用户名', width: 150, edit: 'text' }
+                        , { field: 'HASH', title: '在线状态', sort: true, totalRow: true }
+                        , { field: 'TYPE', title: '终端类型', width: 80}
+                        , { field: 'SIZE', title: '告警信息', width: 100 ,templet: function (res) {
                                 return fileAutoSize(res.SIZE);
                         }}
-                        , { field: 'UPTIME', title: '修改时间', width: 100 }
+                        , { field: 'UPTIME', title: '上线时间', width: 100 }
                         ,{fixed: 'right', title:'操作', toolbar: '#table-edit', width:200}
                     ]
                 ]

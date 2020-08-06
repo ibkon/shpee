@@ -25,6 +25,7 @@ public class Security extends WebSecurityConfigurerAdapter{
 
 		//http.formLogin().loginPage("/login");
 		http.formLogin();
+		http.csrf().ignoringAntMatchers("/h2-console/**");
 		http.headers().frameOptions().disable();
 	}
 

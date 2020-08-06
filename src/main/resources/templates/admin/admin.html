@@ -21,12 +21,12 @@
 <body>
     <div class="layui-layout layui-layout-admin">
         <div class="layui-header">
-            <a href="/"><div class="layui-logo"><i th:text="${applicationName}"></i>后台管理</div></a>
+            <a href="/"><div class="layui-logo">ImCloud</div></a>
             <!-- 头部区域（可配合layui已有的水平导航） -->
             <ul class="layui-nav layui-layout-left">
                 <li class="layui-nav-item"><a href="">控制台</a></li>
-                <li class="layui-nav-item"><a href="">商品管理</a></li>
-                <li class="layui-nav-item"><a href="">用户</a></li>
+                <li class="layui-nav-item"><a href="">网络管理</a></li>
+                <li class="layui-nav-item"><a href="">设备管理</a></li>
                 <li class="layui-nav-item">
                     <a href="javascript:;">其它系统</a>
                     <dl class="layui-nav-child">
@@ -38,7 +38,8 @@
             </ul>
             <ul class="layui-nav layui-layout-right">
                 <li class="layui-nav-item">
-                    <a href="javascript:;" th:text="${username}">
+                    <a href="javascript:;">
+                        admin
                         <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
                     </a>
                     <dl class="layui-nav-child">
@@ -68,11 +69,11 @@
                         <dl class="layui-nav-child">
                             <dd><a href="javascript:;">用户组管理</a></dd>
                             <dd><a href="/admin/user/list" target="frame-page">用户管理</a></dd>
-                            <dd><a href="">超链接</a></dd>
+                            <dd><a href="">用户权限管理</a></dd>
                         </dl>
                     </li>
-                    <li class="layui-nav-item"><a href="">云市场</a></li>
-                    <li class="layui-nav-item"><a href="">站点设置</a></li>
+                    <li class="layui-nav-item"><a href="">日志收集</a></li>
+                    <li class="layui-nav-item"><a href="">系统设置</a></li>
                 </ul>
             </div>
         </div>
