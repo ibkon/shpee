@@ -7,32 +7,65 @@
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <link rel="stylesheet" href="layui/css/layui.css" media="all">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <style th:if="${device}=='comput'">
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            background: url("init.jpg") no-repeat fixed;
+            background-size: 100% 100%;
+        }
+        .shpee-title{
+            text-align: center;
+            text-shadow: 3px 5px 14px #38F;
+            font-weight: bolder;
+            color: #FFF;
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        .shpee-from{
+            margin: 10% auto;
+            width: 40%;
+            background: rgba(0,0,0,0.5);
+            padding: 8px;
+            border-radius: 5px;
+        }
+        .shpee-base-info input{
+            margin-bottom: 15px;
+            background-color: rgba(0,0,0,0);
+            color: #ccf;
+            font-weight: bolder;
+            font-size: 24px;
+            border: none;
+            border-bottom: solid;
+        }
+        .shpee-advanced-info{
+            text-align: center;
+            line-height: inherit;
+        }
+        .shpee-from-button{
+            width: 100%;
+            margin-top: 15px;
+        }
+        .layui-icon{
+            color: #fff;
+        }
+        #shpee-advanced{
+            display: none;
+        }
+    </style>
 </head>
 <body>
-<div class="layui-row">
-    <div class="layui-col-xs12 layui-col-sm8 layui-col-md4">
-        <form class="layui-form" action="">
-            <div class="layui-form-item">
-                <label class="layui-form-label">输入框</label>
-                <div class="layui-input-block">
-                    <input type="text" name="username" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">密码框</label>
-                <div class="layui-input-inline">
-                    <input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
-                </div>
-                <div class="layui-form-mid layui-word-aux">辅助文字</div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-input-block">
-                    <button class="layui-btn" lay-submit lay-filter="formDemo">登录</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
+<div class="shpee-from">
+    <h1 class="shpee-title">Shpee</h1>
+    <form class="layui-form" action="">
+        <div class="shpee-base-info">
+            <input type="text" name="username" required lay-verify="required" placeholder="账号" autocomplete="off" class="layui-input">
+            <input type="password" name="password" required lay-verify="required" placeholder="密码" autocomplete="off" class="layui-input">
+        </div>
+        <button class="shpee-from-button layui-btn layui-btn-normal" lay-submit lay-filter="formDemo">登录</button>
+    </form>
 </div>
 <script src="layui/layui.js"></script>
 <script>
@@ -51,8 +84,8 @@
                     type: 'POST',
                     data: data.field,
                     success: function (arg) {
-                        console.log(arg);
-                    },
+                        window.location="/";
+                    }
                 });
                 return false;
             });

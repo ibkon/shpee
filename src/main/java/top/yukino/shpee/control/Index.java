@@ -94,7 +94,13 @@ public class Index extends Super {
 	}
 
 	@GetMapping("/login")
-	public String login(){
+	public String login(HttpServletRequest request, Map<String, Object> mVal){
+		checkDriver(request,mVal);
 		return "login";
 	}
+	@GetMapping("/logout")
+	public String logout(){
+		return "logout";
+	}
+
 }
