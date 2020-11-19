@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="top.yukino.shpee.conf.Mapper">
+<mapper namespace="com.xentn.shpee.conf.Mapper">
     <cache/>
     <select id="select" resultType="java.util.Map">
         <![CDATA[
@@ -24,7 +24,7 @@
     </update>
 
     <!--Bean-->
-    <select id="selectTUpload" resultType="top.yukino.shpee.bean.TUpload">
+    <select id="selectTUpload" resultType="com.xentn.shpee.bean.TUpload">
         SELECT UID,FILE_NAME,HASH,PATH,TYPE,SIZE,UPTIME
         FROM T_UPLOAD
         <where>
@@ -48,7 +48,7 @@
             </if>
         </where>
     </select>
-    <select id="selectTUser" resultType="top.yukino.shpee.bean.TUser">
+    <select id="selectTUser" resultType="com.xentn.shpee.bean.TUser">
         SELECT NAME,PASSWORD,UPTIME FROM T_USER
         <where>
             <if test="NAME!=null">
@@ -63,13 +63,13 @@
         SELECT SVAL FROM T_CONFIGURE WHERE SKEY=#{key}
     </select>
 
-    <insert id="insertTUser" parameterType="top.yukino.shpee.bean.TUser">
+    <insert id="insertTUser" parameterType="com.xentn.shpee.bean.TUser">
         INSERT INTO T_USER(NAME,PASSWORD,UPTIME) VALUES (#{NAME},#{PASSWORD},#{UPTIME})
     </insert>
     <insert id="insertTUserRole">
         INSERT INTO T_USER_ROLE(NAME,RID) VALUES (#{NAME},#{ROLE})
     </insert>
-    <insert id="insertTUpload" parameterType="top.yukino.shpee.bean.TUpload">
+    <insert id="insertTUpload" parameterType="com.xentn.shpee.bean.TUpload">
         INSERT INTO T_UPLOAD(UID,FILE_NAME,HASH,PATH,TYPE,SIZE,UPTIME,ISDELETE)
         VALUES (#{UID},#{FILENAME},#{HASH},#{PATH},#{TYPE},#{SIZE},#{UPTIME},#{ISDELETE})
     </insert>

@@ -1,5 +1,6 @@
-package top.yukino.shpee.control;
+package com.xentn.shpee.control;
 
+import com.xentn.shpee.bean.TUpload;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -7,8 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import top.yukino.shpee.base.Super;
-import top.yukino.shpee.bean.TUpload;
+import com.xentn.shpee.base.Super;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
@@ -67,7 +67,7 @@ public class Upload extends Super {
 		long	size		= upfile.getSize();
 		String	path		= this.upLoadPath+new SimpleDateFormat("yyyy_MM_dd").format(new Date());
 
-		TUpload	upload	= null;
+		TUpload upload	= null;
 		try {
 			upload	= mapper.selectTUpload(buildMap("hash",hash)).get(0);
 			//快传

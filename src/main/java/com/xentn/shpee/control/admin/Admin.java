@@ -1,8 +1,8 @@
-package top.yukino.shpee.control.admin;
+package com.xentn.shpee.control.admin;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import top.yukino.shpee.base.Super;
+import com.xentn.shpee.base.Super;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;

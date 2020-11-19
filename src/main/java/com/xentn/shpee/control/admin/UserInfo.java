@@ -1,9 +1,9 @@
-package top.yukino.shpee.control.admin;
+package com.xentn.shpee.control.admin;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import top.yukino.shpee.base.Super;
+import com.xentn.shpee.base.Super;
 
 /***
  class name:UserInfo

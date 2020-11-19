@@ -1,11 +1,11 @@
-package top.yukino.shpee.control;
+package com.xentn.shpee.control;
 
+import com.xentn.shpee.bean.TUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import top.yukino.shpee.base.Super;
-import top.yukino.shpee.bean.TUser;
+import com.xentn.shpee.base.Super;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
@@ -35,7 +35,7 @@ public class Registered extends Super {
     public Map<String,Object>   registeredInfo(HttpServletRequest request){
         String  name    = request.getParameter("username");
         String  password    = request.getParameter("password");
-        TUser   user    = null;
+        TUser user    = null;
         try {
             user    = mapper.selectTUser(buildMap("name",name)).get(0);
         }catch (ArrayIndexOutOfBoundsException e){

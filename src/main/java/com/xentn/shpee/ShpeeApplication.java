@@ -1,10 +1,10 @@
-package top.yukino.shpee;
+package com.xentn.shpee;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@MapperScan(value = "top.yukino.shpee.conf")
+@MapperScan(value = "com.xentn.shpee.conf")
 @SpringBootApplication
 public class ShpeeApplication {
 

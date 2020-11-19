@@ -1,8 +1,8 @@
-package top.yukino.shpee.conf;
+package com.xentn.shpee.conf;
 
+import com.xentn.shpee.bean.TUpload;
+import com.xentn.shpee.bean.TUser;
 import org.apache.ibatis.annotations.Param;
-import top.yukino.shpee.bean.TUpload;
-import top.yukino.shpee.bean.TUser;
 
 import java.util.List;
 import java.util.Map;

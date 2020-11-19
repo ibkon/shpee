@@ -1,12 +1,12 @@
-package top.yukino.shpee.control;
+package com.xentn.shpee.control;
 
+import com.xentn.shpee.bean.TUpload;
+import com.xentn.shpee.bean.TUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import top.yukino.shpee.base.Super;
-import top.yukino.shpee.bean.TUpload;
-import top.yukino.shpee.bean.TUser;
+import com.xentn.shpee.base.Super;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
@@ -82,7 +82,7 @@ public class Index extends Super {
 		String	username	= request.getParameter("username");
 		String	password	= request.getParameter("password");
 
-		TUser	user	= new TUser();
+		TUser user	= new TUser();
 		user.setNAME(username);
 		user.setPASSWORD(passwordEncode(password));
 		user.setUPTIME(new Timestamp(System.currentTimeMillis()));

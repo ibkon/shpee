@@ -1,4 +1,4 @@
-package top.yukino.shpee.conf;
+package com.xentn.shpee.conf;
 
 import java.util.HashMap;
 import java.util.Map;

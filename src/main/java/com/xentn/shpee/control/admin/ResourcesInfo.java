@@ -1,4 +1,4 @@
-package top.yukino.shpee.control.admin;
+package com.xentn.shpee.control.admin;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import top.yukino.shpee.base.Super;
-import top.yukino.shpee.bean.TUpload;
+import com.xentn.shpee.base.Super;
+import com.xentn.shpee.bean.TUpload;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;

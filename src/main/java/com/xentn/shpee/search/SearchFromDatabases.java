@@ -1,4 +1,4 @@
-package top.yukino.shpee.search;
+package com.xentn.shpee.search;
 
 /***
  class name:Search

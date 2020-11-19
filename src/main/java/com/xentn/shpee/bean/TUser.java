@@ -1,4 +1,4 @@
-package top.yukino.shpee.bean;
+package com.xentn.shpee.bean;
 
 import lombok.Data;
 

@@ -1,11 +1,11 @@
-package top.yukino.shpee.conf;
+package com.xentn.shpee.conf;
 
+import com.xentn.shpee.bean.TUser;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import top.yukino.shpee.base.Super;
-import top.yukino.shpee.bean.TUser;
+import com.xentn.shpee.base.Super;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.List;
 public class CustomUserService extends Super implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        TUser   user    = null;
+        TUser user    = null;
         List<SimpleGrantedAuthority>    authorities = new ArrayList<>();
         try {
             user  = mapper.selectTUser(buildMap("NAME",username)).get(0);
