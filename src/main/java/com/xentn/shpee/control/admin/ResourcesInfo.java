@@ -62,8 +62,8 @@ public class ResourcesInfo extends Super{
 	 */
 	private Map<String, Object> searchUpload(HttpServletRequest request){
 		//获取查询文件页和一页大小
-		String	page	= request.getParameter("page");
-		String	limit	= request.getParameter("limit");
+		Integer	page	= (Integer.parseInt(request.getParameter("page"))-1)*10;
+		Integer	limit	= Integer.parseInt(request.getParameter("limit"));
 
 		List<Map<String,Object>>	maps	= null;
 		maps	= mapper.select("SELECT * FROM T_UPLOAD WHERE ISDELETE=0 LIMIT "+page+","+limit);

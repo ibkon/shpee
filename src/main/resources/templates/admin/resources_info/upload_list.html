@@ -48,14 +48,14 @@
                 , cols: [
                     [
                         { type: 'checkbox', fixed: 'left' }
-                        , { field: 'UID', title: 'MAC', width: 150, fixed: 'left', unresize: true, sort: true, totalRowText: '合计' }
-                        , { field: 'NAME', title: '用户名', width: 150, edit: 'text' }
-                        , { field: 'HASH', title: '在线状态', sort: true, totalRow: true }
-                        , { field: 'TYPE', title: '终端类型', width: 80}
-                        , { field: 'SIZE', title: '告警信息', width: 100 ,templet: function (res) {
+                        , { field: 'UID', title: 'UID', width: 150, fixed: 'left', unresize: true, sort: true, totalRowText: '合计' }
+                        , { field: 'FILE_NAME', title: '文件名', width: 150, edit: 'text' }
+                        , { field: 'HASH', title: 'HASH256', sort: true, totalRow: true }
+                        , { field: 'TYPE', title: '文件类型', width: 100}
+                        , { field: 'SIZE', title: '文件大小', width: 100 ,templet: function (res) {
                                 return fileAutoSize(res.SIZE);
                         }}
-                        , { field: 'UPTIME', title: '上线时间', width: 100 }
+                        , { field: 'UPTIME', title: '上传时间', width: 160 }
                         ,{fixed: 'right', title:'操作', toolbar: '#table-edit', width:200}
                     ]
                 ]

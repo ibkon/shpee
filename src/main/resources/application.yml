@@ -9,7 +9,9 @@ spring:
   servlet:
     multipart:
       max-file-size: 30MB
-#  datasource:
+      enabled: true
+      max-request-size: 50MB
+  #  datasource:
 #    driver-class-name: org.mariadb.jdbc.Driver
 #    url: jdbc:mariadb://localhost:3306/shpee
 #    username: root
