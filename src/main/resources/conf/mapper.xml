@@ -25,7 +25,7 @@
 
     <!--Bean-->
     <select id="selectTUpload" resultType="com.xentn.shpee.bean.TUpload">
-        SELECT UID,FILE_NAME,HASH,PATH,TYPE,SIZE,UPTIME
+        SELECT UID,FILE_NAME,USER_ID,HASH,PATH,TYPE,SIZE,UPTIME
         FROM T_UPLOAD
         <where>
             <if test="UID!=null">
@@ -70,8 +70,8 @@
         INSERT INTO T_USER_ROLE(NAME,RID) VALUES (#{NAME},#{ROLE})
     </insert>
     <insert id="insertTUpload" parameterType="com.xentn.shpee.bean.TUpload">
-        INSERT INTO T_UPLOAD(UID,FILE_NAME,HASH,PATH,TYPE,SIZE,UPTIME,ISDELETE)
-        VALUES (#{UID},#{FILENAME},#{HASH},#{PATH},#{TYPE},#{SIZE},#{UPTIME},#{ISDELETE})
+        INSERT INTO T_UPLOAD(UID,FILE_NAME,USER_ID,HASH,PATH,TYPE,SIZE,UPTIME,ISDELETE)
+        VALUES (#{UID},#{FILENAME},#{USER_ID},#{HASH},#{PATH},#{TYPE},#{SIZE},#{UPTIME},#{ISDELETE})
     </insert>
     <insert id="setConfigure">
         INSERT INTO T_CONFIGURE(SKEY,SVAL) VALUES(#{key},#{values})

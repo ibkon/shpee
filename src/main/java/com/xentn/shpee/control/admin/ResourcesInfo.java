@@ -108,7 +108,7 @@ public class ResourcesInfo extends Super{
 					default:
 						val.put("type","other");
 				}
-				val.put("src", "static/"+upload.getPATH().replaceAll("upload/","")+"/"+upload.getHASH());
+				val.put("src", upload.getPATH()+"/"+upload.getHASH()+"."+upload.getTYPE());
 			}catch (ArrayIndexOutOfBoundsException e){
 				val.put("type","msg");
 				val.put("msg","查询失败");

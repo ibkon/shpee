@@ -22,7 +22,8 @@ public class Security extends WebSecurityConfigurerAdapter{
 				.antMatchers("/logout").permitAll()
 				.antMatchers("/upload/**").hasRole("UPLOAD")
 				.antMatchers("/admin/**").hasRole("ADMIN")
-				.antMatchers("/registered/**").permitAll();
+				.antMatchers("/registered/**").permitAll()
+				.antMatchers("/static/**").permitAll();
 
 		http.formLogin().loginPage("/login");
 		http.logout().logoutUrl("/logout").logoutSuccessUrl("/");

@@ -12,6 +12,7 @@ public class TUpload implements Serializable {
     private String HASH;
     private String PATH;
     private String TYPE;
+    private String USER_ID;
     private long   SIZE;
     private Timestamp   UPTIME;
     private int    ISDELETE;

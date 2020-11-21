@@ -2,6 +2,8 @@ package com.xentn.shpee.control;
 
 import com.xentn.shpee.bean.TUpload;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,7 +67,7 @@ public class Upload extends Super {
 		String	hash		= DigestUtils.sha256Hex(upfile.getInputStream()).toUpperCase();
 		String	type		= fileName.substring(fileName.lastIndexOf('.')+1);
 		long	size		= upfile.getSize();
-		String	path		= this.upLoadPath+new SimpleDateFormat("yyyy_MM_dd").format(new Date());
+		String	path		= this.upLoadPath+"/"+new SimpleDateFormat("yyyy_MM_dd").format(new Date());
 
 		TUpload upload	= null;
 		try {
@@ -81,6 +83,8 @@ public class Upload extends Super {
 		}
 		catch (IndexOutOfBoundsException e){}
 
+		Object	principal	= SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserDetails details	= (UserDetails)principal;
 
 		upload	= new TUpload();
 		upload.setUID(uuid());
@@ -89,8 +93,12 @@ public class Upload extends Super {
 		upload.setFILENAME(fileName);
 		upload.setTYPE(type);
 		upload.setHASH(hash);
-		upload.setPATH(path);
+		upload.setPATH(path.replaceAll("upload","/static"));
 		upload.setSIZE(size);
+		//添加上传文件用户
+		if(principal instanceof UserDetails){
+			upload.setUSER_ID(details.getUsername());
+		}
 
 		//根据年月日创建目录
 		File fCache	= new File(path);
@@ -98,7 +106,7 @@ public class Upload extends Super {
 			fCache.mkdirs();
 		}
 		if(mapper.insertTUpload(upload)==1){
-			fCache	= new File(path+"/"+hash);
+			fCache	= new File(path+"/"+hash+"."+type);
 			InputStream in		= upfile.getInputStream();
 			OutputStream out		= new FileOutputStream(fCache);
 			byte[]			buffer	= new byte[0x4000];

@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS T_UPLOAD(
     UID     char(32)    NOT NULL
     ,FILE_NAME   varchar(128) NOT NULL
+    ,USER_ID    char(32)
     ,HASH   char(64)
     ,PATH   varchar(128)    NOT NULL
     ,TYPE   char(16)

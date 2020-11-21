@@ -44,7 +44,7 @@ public class Index extends Super {
 		}
 		if(tUploads.size()<=3){
 			for(TUpload t:tUploads){
-				paths.add("static/"+t.getPATH().replaceAll("upload/","")+"/"+t.getHASH());
+				paths.add(t.getPATH()+"/"+t.getHASH()+"."+t.getTYPE());
 			}
 		}
 		else {
@@ -54,7 +54,7 @@ public class Index extends Super {
 			for(int i=0;i<tUploads.size();i++){
 				count	= random.nextInt(tUploads.size());
 				if(set.add(count)){
-					paths.add("static/"+tUploads.get(count).getPATH().replaceAll("upload/","")+"/"+tUploads.get(count).getHASH());
+					paths.add(tUploads.get(count).getPATH()+"/"+tUploads.get(count).getHASH()+"."+tUploads.get(count).getTYPE());
 				}
 				if(set.size()==3)
 					break;
