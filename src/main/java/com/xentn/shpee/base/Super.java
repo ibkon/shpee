@@ -21,11 +21,13 @@ public class Super {
 
 	/**
 	 * 构建默认Layui json对象
-	 * @param data
+	 * @param code
 	 * @param msg
+	 * @param data
+	 * @param count
 	 * @return
 	 */
-	protected Map<String, Object> buildJson(int code,String msg,List<Map<String,Object>> data) {
+	protected Map<String, Object> buildJson(int code,String msg,List<Map<String,Object>> data,int count) {
 		Map<String, Object> 	jsonMap		= new HashMap<String, Object>();
 		Map<String, String> 	totalRow	= new HashMap<String, String>();
 		jsonMap.put("code", code);
@@ -33,13 +35,23 @@ public class Super {
 		if(data!=null) {
 			totalRow.put("score", "666");
 			totalRow.put("experience", "999");
-			jsonMap.put("count", data.size());
 			jsonMap.put("data", data);
 			jsonMap.put("totalRow", totalRow);
+			jsonMap.put("count", count);
 		}
 		return jsonMap;
 	}
-
+	/**
+	 * 构建默认Layui json对象
+	 * @param data
+	 * @param msg
+	 * @return
+	 */
+	protected Map<String, Object> buildJson(int code,String msg,List<Map<String,Object>> data) {
+		if(data==null)
+			return buildJson(code,msg,null,0);
+		return buildJson(code,msg,data,data.size());
+	}
 	/**
 	 * 生成uuid
 	 * @return	uuid

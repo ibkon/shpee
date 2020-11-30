@@ -1,6 +1,8 @@
 package com.xentn.shpee.control;
 
+import com.xentn.shpee.base.Super;
 import com.xentn.shpee.bean.TUpload;
+import net.coobird.thumbnailator.Thumbnails;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,9 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import com.xentn.shpee.base.Super;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -27,6 +30,7 @@ import java.util.Map;
 @Controller
 public class Upload extends Super {
 	private static String	upLoadPath="upload";
+	private static int		imageW=1000,imageH=1000;
 	/**
 	 * 文件上传页面
 	 * @param request
@@ -107,6 +111,22 @@ public class Upload extends Super {
 		}
 		if(mapper.insertTUpload(upload)==1){
 			fCache	= new File(path+"/"+hash+"."+type);
+			//如果上传文件是图片，生成缩略图
+			if(type.equals("jpg")||type.equals("png")||type.equals("jpeg")){
+				BufferedImage	image = ImageIO.read(upfile.getInputStream());
+				if(image.getWidth()>imageW||image.getHeight()>imageH) {
+					Thumbnails.of(upfile.getInputStream())
+							.size(imageW,imageH)
+							.toFile(path+"/"+hash+".jpg");
+				}
+				else{
+					Thumbnails.of(upfile.getInputStream())
+							.size(image.getWidth(),image.getHeight())
+							.toFile(path+"/"+hash+".jpg");
+				}
+				fCache	= new File(path+"/"+hash);
+			}
+
 			InputStream in		= upfile.getInputStream();
 			OutputStream out		= new FileOutputStream(fCache);
 			byte[]			buffer	= new byte[0x4000];

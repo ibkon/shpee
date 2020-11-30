@@ -42,7 +42,7 @@ public class Registered extends Super {
             return buildJson(1,"注册失败：",null);
         }
         user.setNAME(name);
-        user.setPASSWORD(password);
+        user.setPASSWORD(passwordEncode(password));
         user.setUPTIME(new Timestamp(System.currentTimeMillis()));
         if(mapper.insertTUser(user)==1&&mapper.insertTUserRole(name,"USER")==1){
             return buildJson(0,"注册成功",null);

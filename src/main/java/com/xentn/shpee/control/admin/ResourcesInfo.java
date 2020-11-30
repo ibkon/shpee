@@ -32,6 +32,8 @@ public class ResourcesInfo extends Super{
 		//跳转到上传文件管理页
 		case "upload":
 			return "admin/resources_info/upload_list";
+		case "recycle":
+			return "admin/resources_info/recycle_list";
 		default:
 			break;
 		}
@@ -49,7 +51,8 @@ public class ResourcesInfo extends Super{
 		switch (listType) {
 		case "upload":
 			return	searchUpload(request);
-
+		case  "recycle":
+			return	recycle(request);
 		default:
 			break;
 		}
@@ -68,11 +71,23 @@ public class ResourcesInfo extends Super{
 		List<Map<String,Object>>	maps	= null;
 		maps	= mapper.select("SELECT * FROM T_UPLOAD WHERE ISDELETE=0 LIMIT "+page+","+limit);
 		if(maps!=null){
-			return buildJson(0,"上传文件查询成功",maps);
+			return buildJson(0,"上传文件查询成功",maps,mapper.count("select  count(*) from T_UPLOAD where ISDELETE=0;"));
 		}
 		return buildJson(1,"上传文件查询失败",null);
 	}
 
+	private Map<String,Object> recycle(HttpServletRequest request){
+		//获取查询文件页和一页大小
+		Integer	page	= (Integer.parseInt(request.getParameter("page"))-1)*10;
+		Integer	limit	= Integer.parseInt(request.getParameter("limit"));
+
+		List<Map<String,Object>>	maps	= null;
+		maps	= mapper.select("SELECT * FROM T_UPLOAD WHERE ISDELETE=1 LIMIT "+page+","+limit);
+		if(maps!=null){
+			return buildJson(0,"回收站文件查询成功",maps);
+		}
+		return buildJson(1,"回收站文件查询失败",null);
+	}
 
 	@PostMapping("/admin/resources/remove")
 	@ResponseBody
@@ -80,7 +95,7 @@ public class ResourcesInfo extends Super{
 		String	uid	= request.getParameter("uid");
 		if(uid==null||uid.equals(""))
 			return buildJson(1,"文件不存在",null);
-		if(mapper.update("UPDATE TABLE T_UPDATE ISDELETE=1 WHERE UID='"+uid+"'")==1){
+		if(mapper.update("UPDATE  T_UPLOAD SET ISDELETE=1 WHERE UID='"+uid+"'")==1){
 			return buildJson(0,"文件删除成功",null);
 		}
 		return buildJson(1,"删除失败",null);
@@ -108,7 +123,7 @@ public class ResourcesInfo extends Super{
 					default:
 						val.put("type","other");
 				}
-				val.put("src", upload.getPATH()+"/"+upload.getHASH()+"."+upload.getTYPE());
+				val.put("src", upload.getPATH()+"/"+upload.getHASH()+".jpg");
 			}catch (ArrayIndexOutOfBoundsException e){
 				val.put("type","msg");
 				val.put("msg","查询失败");

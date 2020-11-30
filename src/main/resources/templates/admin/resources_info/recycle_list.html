@@ -22,9 +22,9 @@
         </div>
     </script>
     <script type="text/html" id="table-edit">
-        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-xs" lay-event="edit">恢复</a>
         <a class="layui-btn layui-btn-xs" lay-event="show">查看</a>
-        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">清除</a>
     </script>
 
     <script src="/layui/layui.js"></script>
@@ -40,7 +40,7 @@
             });
             table.render({
                 elem: '#test'
-                , url: '/admin/resources/list?list-type=upload'
+                , url: '/admin/resources/list?list-type=recycle'
                 , type: 'POST'
                 , toolbar: '#toolbarDemo'
                 , title: '用户数据表'

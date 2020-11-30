@@ -13,6 +13,7 @@ public interface Mapper {
     public Integer  insert(String sql);
     public Integer  update(String sql);
     public Integer  delete(String sql);
+    public Integer  count(String sql);
 
     public List<TUpload>    selectTUpload(Map<String,Object> args);
     public List<TUser>      selectTUser(Map<String,Object> args);

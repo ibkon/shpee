@@ -22,6 +22,11 @@
 	  		${value}
 	  	]]>
     </update>
+    <select id="count" resultType="java.lang.Integer">
+        <![CDATA[
+	  		${value}
+	  	]]>
+    </select>
 
     <!--Bean-->
     <select id="selectTUpload" resultType="com.xentn.shpee.bean.TUpload">
@@ -32,19 +37,19 @@
                 UID=#{UID}
             </if>
             <if test="FILE_NAME!=null">
-                FILE_NAME=#{FILE_NAME}
+                AND FILE_NAME=#{FILE_NAME}
             </if>
             <if test="HASH!=null">
-                HASH=#{HASH}
+                AND HASH=#{HASH}
             </if>
             <if test="TYPE!=null">
-                TYPE=#{TYPE}
+                AND TYPE=#{TYPE}
             </if>
             <if test="ISDELETE!=null">
-                ISDELETE=#{ISDELETE}
+                AND ISDELETE=#{ISDELETE}
             </if>
             <if test="page!=null and limit!=null">
-                limit #{page},#{limit}
+                AND limit #{page},#{limit}
             </if>
         </where>
     </select>
