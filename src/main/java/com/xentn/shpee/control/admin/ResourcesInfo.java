@@ -119,11 +119,18 @@ public class ResourcesInfo extends Super{
 					case 	"png":;
 					case 	"gif":
 						val.put("type","image");
+						val.put("src", upload.getPATH()+"/"+upload.getHASH()+".jpg");
+						break;
+					case	"mp4":
+						val.put("type","video");
+						val.put("src", upload.getPATH()+"/"+upload.getHASH()+"."+upload.getTYPE());
 						break;
 					default:
 						val.put("type","other");
+						val.put("src", upload.getPATH()+"/"+upload.getHASH()+"."+upload.getTYPE());
 				}
-				val.put("src", upload.getPATH()+"/"+upload.getHASH()+".jpg");
+				val.put("width",request.getParameter("width"));
+				val.put("height",request.getParameter("height"));
 			}catch (ArrayIndexOutOfBoundsException e){
 				val.put("type","msg");
 				val.put("msg","查询失败");
