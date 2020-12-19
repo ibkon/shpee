@@ -29,7 +29,6 @@ import java.util.Map;
  */
 @Controller
 public class Upload extends Super {
-	private static String	upLoadPath="upload";
 	private static int		imageW=1000,imageH=1000;
 	/**
 	 * 文件上传页面
@@ -71,7 +70,8 @@ public class Upload extends Super {
 		String	hash		= DigestUtils.sha256Hex(upfile.getInputStream()).toUpperCase();
 		String	type		= fileName.substring(fileName.lastIndexOf('.')+1);
 		long	size		= upfile.getSize();
-		String	path		= this.upLoadPath+"/"+new SimpleDateFormat("yyyy_MM_dd").format(new Date());
+
+		String	path		= config.getUploadPath()+"/"+new SimpleDateFormat("yyyy_MM_dd").format(new Date());
 
 		TUpload upload	= null;
 		try {
@@ -97,7 +97,7 @@ public class Upload extends Super {
 		upload.setFILENAME(fileName);
 		upload.setTYPE(type);
 		upload.setHASH(hash);
-		upload.setPATH(path.replaceAll("upload","/static"));
+		upload.setPATH(path.replaceAll(config.getUploadPath(), "/static"));
 		upload.setSIZE(size);
 		//添加上传文件用户
 		if(principal instanceof UserDetails){

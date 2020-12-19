@@ -1,6 +1,7 @@
 package com.xentn.shpee.base;
 
 import com.xentn.shpee.conf.Mapper;
+import com.xentn.shpee.conf.ShpeeConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +19,9 @@ import java.util.UUID;
 public class Super {
 	@Autowired(required=true)
 	protected Mapper mapper;
+
+	@Autowired
+	protected ShpeeConfig config;
 
 	/**
 	 * 构建默认Layui json对象

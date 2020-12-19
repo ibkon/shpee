@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.xentn.shpee.base.Super;
 
+import javax.servlet.http.HttpServletRequest;
+
 /***
  class name:UserInfo
  edit user:Sagiri
@@ -18,4 +20,9 @@ public class UserInfo extends Super {
     public String UserList(){
         return "admin/resources_info/user_list";
     }
+    @GetMapping("admin/get-user-info")
+    public String getUserInfo(HttpServletRequest request){
+        return "admin/resources_info/UserInfo";
+    }
+
 }

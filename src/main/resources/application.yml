@@ -1,25 +1,23 @@
 server:
   port: 8080
 #  address: 127.0.0.1
-#  servlet:
- #   context-path: ~\shpee
-#  address: ::1
+
 spring:
   thymeleaf:
     cache: false
   servlet:
     multipart:
-      max-file-size: 50MB
+      max-file-size: 1GB
       enabled: true
-      max-request-size: 100MB
-  datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3307/shpee
-    username: root
-    password: 654321^dcba
-    type: com.zaxxer.hikari.HikariDataSource
+      max-request-size: 10GB
+##  datasource:
+#    driver-class-name: org.mariadb.jdbc.Driver
+#    url: jdbc:mariadb://localhost:3307/shpee_dev
+#    username: root
+#    password: 654321^dcba
+#    type: com.zaxxer.hikari.HikariDataSource
 
-#   Mysql configure
+##   Mysql configure
 #  datasource:
 #    username: root
 #    password: 654321^dcba
@@ -28,19 +26,22 @@ spring:
 #    type: com.mchange.v2.c3p0.ComboPooledDataSource
 
 
-#H2 configure
-#  datasource:
-#    driver-class-name: org.h2.Driver
-#    url: jdbc:h2:./shpeedb
-#    schema:
-#    - classpath:conf/table.sql
-#    data:
-#    - classpath:conf/insert.sql
-#    username: sa
-#    password: sa
-#  h2:
-#    console:
-#      enabled: true
+##  H2 configure
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:./shpeedb
+    schema:
+    - classpath:conf/table.sql
+    data:
+    - classpath:conf/insert.sql
+    username: sa
+    password: sa
+  h2:
+    console:
+      enabled: true
+
+shpee:
+  upload-path: upload
 
 mybatis:
   mapper-locations: classpath:conf/mapper.xml
