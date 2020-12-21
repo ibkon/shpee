@@ -4,10 +4,7 @@ import net.coobird.thumbnailator.Thumbnails;
 import org.apache.commons.io.IOUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.util.Units;
-import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.apache.poi.xwpf.usermodel.*;
 
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -25,14 +22,20 @@ public class BuildDocx {
         this.outputStream   = outputStream;
         document = new XWPFDocument();
     }
-    //添加标题
-    public void addTest(String test){
+    //添加文本
+    public void addText(String test){
         XWPFParagraph paragraph = document.createParagraph();
         paragraph.setAlignment(ParagraphAlignment.LEFT);
         XWPFRun run = paragraph.createRun();
         run.setText(test);
         run.setColor("000000");
         run.setFontSize(20);
+    }
+    public void nextPage(){
+        XWPFParagraph paragraph = document.createParagraph();
+        paragraph.setAlignment(ParagraphAlignment.LEFT);
+        XWPFRun run = paragraph.createRun();
+        run.addBreak(BreakType.PAGE);
     }
     //添加图片
     public void addImage(String path,String fileName,int type) {
@@ -46,7 +49,7 @@ public class BuildDocx {
 
         try {
             inputStream = new FileInputStream(path);
-            image = Thumbnails.of(path).size(500,500).asBufferedImage();
+            image = Thumbnails.of(path).size(400,600).asBufferedImage();
             bs = IOUtils.toByteArray(inputStream);
             run.addPicture(new ByteArrayInputStream(bs), type,"", Units.toEMU(image.getWidth()),Units.toEMU(image.getHeight()));
             inputStream.close();
@@ -60,8 +63,13 @@ public class BuildDocx {
 
     }
 
-    public void flush() throws IOException {
-        document.write(new FileOutputStream("test.docx"));
-        document.close();
+    public void flush() {
+        try {
+            document.write(outputStream);
+            document.close();
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
