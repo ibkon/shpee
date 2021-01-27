@@ -1,5 +1,6 @@
 package com.xentn.shpee.conf;
 
+import com.xentn.shpee.bean.TProduct;
 import com.xentn.shpee.bean.TUpload;
 import com.xentn.shpee.bean.TUser;
 import org.apache.ibatis.annotations.Param;
@@ -17,6 +18,7 @@ public interface Mapper {
 
     public List<TUpload>    selectTUpload(Map<String,Object> args);
     public List<TUser>      selectTUser(Map<String,Object> args);
+    public List<TProduct>   selectTProduct(Map<String,Object> args);
     public List<String>     selectRole(String name);
     public String           getConfigure(String key);
 

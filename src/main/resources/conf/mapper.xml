@@ -53,6 +53,13 @@
             </if>
         </where>
     </select>
+    <select id="selectTProduct" resultType="com.xentn.shpee.bean.TProduct">
+        SELECT p.PID PID,p.NAME NAME,p.PLID PLID,
+               pc.NAME PCNAME,pc.PLID,
+               pl.NAME PLNAME
+            FROM T_PRODUCT p,T_PRODUCT_CLASS pc,T_PRODUCT_LINE pl
+            WHERE p.PLID=pl.PLID AND pc.PLID=pl.PLID
+    </select>
     <select id="selectTUser" resultType="com.xentn.shpee.bean.TUser">
         SELECT NAME,PASSWORD,UPTIME FROM T_USER
         <where>

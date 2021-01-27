@@ -72,6 +72,18 @@
                             <dd><a href="">用户权限管理</a></dd>
                         </dl>
                     </li>
+                    <li class="layui-nav-item">
+                        <a href="javascript:;">配置器管理</a>
+                        <dl class="layui-nav-child">
+                            <dd><a href="/admin/configurator" target="frame-page">产品变更</a></dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd><a href="/admin/configurator?type=class" target="frame-page">产品系列变更</a></dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd><a href="/admin/configurator?type=line" target="frame-page">产品线变更</a></dd>
+                        </dl>
+                    </li>
                     <li class="layui-nav-item"><a href="">日志收集</a></li>
                     <li class="layui-nav-item"><a href="">系统设置</a></li>
                 </ul>
@@ -80,7 +92,7 @@
 
         <div class="layui-body">
             <!-- 内容主体区域 -->
-            <iframe name="frame-page" class="frame-style" src="/admin/resources?class=upload"></iframe>
+            <iframe name="frame-page" class="frame-style" src="/admin/configurator"></iframe>
         </div>
 
         <div class="layui-footer">

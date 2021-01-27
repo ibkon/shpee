@@ -31,7 +31,7 @@ public class Super {
 	 * @param count
 	 * @return
 	 */
-	protected Map<String, Object> buildJson(int code,String msg,List<Map<String,Object>> data,int count) {
+	protected Map<String, Object> buildJson(int code,String msg,Object data,int count) {
 		Map<String, Object> 	jsonMap		= new HashMap<String, Object>();
 		Map<String, String> 	totalRow	= new HashMap<String, String>();
 		jsonMap.put("code", code);

@@ -30,3 +30,18 @@ CREATE TABLE IF NOT EXISTS T_CONFIGURE(
   SKEY   char(64)    not null,
   SVAL  char(64)    not null
     );
+
+CREATE TABLE IF NOT EXISTS T_PRODUCT_LINE(
+    PLID   char(64)    not null,
+    NAME  char(64)    not null
+    );
+CREATE TABLE IF NOT EXISTS T_PRODUCT_CLASS(
+    PLID   char(64)    not null,
+    PCID  char(64)    not null,
+    NAME  char(64)    not null
+    );
+CREATE TABLE IF NOT EXISTS T_PRODUCT(
+    PLID   char(64)    not null,
+    PID  char(64)    not null,
+    NAME  char(64)    not null
+    );
