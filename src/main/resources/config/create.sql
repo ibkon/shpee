@@ -1,0 +1,16 @@
+
+#Delete all table
+/*
+DROP TABLE T_USER;
+*/
+
+CREATE TABLE IF NOT EXISTS T_USER(
+    USER_ID     char(64)    PRIMARY KEY NOT NULL,
+    USERNAME    varchar(64) UNIQUE NOT NULL,
+    PASSWORD    char(64)    NOT NULL ,
+    EMAIL       char(64)    UNIQUE,
+    ENABLED     boolean DEFAULT TRUE,
+    ACCOUNT_NON_EXPIRED boolean DEFAULT TRUE,
+    CREDENTIALS_NON_EXPIRED boolean DEFAULT TRUE,
+    ACCOUNT_NON_LOCKED  boolean DEFAULT TRUE
+    );

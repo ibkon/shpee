@@ -4,7 +4,14 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@MapperScan(value = "com.xentn.shpee.conf")
+/***
+ * @Description: shpee start
+ *
+ * @author: ibkon
+ * @date: 2021/3/14
+ * @version: 1.0
+ */
+@MapperScan(value = "com.xentn.shpee.mapper")
 @SpringBootApplication
 public class ShpeeApplication {
 
