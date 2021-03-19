@@ -5,7 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 /***
- * @Description: TODO
+ * @Description: User table bean
  *
  * @author: xentn
  * @date: 2021/3/14

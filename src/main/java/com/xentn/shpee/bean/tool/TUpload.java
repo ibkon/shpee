@@ -1,7 +1,7 @@
 package com.xentn.shpee.bean.tool;
 
 /***
- * @Description: TODO
+ * @Description: upload file table bean
  *
  * @author: ibkon
  * @date: 2021/3/17
