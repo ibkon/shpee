@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xentn.shpee.mapper.ShpeeConfigMapper">
+    <cache/>
+    <select id="getConfig" resultType="java.lang.String">
+        SELECT SHPEE_VALUE FROM T_SHPEE_CONFIG  WHERE SHPEE_KEY=#{shpee_key}
+    </select>
+    <insert id="setConfig">
+        INSERT INTO T_SHPEE_CONFIG(SHPEE_KEY,SHPEE_VALUE) VALUES(#{shpee_key},#{shpee_value})
+    </insert>
+    <update id="updateConfig">
+        UPDATE T_SHPEE_CONFIG SET SHPEE_VALUE = #{shpee_value} WHERE SHPEE_KEY = #{shpee_key}
+    </update>
+    <delete id="deleteConfig">
+        DELETE FROM T_SHPEE_CONFIG WHERE SHPEE_KEY = #{shpee_key}
+    </delete>
+</mapper>
