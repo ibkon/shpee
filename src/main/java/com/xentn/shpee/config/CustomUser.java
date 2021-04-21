@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -26,8 +27,8 @@ public class CustomUser implements UserDetailsService {
     private UserMapper  mapper;
 
     @Autowired
-    public CustomUser(UserMapper mapper){
-        this.mapper=mapper;
+    private void setMapper(UserMapper mapper){
+        this.mapper = mapper;
     }
 
     /**
@@ -42,6 +43,7 @@ public class CustomUser implements UserDetailsService {
             throw  new UsernameNotFoundException("Username is null");
         }
         List<SimpleGrantedAuthority>    authorities = null;
+        List<String>    role    = null;
         TUser   tUser   = null;
         //Verify that it is an email address, Query by email
         if(Pattern.matches("[\\w!#$%&'*+/=?^_`{|}~-]+(?:\\.[\\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\\w](?:[\\w-]*[\\w])?\\.)+[\\w](?:[\\w-]*[\\w])?",s)){
@@ -53,6 +55,11 @@ public class CustomUser implements UserDetailsService {
         }
         if(tUser==null){
             throw new UsernameNotFoundException("User does not exist");
+        }
+        role    = mapper.selectRole(tUser.getGroup());
+        authorities = new ArrayList<>();
+        for(String r:role){
+            authorities.add(new SimpleGrantedAuthority(r));
         }
         return new User(tUser.getUsername(),tUser.getPassword(),tUser.isEnabled(),tUser.isAccountNonExpired(),tUser.isCredentialsNonExpired(),tUser.isAccountNonLocked(),authorities);
     }

@@ -1,7 +1,7 @@
 package com.xentn.shpee.controller.admin;
 
 /***
- * @Description: TODO
+ * @Description: admin controller
  *
  * @author: ibkon
  * @date: 2021/3/22
