@@ -32,7 +32,16 @@ public class MainController {
     @GetMapping("/")
     public String index(){
         if(!isInitial){
-            return "admin/install";
+            String  shpeeName   = mapper.getConfig("shpee_name");
+            if(shpeeName==null||shpeeName.equals("")){
+                this.isInitial  = false;
+            }else {
+                this.isInitial  = true;
+            }
+            if(!isInitial){
+                return "admin/install";
+            }
+            return "view/index";
         }
         return "view/index";
     }

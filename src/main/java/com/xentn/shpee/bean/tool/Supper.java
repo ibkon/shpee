@@ -16,7 +16,6 @@ import java.util.UUID;
  * @version: 1.0
  */
 public class Supper {
-
     private ShpeeConfigMapper   configMapper;
     private UserMapper          userMapper;
 

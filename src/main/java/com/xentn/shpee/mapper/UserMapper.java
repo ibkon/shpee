@@ -30,7 +30,7 @@ public interface UserMapper {
      int  updateG(TUserGroup group);
      int  deleteG(TUserGroup group);
 
-     int  selectR(@Param("roleName") String roleName);
+     Integer  selectR(@Param("roleName") String roleName);
      int  insertR(@Param("roleName") String roleName);
      int  updateR(TRole  role);
      int  deleteR(TRole role);

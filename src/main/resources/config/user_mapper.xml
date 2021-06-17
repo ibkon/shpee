@@ -10,11 +10,11 @@
     <select id="selectByEmail" resultType="com.xentn.shpee.bean.user.TUser">
         SELECT USER_ID,USERNAME,PASSWORD,EMAIL,USER_GROUP,ENABLED,ACCOUNT_NON_EXPIRED,CREDENTIALS_NON_EXPIRED,ACCOUNT_NON_LOCKED
         FROM T_SHPEE_USER
-        WHERE EAMIL=#{email}
+        WHERE EMAIL=#{email}
     </select>
     <insert id="insert" parameterType="com.xentn.shpee.bean.user.TUser">
         INSERT INTO T_SHPEE_USER(USER_ID,USERNAME,PASSWORD,EMAIL,USER_GROUP)
-        VALUES(#{userId},#{username},#{password},#{email},#{group})
+        VALUES(#{userId},#{username},#{password},#{email},#{userGroup})
     </insert>
     <update id="update" parameterType="com.xentn.shpee.bean.user.TUser">
         UPDATE T_SHPEE_USER
@@ -71,12 +71,12 @@
     </delete>
 
     <select id="selectRole" resultType="string">
-        SELECT r.ROLE_NAME
+        SELECT DISTINCT r.ROLE_NAME
         FROM T_GROUP_ROLE gr, T_USER_GROUP g, T_ROLE r
         WHERE g.ENABLED = TRUE AND gr.GROUP_ID = #{groupId} AND r.ENABLED = TRUE AND gr.ROLE_ID = r.ROLE_ID
     </select>
 
-    <select id="selectR" resultType="int">
+    <select id="selectR" resultType="java.lang.Integer">
         SELECT ROLE_ID
         FROM T_ROLE
         WHERE ROLE_NAME=#{roleName}

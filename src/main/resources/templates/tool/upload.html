@@ -2,22 +2,15 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>初始化站点</title>
     <meta name="_csrf" th:content="${_csrf.token}">
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <title>文件上传</title>
     <link rel="stylesheet" href="/layui/css/layui.css" media="all">
 </head>
 <body>
-<form method="get" action="/admin/install">
-    <h1>初始化站点</h1>
-    站点名<input name="shpee_name" type="text"><br>
-    管理员用户名<input name="admin_user_name" type="text"><br>
-    管理员密码<input name="password" type="password"><br>
-    管理员邮箱<input name="email" type="email"><br>
-    <button type="submit">安装</button>
-</form>
 
 <script src="/layui/layui.js"></script>
+<button type="button" class="layui-btn" id="test1">上传图片</button>
 <script>
     layui.use('upload', function () {
         var $ = layui.jquery
@@ -28,6 +21,7 @@
             xhr.setRequestHeader(header, token);
         });
     })
+
 </script>
 </body>
 </html>

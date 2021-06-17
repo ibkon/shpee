@@ -17,7 +17,7 @@ public class TUser implements Serializable {
     private String  username;
     private String  password;
     private String  email;
-    private int     group;
+    private int     userGroup;
     private boolean enabled;
     private boolean accountNonExpired;
     private boolean credentialsNonExpired;

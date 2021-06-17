@@ -1,6 +1,7 @@
 package com.xentn.shpee.controller.admin.api;
 
 import com.xentn.shpee.bean.tool.Supper;
+import com.xentn.shpee.bean.tool.shpeeInfoCode;
 import com.xentn.shpee.bean.user.TUser;
 import com.xentn.shpee.bean.user.TUserGroup;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +26,20 @@ public class ShpeeInstall extends Supper {
     private PasswordEncoder encoder;
 
     private int adminGroupId  = 10000;
-    private int userGroupId   = 20001;
+    private int adminRoleId = 100000;
 
     @Autowired
     private void setEncoder(PasswordEncoder encoder){
         this.encoder    = encoder;
     }
 
+    /**
+     * @Author xentn
+     * @Description //install mapping
+     * @Date 2021/6/16
+     * @Param [request]
+     * @return java.util.Map<java.lang.String,java.lang.Object>
+     */
     @ResponseBody
     @RequestMapping("/admin/install")
     public Map<String,Object> install(HttpServletRequest request){
@@ -39,65 +47,46 @@ public class ShpeeInstall extends Supper {
         String  adminUser   = request.getParameter("admin_user_name");
         String  password    = request.getParameter("password");
         String  email       = request.getParameter("email");
+
+        if(shpeeName==null||adminUser==null||password==null||email==null){
+            return buildInfo(shpeeInfoCode.SHPEE_ARGS_ERROR,"信息不完善");
+        }
+
         TUser   user    = new TUser();
 
         user.setUserId(getUUID());
         user.setUsername(adminUser);
         user.setEmail(email);
         user.setPassword(encoder.encode(password));
-        user.setGroup(this.adminGroupId);
-        System.out.println(user);
-        initialGroup();
-        initialRole();
+        user.setUserGroup(this.adminGroupId);
+        initial();
 
         getUserMapper().insert(user);
         getConfigMapper().setConfig("shpee_name",shpeeName);
-        return buildInfo(0,"初始化站点成功");
+        return buildInfo(shpeeInfoCode.SHPEE_SUCCESS,"初始化站点成功");
     }
     /**
      * @Author xentn
-     * @Description //initial user group
-     * @Date 2021/4/19
+     * @Description //Initialize permissions
+     * @Date 2021/6/16
      * @Param []
      * @return void
      */
-    private void initialGroup(){
-        TUserGroup  adminGroup  = new TUserGroup();
-        TUserGroup  userGroup   = new TUserGroup();
-
-        adminGroup.setGroupId(this.adminGroupId);
-        adminGroup.setGroupName("root");
-        adminGroup.setEnable(true);
-
-        userGroup.setGroupId(this.userGroupId);
-        userGroup.setGroupName("user");
-        adminGroup.setEnable(true);
-
-        getUserMapper().insertG(adminGroup);
-        getUserMapper().insertG(userGroup);
-
-    }
-
-    /**
-     * @Author xentn
-     * @Description //initial role
-     * @Date 2021/4/21
-     * @Param []
-     * @return void
-     */
-    private void initialRole(){
-        String  administrator    = "ROLE_ADMINISTRATOR";
-        String  general          = "ROLE_GENERAL";
-        int     administratorID  = -1;
-        int     generalID  = -1;
-
-        getUserMapper().insertR(administrator);
-        getUserMapper().insertR(general);
-        administratorID = getUserMapper().selectR(administrator);
-        generalID = getUserMapper().selectR(general);
-        getUserMapper().insertGR(this.adminGroupId,administratorID);
-        getUserMapper().insertGR(this.adminGroupId,generalID);
-        getUserMapper().insertGR(this.userGroupId,generalID);
-
+    private void initial(){
+        TUserGroup  adminGroup  = getUserMapper().selectUserGroup(this.adminGroupId);
+        Integer   roles   = getUserMapper().selectR("ADMIN");
+        //Determine whether the user group has been initialized
+        if(adminGroup==null){
+            adminGroup  = new TUserGroup();
+            adminGroup.setGroupId(this.adminGroupId);
+            adminGroup.setEnable(true);
+            adminGroup.setGroupName("ADMIN");
+            getUserMapper().insertG(adminGroup);
+        }
+        //Determine whether the role has been initialized
+        if(roles==null||roles==0){
+            getUserMapper().insertR("ADMIN");
+        }
+        getUserMapper().insertGR(this.adminGroupId,getUserMapper().selectR("ADMIN"));
     }
 }
