@@ -43,8 +43,9 @@ public class Security extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests().antMatchers("/").permitAll()
                 .antMatchers("/admin/install").permitAll()
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/upload/**").authenticated();
+                .antMatchers("/admin/**").hasRole(RoleList.ROLE_SYSTEM_ADMIN)
+                .antMatchers("/cloud/**").hasRole(RoleList.ROLE_CLOUD_DISK)
+                .antMatchers("/upload/**").hasRole(RoleList.ROLE_UPLOAD);
         http.formLogin();
         http.logout();
     }

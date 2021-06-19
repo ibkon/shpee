@@ -44,19 +44,28 @@ public class CustomUser implements UserDetailsService {
         }
         List<SimpleGrantedAuthority>    authorities = null;
         List<String>    role    = null;
-        TUser   tUser   = null;
+        TUser   tUser   = new TUser();
+        List<TUser> tUsers  = null;
+
         //Verify that it is an email address, Query by email
         if(Pattern.matches("[\\w!#$%&'*+/=?^_`{|}~-]+(?:\\.[\\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\\w](?:[\\w-]*[\\w])?\\.)+[\\w](?:[\\w-]*[\\w])?",s)){
-            tUser   = mapper.selectByEmail(s);
+            tUser.setEmail(s);
         }
         //Query by username
         else{
-            tUser   = mapper.selectByUsername(s);
+            tUser.setUsername(s);
         }
+
+        tUsers  = mapper.selectUsers(tUser);
+        if(tUsers != null && tUsers.size()==1){
+            tUser   = tUsers.get(0);
+        }
+
         if(tUser==null){
             throw new UsernameNotFoundException("User does not exist");
         }
-        role    = mapper.selectRole(tUser.getUserGroup());
+        System.err.println(tUser);
+        role    = mapper.selectGroupRoles(tUser.getUserGroup());
         authorities = new ArrayList<>();
         for(String r:role){
             authorities.add(new SimpleGrantedAuthority(r));

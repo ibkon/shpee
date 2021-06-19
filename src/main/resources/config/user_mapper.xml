@@ -2,20 +2,46 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.xentn.shpee.mapper.UserMapper">
     <cache/>
-    <select id="selectByUsername" resultType="com.xentn.shpee.bean.user.TUser">
-        SELECT USER_ID,USERNAME,PASSWORD,EMAIL,USER_GROUP,ENABLED,ACCOUNT_NON_EXPIRED,CREDENTIALS_NON_EXPIRED,ACCOUNT_NON_LOCKED
+    <!-- shpee user operation -->
+    <!--select user-->
+    <select id="selectUsers" parameterType="com.xentn.shpee.bean.user.TUser" resultType="com.xentn.shpee.bean.user.TUser">
+        SELECT USER_ID,USERNAME,PASSWORD,USER_GROUP,EMAIL,ENABLED,ACCOUNT_NON_EXPIRED,CREDENTIALS_NON_EXPIRED,ACCOUNT_NON_LOCKED
         FROM T_SHPEE_USER
-        WHERE USERNAME=#{username}
+        <where>
+            <if test="userId!=null">
+                USER_ID = #{userId}
+            </if>
+            <if test="username!=null">
+                AND USERNAME = #{username}
+            </if>
+            <if test="userGroup!=null">
+                AND USER_GROUP = #{userGroup}
+            </if>
+            <if test="email!=null">
+                AND EMAIL = #{email}
+            </if>
+            <if test="enabled!=null">
+                AND ENABLED = #{enabled}
+            </if>
+            <if test="accountNonExpired!=null">
+                AND ACCOUNT_NON_EXPIRED = #{accountNonExpired}
+            </if>
+            <if test="credentialsNonExpired!=null">
+                AND CREDENTIALS_NON_EXPIRED = #{credentialsNonExpired}
+            </if>
+            <if test="accountNonLocked!=null">
+                AND ACCOUNT_NON_LOCKED = #{accountNonLocked}
+            </if>
+        </where>
     </select>
-    <select id="selectByEmail" resultType="com.xentn.shpee.bean.user.TUser">
-        SELECT USER_ID,USERNAME,PASSWORD,EMAIL,USER_GROUP,ENABLED,ACCOUNT_NON_EXPIRED,CREDENTIALS_NON_EXPIRED,ACCOUNT_NON_LOCKED
-        FROM T_SHPEE_USER
-        WHERE EMAIL=#{email}
-    </select>
+    <!--select user end-->
+    <!--insert user-->
     <insert id="insert" parameterType="com.xentn.shpee.bean.user.TUser">
         INSERT INTO T_SHPEE_USER(USER_ID,USERNAME,PASSWORD,EMAIL,USER_GROUP)
         VALUES(#{userId},#{username},#{password},#{email},#{userGroup})
     </insert>
+    <!--insert user end-->
+    <!--update user info-->
     <update id="update" parameterType="com.xentn.shpee.bean.user.TUser">
         UPDATE T_SHPEE_USER
         SET
@@ -23,88 +49,104 @@
             USERNAME    = #{username}
         </if>
         <if test="password!=null">
-            PASSWORD    = #{password}
+            ,PASSWORD    = #{password}
         </if>
         <if test="email!=null">
-            EMAIL    = #{email}
+            ,EMAIL    = #{email}
+        </if>
+        <if test="userGroup!=null">
+            ,USER_GROUP    = #{userGroup}
         </if>
         <if test="enabled!=null">
-            ENABLED    = #{enabled}
+            ,ENABLED    = #{enabled}
         </if>
         <if test="accountNonExpired!=null">
-            ACCOUNT_NON_EXPIRED    = #{accountNonExpired}
+            ,ACCOUNT_NON_EXPIRED    = #{accountNonExpired}
         </if>
         <if test="credentialsNonExpired!=null">
-            CREDENTIALS_NON_EXPIRED    = #{credentialsNonExpired}
+            ,CREDENTIALS_NON_EXPIRED    = #{credentialsNonExpired}
         </if>
         <if test="accountNonLocked!=null">
-            ACCOUNT_NON_LOCKED    = #{accountNonLocked}
+            ,ACCOUNT_NON_LOCKED    = #{accountNonLocked}
         </if>
         WHERE USER_ID = #{userId}
     </update>
+    <!--update user end-->
+    <!--delete user-->
     <delete id="delete" parameterType="com.xentn.shpee.bean.user.TUser">
         DELETE FROM T_SHPEE_USER WHERE USER_ID = #{userId}
     </delete>
+    <!--delete user end-->
+    <!--user end-->
 
-    <select id="selectUserGroup" resultType="com.xentn.shpee.bean.user.TUserGroup">
-        SELECT GROUP_ID,GROUP_NAME,ENABLED
+    <!--user group operation-->
+    <!--select group-->
+    <select id="selectUserGroups" parameterType="com.xentn.shpee.bean.user.TUserGroup" resultType="com.xentn.shpee.bean.user.TUserGroup">
+        SELECT GROUP_ID,GROUP_ADMIN_USER_ID,GROUP_NAME,ENABLED
         FROM T_USER_GROUP
-        WHERE GROUP_ID=#{groupId}
+        <where>
+            <if test="groupId!=null">
+                GROUP_ID = #{groupId}
+            </if>
+            <if test="groupAdminUserId!=null">
+                AND GROUP_ADMIN_USER_ID = #{groupAdminUserId}
+            </if>
+            <if test="groupName!=null">
+                AND GROUP_NAME = #{groupName}
+            </if>
+            <if test="enable!=null">
+                AND ENABLED = #{enable}
+            </if>
+        </where>
     </select>
-    <insert id="insertG" parameterType="com.xentn.shpee.bean.user.TUserGroup">
-        INSERT INTO T_USER_GROUP(GROUP_ID,GROUP_NAME)
-        VALUES(#{groupId},#{groupName})
+    <!--select group end-->
+    <!--insert group-->
+    <insert id="insertGroup" parameterType="com.xentn.shpee.bean.user.TUserGroup">
+        INSERT INTO T_USER_GROUP(GROUP_ID,GROUP_ADMIN_USER_ID,GROUP_NAME)
+        VALUES(#{groupId},#{groupAdminUserId},#{groupName})
     </insert>
-    <update id="updateG" parameterType="com.xentn.shpee.bean.user.TUserGroup">
+    <!--insert group end-->
+    <!--update group-->
+    <update id="updateGroup" parameterType="com.xentn.shpee.bean.user.TUserGroup">
         UPDATE T_USER_GROUP
         SET
         <if test="groupName!=null">
             GROUP_NAME    = #{groupName}
         </if>
+        <if test="groupAdminUserId!=null">
+            ,GROUP_ADMIN_USER_ID    = #{groupAdminUserId}
+        </if>
         <if test="enable!=null">
-            ENABLED    = #{enable}
+            ,ENABLED    = #{enable}
         </if>
         WHERE GROUP_ID = #{groupId}
     </update>
-    <delete id="deleteG" parameterType="com.xentn.shpee.bean.user.TUserGroup">
+    <!--update group end-->
+    <!--delete group-->
+    <delete id="deleteGroup">
         DELETE FROM T_USER_GROUP WHERE GROUP_ID = #{groupId}
     </delete>
+    <!--delete group end-->
+    <!--user group end-->
 
-    <select id="selectRole" resultType="string">
-        SELECT DISTINCT r.ROLE_NAME
-        FROM T_GROUP_ROLE gr, T_USER_GROUP g, T_ROLE r
-        WHERE g.ENABLED = TRUE AND gr.GROUP_ID = #{groupId} AND r.ENABLED = TRUE AND gr.ROLE_ID = r.ROLE_ID
+    <!--User group permission operation-->
+    <!--select group roles-->
+    <select id="selectGroupRoles" resultType="string">
+        SELECT DISTINCT ROLE_NAME
+        FROM T_GROUP_ROLE
+        WHERE GROUP_ID = #{groupId}
     </select>
-
-    <select id="selectR" resultType="java.lang.Integer">
-        SELECT ROLE_ID
-        FROM T_ROLE
-        WHERE ROLE_NAME=#{roleName}
-    </select>
-    <insert id="insertR">
-        INSERT INTO T_ROLE(ROLE_NAME)
-        VALUES(#{roleName})
+    <!--select group roles end-->
+    <!--insert group role-->
+    <insert id="insertGroupRole">
+        INSERT INTO T_GROUP_ROLE(GROUP_ID,ROLE_NAME)
+        VALUES(#{groupId},#{roleName})
     </insert>
-    <update id="updateR" parameterType="com.xentn.shpee.bean.user.TRole">
-        UPDATE T_ROLE
-        SET
-        <if test="roleName!=null">
-            ROLE_NAME    = #{roleName}
-        </if>
-        <if test="enable!=null">
-            ENABLED    = #{enable}
-        </if>
-        WHERE ROLE_ID = #{roleId}
-    </update>
-    <delete id="deleteR" parameterType="com.xentn.shpee.bean.user.TRole">
-        DELETE FROM T_ROLE WHERE ROLE_ID = #{roleId}
+    <!--insert group role end-->
+    <!--delete group role-->
+    <delete id="deleteGroupRole">
+        DELETE FROM T_GROUP_ROLE WHERE GROUP_ID = #{groupId} AND ROLE_NAME = #{roleName}
     </delete>
-
-    <insert id="insertGR">
-        INSERT INTO T_GROUP_ROLE(GROUP_ID,ROLE_ID)
-        VALUES(#{groupId},#{roleId})
-    </insert>
-    <delete id="deleteGR">
-        DELETE FROM T_GROUP_ROLE WHERE GROUP_ID = #{groupId} AND ROLE_ID = #{roleId}
-    </delete>
+    <!--delete group role-->
+    <!--User group permission operation end-->
 </mapper>

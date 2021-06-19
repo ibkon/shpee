@@ -11,7 +11,8 @@ import lombok.Data;
  */
 @Data
 public class TUserGroup {
-    private int groupId;
+    private String groupId;
+    private String groupAdminUserId;
     private String groupName;
-    private boolean enable;
+    private boolean enable = true;
 }

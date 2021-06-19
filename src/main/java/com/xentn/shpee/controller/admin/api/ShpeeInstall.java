@@ -2,10 +2,10 @@ package com.xentn.shpee.controller.admin.api;
 
 import com.xentn.shpee.bean.tool.Supper;
 import com.xentn.shpee.bean.tool.shpeeInfoCode;
-import com.xentn.shpee.bean.user.TUser;
-import com.xentn.shpee.bean.user.TUserGroup;
+import com.xentn.shpee.bean.user.UserAction;
+import com.xentn.shpee.config.RoleList;
+import com.xentn.shpee.mapper.ShpeeConfigMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,14 +23,17 @@ import java.util.Map;
 @Controller
 public class ShpeeInstall extends Supper {
 
-    private PasswordEncoder encoder;
-
-    private int adminGroupId  = 10000;
-    private int adminRoleId = 100000;
+    private UserAction  userAction;
+    private ShpeeConfigMapper   mapper;
 
     @Autowired
-    private void setEncoder(PasswordEncoder encoder){
-        this.encoder    = encoder;
+    public void setUserAction(UserAction userAction) {
+        this.userAction = userAction;
+    }
+
+    @Autowired
+    public void setMapper(ShpeeConfigMapper mapper) {
+        this.mapper = mapper;
     }
 
     /**
@@ -52,41 +55,13 @@ public class ShpeeInstall extends Supper {
             return buildInfo(shpeeInfoCode.SHPEE_ARGS_ERROR,"信息不完善");
         }
 
-        TUser   user    = new TUser();
-
-        user.setUserId(getUUID());
-        user.setUsername(adminUser);
-        user.setEmail(email);
-        user.setPassword(encoder.encode(password));
-        user.setUserGroup(this.adminGroupId);
-        initial();
-
-        getUserMapper().insert(user);
-        getConfigMapper().setConfig("shpee_name",shpeeName);
+        this.userAction.addUserGroup("System administrator",
+                adminUser,
+                email,
+                password,
+                RoleList.getAllRoles()
+        );
+        mapper.setConfig("shpee_name",shpeeName);
         return buildInfo(shpeeInfoCode.SHPEE_SUCCESS,"初始化站点成功");
-    }
-    /**
-     * @Author xentn
-     * @Description //Initialize permissions
-     * @Date 2021/6/16
-     * @Param []
-     * @return void
-     */
-    private void initial(){
-        TUserGroup  adminGroup  = getUserMapper().selectUserGroup(this.adminGroupId);
-        Integer   roles   = getUserMapper().selectR("ADMIN");
-        //Determine whether the user group has been initialized
-        if(adminGroup==null){
-            adminGroup  = new TUserGroup();
-            adminGroup.setGroupId(this.adminGroupId);
-            adminGroup.setEnable(true);
-            adminGroup.setGroupName("ADMIN");
-            getUserMapper().insertG(adminGroup);
-        }
-        //Determine whether the role has been initialized
-        if(roles==null||roles==0){
-            getUserMapper().insertR("ADMIN");
-        }
-        getUserMapper().insertGR(this.adminGroupId,getUserMapper().selectR("ADMIN"));
     }
 }

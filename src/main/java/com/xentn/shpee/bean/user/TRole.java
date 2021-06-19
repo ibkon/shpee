@@ -3,7 +3,7 @@ package com.xentn.shpee.bean.user;
 import lombok.Data;
 
 /***
- * @Description: TODO
+ * @Description: role class
  *
  * @author: ibkon
  * @date: 2021/4/19
@@ -11,7 +11,7 @@ import lombok.Data;
  */
 @Data
 public class TRole {
-    private int roleId;
+    private String roleId;
+    private String shpeeRole;
     private String roleName;
-    private boolean enable;
 }

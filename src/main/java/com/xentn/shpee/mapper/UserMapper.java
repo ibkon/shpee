@@ -1,6 +1,5 @@
 package com.xentn.shpee.mapper;
 
-import com.xentn.shpee.bean.user.TRole;
 import com.xentn.shpee.bean.user.TUser;
 import com.xentn.shpee.bean.user.TUserGroup;
 import org.apache.ibatis.annotations.Mapper;
@@ -17,24 +16,17 @@ import java.util.List;
  */
 @Mapper
 public interface UserMapper {
-     TUser selectByUsername(@Param("username") String username);
-     TUser selectByEmail(@Param("email") String email);
-     TUserGroup     selectUserGroup(@Param("groupId") int groupId);
-     List<String>   selectRole(@Param("groupId") int groupId);
-
+     List<TUser>    selectUsers(TUser user);
      int  insert(TUser user);
      int  update(TUser user);
-     int  delete(TUser user);
+     int  delete(String userId);
 
-     int  insertG(TUserGroup group);
-     int  updateG(TUserGroup group);
-     int  deleteG(TUserGroup group);
+     List<TUserGroup>    selectUserGroups(TUserGroup group);
+     int insertGroup(TUserGroup group);
+     int updateGroup(TUserGroup group);
+     int deleteGroup(String groupId);
 
-     Integer  selectR(@Param("roleName") String roleName);
-     int  insertR(@Param("roleName") String roleName);
-     int  updateR(TRole  role);
-     int  deleteR(TRole role);
-
-     int  insertGR(@Param("groupId") int groupId,@Param("roleId") int roleId);
-     int  deleteGR(@Param("groupId") int groupId,@Param("roleId") int roleId);
+     List<String> selectGroupRoles(String groupId);
+     int  insertGroupRole(@Param("groupId") String groupId,@Param("roleName") String roleName);
+     int  deleteGroupRole(@Param("groupId") String groupId,@Param("roleName") String roleName);
 }
