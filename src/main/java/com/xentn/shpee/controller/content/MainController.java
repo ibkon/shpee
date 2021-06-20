@@ -45,9 +45,4 @@ public class MainController {
         }
         return "view/index";
     }
-
-    @GetMapping("/install")
-    public String install(){
-        return "admin/install";
-    }
 }

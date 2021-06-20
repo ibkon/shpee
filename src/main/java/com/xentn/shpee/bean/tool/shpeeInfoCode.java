@@ -10,4 +10,5 @@ package com.xentn.shpee.bean.tool;
 public class shpeeInfoCode {
     final public static int SHPEE_SUCCESS   = 0;
     final public static int SHPEE_ARGS_ERROR   = 1;
+    final public static int SHPEE_PROHIBITED_OPERATION   = 2;
 }
