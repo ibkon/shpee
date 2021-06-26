@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>layout 管理系统大布局 - Layui</title>
+    <title>shpee系统管理后台</title>
     <link rel="stylesheet" href="/layui/css/layui.css">
 </head>
 <body>
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
-        <div class="layui-logo layui-hide-xs layui-bg-black">layout demo</div>
-        <!-- 头部区域（可配合layui 已有的水平导航） -->
+        <div class="layui-logo layui-hide-xs layui-bg-black" th:text="${shpee_name}"></div>
+
         <ul class="layui-nav layui-layout-left">
             <!-- 移动端显示 -->
             <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-header-event="menuLeft">
@@ -33,7 +33,7 @@
             <li class="layui-nav-item layui-hide layui-show-md-inline-block">
                 <a href="javascript:;">
                     <img src="//tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" class="layui-nav-img">
-                    tester
+                    <span th:text="${user_name}"></span>
                 </a>
                 <dl class="layui-nav-child">
                     <dd><a href="">Your Profile</a></dd>
@@ -54,20 +54,37 @@
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
             <ul class="layui-nav layui-nav-tree" lay-filter="test">
                 <li class="layui-nav-item layui-nav-itemed">
-                    <a class="" href="javascript:;">menu group 1</a>
+                    <a class="" href="javascript:;">用户管理</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;">menu 1</a></dd>
-                        <dd><a href="javascript:;">menu 2</a></dd>
-                        <dd><a href="javascript:;">menu 3</a></dd>
-                        <dd><a href="">the links</a></dd>
+                        <dd><a href="javascript:;">用户组</a></dd>
+                        <dd><a href="javascript:;">用户</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">
-                    <a href="javascript:;">menu group 2</a>
+                    <a href="javascript:;">云盘管理</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;">list 1</a></dd>
-                        <dd><a href="javascript:;">list 2</a></dd>
-                        <dd><a href="">超链接</a></dd>
+                        <dd><a href="javascript:;">存储空间管理</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">系统文件管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;">文件列表</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">配置器管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;" target="frame-page">产品型号管理</a></dd>
+                    </dl>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;" target="frame-page">产品参数管理</a></dd>
+                    </dl>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;" target="frame-page">产品文件管理</a></dd>
+                    </dl>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/admin/product/add/product" target="frame-page">添加产品信息</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item"><a href="javascript:;">click menu item</a></li>
@@ -78,7 +95,9 @@
 
     <div class="layui-body">
         <!-- 内容主体区域 -->
-        <div style="padding: 15px;">内容主体区域。记得修改 layui.css 和 js 的路径</div>
+        <div style="padding: 15px;">
+            <iframe name="frame-page" src="/admin/product/add/product" style="width: 100%;" frameborder="0" scrolling="no" id="test" onload="this.height=100"></iframe>
+        </div>
     </div>
 
     <div class="layui-footer">
@@ -89,6 +108,18 @@
 <script src="/layui/layui.js"></script>
 <script>
     //JS
+    function reinitIframe(){
+        var iframe = document.getElementById("test");
+        try{
+            var bHeight = iframe.contentWindow.document.body.scrollHeight;
+            var dHeight = iframe.contentWindow.document.documentElement.scrollHeight;
+            var height = Math.max(bHeight, dHeight);
+            iframe.height = height;
+            console.log(height);
+        }catch (ex){}
+    }
+    window.setInterval("reinitIframe()", 200);
+
     layui.use(['element', 'layer', 'util'], function(){
         var element = layui.element
             ,layer = layui.layer

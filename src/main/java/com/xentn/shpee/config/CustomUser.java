@@ -64,7 +64,6 @@ public class CustomUser implements UserDetailsService {
         if(tUser==null){
             throw new UsernameNotFoundException("User does not exist");
         }
-        System.err.println(tUser);
         role    = mapper.selectGroupRoles(tUser.getUserGroup());
         authorities = new ArrayList<>();
         for(String r:role){

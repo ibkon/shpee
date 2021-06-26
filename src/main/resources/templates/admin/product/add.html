@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <style>
+        .layui-textarea{
+            height: 120px;
+        }
+    </style>
+</head>
+<body>
+<h1>添加产品</h1>
+<form class="layui-form" action="">
+    <div  style="margin-top: 10px;">
+    <label class="layui-form-label">选择产品线</label>
+        <div class="layui-input-block">
+            <select name="product-line" lay-verify="required">
+                <option value=""></option>
+            </select>
+        </div>
+    </div>
+    <div  style="margin-top: 10px;">
+        <label class="layui-form-label">添加产品线</label>
+        <div class="layui-input-block">
+            <a src="" id="add-line-button" style="width: 100%;font-size: 30px;" class="layui-btn layui-icon layui-icon-addition"></a>
+        </div>
+    </div>
+    <div  style="margin-top: 10px;">
+        <label class="layui-form-label">添加产品</label>
+        <div class="layui-input-block">
+            <input type="text" name="title" required  lay-verify="required" placeholder="请输入产品名称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div  style="margin-top: 10px;">
+        <label class="layui-form-label">产品参数</label>
+        <div class="layui-input-block">
+            <textarea name="desc" id="product-parameter" placeholder="请输入产品参数" class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item" style="margin-top: 10px;">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+
+<script src="/layui/layui.js"></script>
+<script>
+    layui.use(['layedit','form'], function () {
+        var $ = layui.jquery
+            , form = layui.form
+            ,layedit = layui.layedit;
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        $(document).ajaxSend(function (e, xhr, options) {
+            xhr.setRequestHeader(header, token);
+        });
+        layedit.build('product-parameter', {
+            height: 300
+        });
+        form.on('submit(formDemo)', function(data){
+            layer.msg(JSON.stringify(data.field));
+            return false;
+        });
+
+        $("#add-line-button").click(function (){
+            layer.open({
+                type: 2,
+                title: '添加产品线',
+                shadeClose: true,
+                shade: [0.5,'#38f'],
+                maxmin: true,
+                area: ['460px', '240px'],
+                content: "/admin/product/add/product_line",
+                cancel: function(index, layero){
+                    window.location.reload();
+                    return false;
+                }
+            })
+        });
+    })
+</script>
+</body>
+</html>

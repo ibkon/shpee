@@ -7,7 +7,7 @@ package com.xentn.shpee.bean.tool;
  * @date: 2021/4/21
  * @version: 1.0
  */
-public class shpeeInfoCode {
+public class ShpeeInfoCode {
     final public static int SHPEE_SUCCESS   = 0;
     final public static int SHPEE_ARGS_ERROR   = 1;
     final public static int SHPEE_PROHIBITED_OPERATION   = 2;

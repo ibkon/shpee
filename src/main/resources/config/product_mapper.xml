@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xentn.shpee.mapper.ProductMapper">
+    <cache/>
+    <!--group-->
+    <select id="selectGroup" parameterType="com.xentn.shpee.bean.product.TProductGroup" resultType="com.xentn.shpee.bean.product.TProductGroup">
+        SELECT PRODUCT_GROUP_ID,PRODUCT_NAME
+        FROM T_PRODUCT_GROUP
+        <where>
+            <if test="productGroupId!=null">
+                PRODUCT_GROUP_ID = #{productGroupId}
+            </if>
+            <if test="productName!=null">
+                PRODUCT_NAME = #{productName}
+            </if>
+        </where>
+    </select>
+    <insert id="insertGroup" parameterType="com.xentn.shpee.bean.product.TProductGroup">
+        INSERT INTO T_PRODUCT_GROUP(PRODUCT_GROUP_ID,PRODUCT_NAME)
+        VALUES(#{productGroupId},#{productName})
+    </insert>
+    <!--group end-->
+</mapper>

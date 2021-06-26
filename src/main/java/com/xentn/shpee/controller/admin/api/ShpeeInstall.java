@@ -1,7 +1,7 @@
 package com.xentn.shpee.controller.admin.api;
 
 import com.xentn.shpee.bean.tool.Supper;
-import com.xentn.shpee.bean.tool.shpeeInfoCode;
+import com.xentn.shpee.bean.tool.ShpeeInfoCode;
 import com.xentn.shpee.bean.user.UserAction;
 import com.xentn.shpee.config.RoleList;
 import com.xentn.shpee.mapper.ShpeeConfigMapper;
@@ -47,7 +47,7 @@ public class ShpeeInstall extends Supper {
     @RequestMapping("/admin/install")
     public Map<String,Object> install(HttpServletRequest request){
         if(mapper.getConfig("shpee_name")!=null){
-            return buildInfo(shpeeInfoCode.SHPEE_PROHIBITED_OPERATION,"403");
+            return buildInfo(ShpeeInfoCode.SHPEE_PROHIBITED_OPERATION,"403");
         }
         String  shpeeName   = request.getParameter("shpee_name");
         String  adminUser   = request.getParameter("admin_user_name");
@@ -55,7 +55,7 @@ public class ShpeeInstall extends Supper {
         String  email       = request.getParameter("email");
 
         if(shpeeName==null||adminUser==null||password==null||email==null){
-            return buildInfo(shpeeInfoCode.SHPEE_ARGS_ERROR,"信息不完善");
+            return buildInfo(ShpeeInfoCode.SHPEE_ARGS_ERROR,"信息不完善");
         }
 
         this.userAction.addUserGroup("System administrator",
@@ -65,6 +65,6 @@ public class ShpeeInstall extends Supper {
                 RoleList.getAllRoles()
         );
         mapper.setConfig("shpee_name",shpeeName);
-        return buildInfo(shpeeInfoCode.SHPEE_SUCCESS,"初始化站点成功");
+        return buildInfo(ShpeeInfoCode.SHPEE_SUCCESS,"初始化站点成功");
     }
 }
