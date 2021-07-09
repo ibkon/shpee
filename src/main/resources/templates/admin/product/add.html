@@ -22,6 +22,7 @@
         <div class="layui-input-block">
             <select name="product-line" lay-verify="required">
                 <option value=""></option>
+                <option th:each="pls:${product_lines}" th:value="${pls.productGroupId}" th:text="${pls.productName}"></option>
             </select>
         </div>
     </div>
