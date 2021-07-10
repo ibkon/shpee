@@ -20,7 +20,7 @@
     <div  style="margin-top: 10px;">
     <label class="layui-form-label">选择产品线</label>
         <div class="layui-input-block">
-            <select name="product-line" lay-verify="required">
+            <select name="product_line" lay-verify="required">
                 <option value=""></option>
                 <option th:each="pls:${product_lines}" th:value="${pls.productGroupId}" th:text="${pls.productName}"></option>
             </select>
@@ -35,13 +35,13 @@
     <div  style="margin-top: 10px;">
         <label class="layui-form-label">添加产品</label>
         <div class="layui-input-block">
-            <input type="text" name="title" required  lay-verify="required" placeholder="请输入产品名称" autocomplete="off" class="layui-input">
+            <input type="text" name="product_name" required  lay-verify="required" placeholder="请输入产品名称" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div  style="margin-top: 10px;">
         <label class="layui-form-label">产品参数</label>
         <div class="layui-input-block">
-            <textarea name="desc" id="product-parameter" placeholder="请输入产品参数" class="layui-textarea"></textarea>
+            <textarea name="product_doc" required id="product-parameter" placeholder="请输入产品参数" class="layui-textarea"></textarea>
         </div>
     </div>
     <div class="layui-form-item" style="margin-top: 10px;">
@@ -63,11 +63,28 @@
         $(document).ajaxSend(function (e, xhr, options) {
             xhr.setRequestHeader(header, token);
         });
-        layedit.build('product-parameter', {
-            height: 300
+        var parameter = layedit.build('product-parameter', {
+            height: 360,
+            hideTool : ['strong','italic','underline','del','|','left','center','right','link','unlink','face','image','help']
         });
         form.on('submit(formDemo)', function(data){
-            layer.msg(JSON.stringify(data.field));
+            $.ajax({
+                url: "/admin/api/product/add/product",
+                type: 'POST',
+                data: {
+                    product_line : data.field.product_line,
+                    product_name : data.field.product_name,
+                    product_doc  : layedit.getContent(parameter)
+                },
+                success:function (arg){
+                    if(arg.code === 0){
+                        layer.msg('添加产品成功');
+                    }
+                    else{
+                        layer.msg('添加产品\''+arg.msg+'\'失败');
+                    }
+                }
+            });
             return false;
         });
 

@@ -20,3 +20,4 @@ You need to install 'JDK (LTS)' and 'Maven', then you can use eclipse or idea to
 4. run '$java -jar target/XXX.jar'.
 
 Finally you can use your browser to open '127.0.0.1:8080'.
+

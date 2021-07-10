@@ -16,4 +16,5 @@ import java.util.List;
 public interface ProductMapper {
     List<TProductGroup> selectGroup(TProductGroup group);
     int insertGroup(TProductGroup group);
+
 }

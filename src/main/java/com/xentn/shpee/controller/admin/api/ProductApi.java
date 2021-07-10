@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -46,8 +47,21 @@ public class ProductApi extends Supper {
             group.setProductGroupId(getUUID());
             getProductMapper().insertGroup(group);
             return buildInfo(ShpeeInfoCode.SHPEE_SUCCESS,"success");
+        }else if(type.equals("product")){
+            List<String>    parmeters   = new ArrayList<>();
+            String  productGroupId  = request.getParameter("product_line");
+            String  productName  = request.getParameter("product_name");
+            String  productParameter  = request.getParameter("product_doc");
+            if(productParameter.indexOf("<p>")==-1){
+                parmeters.add(productParameter);
+            }else{
+                for(String ps:productParameter.split("<p>")){
+                    if(ps.equals(""))
+                        continue;
+                    parmeters.add(ps.replaceFirst("</p>",""));
+                }
+            }
         }
         return buildInfo(ShpeeInfoCode.SHPEE_ARGS_ERROR,"403");
     }
-
 }
