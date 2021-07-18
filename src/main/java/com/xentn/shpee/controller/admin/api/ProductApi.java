@@ -1,6 +1,8 @@
 package com.xentn.shpee.controller.admin.api;
 
+import com.xentn.shpee.bean.product.TProduct;
 import com.xentn.shpee.bean.product.TProductGroup;
+import com.xentn.shpee.bean.product.TProductParameter;
 import com.xentn.shpee.bean.tool.ShpeeInfoCode;
 import com.xentn.shpee.bean.tool.Supper;
 import org.springframework.stereotype.Controller;
@@ -9,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -48,19 +49,35 @@ public class ProductApi extends Supper {
             getProductMapper().insertGroup(group);
             return buildInfo(ShpeeInfoCode.SHPEE_SUCCESS,"success");
         }else if(type.equals("product")){
-            List<String>    parmeters   = new ArrayList<>();
+            TProduct        product     = new TProduct();
+            TProductParameter   parameter   = new TProductParameter();
+
+            parameter.setProductParameterId(getUUID());
+
             String  productGroupId  = request.getParameter("product_line");
             String  productName  = request.getParameter("product_name");
             String  productParameter  = request.getParameter("product_doc");
+
             if(productParameter.indexOf("<p>")==-1){
-                parmeters.add(productParameter);
+                parameter.setProductParameterText(productParameter);
+                if(productParameter.indexOf("##")==0){
+                    parameter.setKeyItem(true);
+                }
+                parameter.setProductParameterNextId("null");
             }else{
                 for(String ps:productParameter.split("<p>")){
                     if(ps.equals(""))
                         continue;
-                    parmeters.add(ps.replaceFirst("</p>",""));
+                    System.out.println(ps.indexOf("##"));
+                    //parmeters.add(ps.replaceFirst("</p>",""));
                 }
             }
+            product.setProductId(getUUID());
+            product.setProductName(productName);
+            product.setProductGroupId(productGroupId);
+            product.setProductParameterId(parameter.getProductParameterId());
+            //getProductMapper().insertProduct(product);
+
         }
         return buildInfo(ShpeeInfoCode.SHPEE_ARGS_ERROR,"403");
     }

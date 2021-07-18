@@ -57,6 +57,6 @@ CREATE TABLE IF NOT EXISTS T_PRODUCT(
 CREATE TABLE IF NOT EXISTS T_PRODUCT_PARAMETER(
     PRODUCT_PARAMETER_ID        char(64),
     PRODUCT_PARAMETER_NEXT_ID   char(64),
-    KEY_ITEM                    boolean,
+    KEY_ITEM                    boolean default FALSE ,
     PRODUCT_PARAMETER_TEXT      nvarchar(256)
 );

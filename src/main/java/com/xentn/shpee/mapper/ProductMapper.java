@@ -1,6 +1,8 @@
 package com.xentn.shpee.mapper;
 
+import com.xentn.shpee.bean.product.TProduct;
 import com.xentn.shpee.bean.product.TProductGroup;
+import com.xentn.shpee.bean.product.TProductParameter;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -16,5 +18,11 @@ import java.util.List;
 public interface ProductMapper {
     List<TProductGroup> selectGroup(TProductGroup group);
     int insertGroup(TProductGroup group);
+
+    int insertProduct(TProduct product);
+    List<TProduct>  selectProduct(TProduct product);
+
+    int insertParameter(TProductParameter parameter);
+
 
 }
