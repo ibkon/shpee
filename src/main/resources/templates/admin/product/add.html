@@ -39,6 +39,12 @@
         </div>
     </div>
     <div  style="margin-top: 10px;">
+        <label class="layui-form-label">二级标签</label>
+        <div class="layui-input-block">
+            <input type="text" name="product_label" required  lay-verify="required" placeholder="请输入产品二级标签" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div  style="margin-top: 10px;">
         <label class="layui-form-label">产品参数</label>
         <div class="layui-input-block">
             <textarea name="product_doc" required id="product-parameter" placeholder="请输入产品参数" class="layui-textarea"></textarea>
@@ -74,6 +80,7 @@
                 data: {
                     product_line : data.field.product_line,
                     product_name : data.field.product_name,
+                    product_label : data.field.product_label,
                     product_doc  : layedit.getContent(parameter)
                 },
                 success:function (arg){

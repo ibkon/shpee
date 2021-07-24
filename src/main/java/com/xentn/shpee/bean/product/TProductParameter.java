@@ -12,6 +12,6 @@ import lombok.Data;
 public class TProductParameter {
     private String ProductParameterId;
     private String ProductParameterNextId;
-    private boolean KeyItem;
+    private boolean keyItem;
     private String ProductParameterText;
 }

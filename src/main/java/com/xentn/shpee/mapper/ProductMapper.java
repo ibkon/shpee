@@ -23,6 +23,7 @@ public interface ProductMapper {
     List<TProduct>  selectProduct(TProduct product);
 
     int insertParameter(TProductParameter parameter);
+    List<TProductParameter>  selectParameter(TProductParameter parameter);
 
 
 }

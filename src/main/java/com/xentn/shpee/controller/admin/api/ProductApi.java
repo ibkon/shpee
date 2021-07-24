@@ -49,35 +49,55 @@ public class ProductApi extends Supper {
             getProductMapper().insertGroup(group);
             return buildInfo(ShpeeInfoCode.SHPEE_SUCCESS,"success");
         }else if(type.equals("product")){
-            TProduct        product     = new TProduct();
+            TProduct            product     = new TProduct();
             TProductParameter   parameter   = new TProductParameter();
 
+            String  productGroupId      = request.getParameter("product_line");
+            String  productName         = request.getParameter("product_name");
+            String  productLabel         = request.getParameter("product_label");
+            String  productParameter    = request.getParameter("product_doc");
+
             parameter.setProductParameterId(getUUID());
-
-            String  productGroupId  = request.getParameter("product_line");
-            String  productName  = request.getParameter("product_name");
-            String  productParameter  = request.getParameter("product_doc");
-
-            if(productParameter.indexOf("<p>")==-1){
-                parameter.setProductParameterText(productParameter);
-                if(productParameter.indexOf("##")==0){
-                    parameter.setKeyItem(true);
-                }
-                parameter.setProductParameterNextId("null");
-            }else{
-                for(String ps:productParameter.split("<p>")){
-                    if(ps.equals(""))
-                        continue;
-                    System.out.println(ps.indexOf("##"));
-                    //parmeters.add(ps.replaceFirst("</p>",""));
-                }
-            }
+            product.setProductParameterId(parameter.getProductParameterId());
             product.setProductId(getUUID());
             product.setProductName(productName);
             product.setProductGroupId(productGroupId);
-            product.setProductParameterId(parameter.getProductParameterId());
-            //getProductMapper().insertProduct(product);
+            product.setProductLabel(productLabel);
 
+            if(productParameter.indexOf("<p>")==-1){
+                if(productParameter.indexOf("##")==0){
+                    parameter.setKeyItem(true);
+                    productParameter = productParameter.substring(2);
+                }
+                parameter.setProductParameterText(productParameter);
+                parameter.setProductParameterNextId("null");
+                System.out.println(parameter);
+            }else{
+                String[]    ps = productParameter.split("<p>");
+                for(int i=0;i<ps.length;i++){
+                    if(ps[i].equals(""))
+                        continue;
+                    parameter.setKeyItem(false);
+
+                    if(i>0&&parameter.getProductParameterNextId()!=null){
+                        parameter.setProductParameterId(parameter.getProductParameterNextId());
+                    }
+                    if(ps[i].indexOf("##")==0){
+                        parameter.setKeyItem(true);
+                        ps[i] = ps[i].substring(2);
+                    }
+                    if(i==ps.length-1){
+                        parameter.setProductParameterNextId("null");
+                    }else{
+                        parameter.setProductParameterNextId(getUUID());
+                    }
+                    parameter.setProductParameterText(ps[i].replaceAll("</p>",""));
+                    getProductMapper().insertParameter(parameter);
+                }
+
+            }
+            getProductMapper().insertProduct(product);
+            return buildInfo(ShpeeInfoCode.SHPEE_SUCCESS,"success");
         }
         return buildInfo(ShpeeInfoCode.SHPEE_ARGS_ERROR,"403");
     }

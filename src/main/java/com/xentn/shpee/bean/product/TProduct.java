@@ -2,6 +2,8 @@ package com.xentn.shpee.bean.product;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /***
  * @Description: product bean
  *
@@ -10,7 +12,7 @@ import lombok.Data;
  *
  */
 @Data
-public class TProduct {
+public class TProduct  implements Serializable {
     private String  productId;
     private String  productName;
     private String  productGroupId;

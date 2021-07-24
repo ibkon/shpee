@@ -20,4 +20,55 @@
         VALUES(#{productGroupId},#{productName})
     </insert>
     <!--group end-->
+    <!--product-->
+    <insert id="insertProduct" parameterType="com.xentn.shpee.bean.product.TProduct">
+        INSERT INTO T_PRODUCT(PRODUCT_ID,PRODUCT_NAME,PRODUCT_GROUP_ID,PRODUCT_LABEL,PRODUCT_PARAMETER_ID)
+        VALUES(#{productId},#{productName},#{productGroupId},#{productLabel},#{productParameterId})
+    </insert>
+    <select id="selectProduct" parameterType="com.xentn.shpee.bean.product.TProduct" resultType="com.xentn.shpee.bean.product.TProduct">
+        SELECT PRODUCT_ID,PRODUCT_NAME,PRODUCT_GROUP_ID,PRODUCT_LABEL,PRODUCT_PARAMETER_ID,ENABLED
+        FROM T_PRODUCT
+        <where>
+            <if test="productId!=null">
+                PRODUCT_ID = #{productId}
+            </if>
+            <if test="productName!=null">
+                AND PRODUCT_NAME = #{productName}
+            </if>
+            <if test="productGroupId!=null">
+                AND PRODUCT_GROUP_ID = #{productGroupId}
+            </if>
+            <if test="productLabel!=null">
+                AND PRODUCT_LABEL = #{productLabel}
+            </if>
+            <if test="productParameterId!=null">
+                AND PRODUCT_PARAMETER_ID = #{productParameterId}
+            </if>
+            <if test="enabled!=null">
+                AND ENABLED = #{enabled}
+            </if>
+        </where>
+    </select>
+    <!--product end-->
+    <!--product parameter-->
+    <insert id="insertParameter" parameterType="com.xentn.shpee.bean.product.TProduct">
+        INSERT INTO T_PRODUCT_PARAMETER(PRODUCT_PARAMETER_ID,PRODUCT_PARAMETER_NEXT_ID,KEY_ITEM,PRODUCT_PARAMETER_TEXT)
+        VALUES(#{ProductParameterId},#{ProductParameterNextId},#{keyItem},#{ProductParameterText})
+    </insert>
+    <select id="selectParameter" parameterType="com.xentn.shpee.bean.product.TProduct" resultType="com.xentn.shpee.bean.product.TProduct">
+        SELECT PRODUCT_PARAMETER_ID,PRODUCT_PARAMETER_NEXT_ID,KEY_ITEM,PRODUCT_PARAMETER_TEXT
+        FROM T_PRODUCT_PARAMETER
+        <where>
+            <if test="ProductParameterId!=null">
+                PRODUCT_PARAMETER_ID = #{ProductParameterId}
+            </if>
+            <if test="ProductParameterNextId!=null">
+                AND PRODUCT_PARAMETER_NEXT_ID = #{ProductParameterNextId}
+            </if>
+            <if test="keyItem!=null">
+                AND KEY_ITEM = #{keyItem}
+            </if>
+        </where>
+    </select>
+    <!--product parameter end-->
 </mapper>
