@@ -1,10 +1,133 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <style>
+        body{
+            padding: 10px;
+        }
+        .layui-input{
+            display: inline;
+            width: 80%;
+        }
+    </style>
 </head>
 <body>
+<div>
+    <div id="search">
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <div class="layui-input-block" style="text-align: center;margin: 0 auto;">
+                    <input type="shpee-search-val" name="title" required  lay-verify="required" autocomplete="off" class="layui-input" style="width: 70%">
+                    <button class="layui-btn layui-btn layui-btn-normal" lay-submit lay-filter="formDemo" style="width: 10%">搜索</button>
+                </div>
+            </div>
+            <div>
+                <label class="layui-form-label">搜索类别</label>
+                <input type="radio" name="s-type" value="product-name" title="产品名称" checked>
+                <input type="radio" name="s-type" value="product-label" title="产品分类">
+                <input type="radio" name="s-type" value="product-group" title="产品线">
+            </div>
+        </form>
+        <table id="product-list" lay-filter="pt-list"></table>
+        <script type="text/html" id="table-edit">
+            <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-xs" lay-event="show">查看参数</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        </script>
 
+        <script src="/layui/layui.js"></script>
+        <script>
+            //Demo
+            layui.use(['form','table'], function(){
+                var form = layui.form,
+                    table = layui.table,
+                    $ = layui.jquery;
+                var token = $("meta[name='_csrf']").attr("content");
+                var header = $("meta[name='_csrf_header']").attr("content");
+
+                $(document).ajaxSend(function (e, xhr, options) {
+                    xhr.setRequestHeader(header, token);
+                });
+                search();
+
+                //监听提交
+                form.on('submit(formDemo)', function(data){
+                    layer.msg(JSON.stringify(data.field));
+                    return false;
+                });
+
+                table.on('tool(pt-list)', function (obj) {
+                    var data = obj.data;
+                    if (obj.event == 'edit') {
+                        layer.msg('待开发');
+                    };
+                    //显示产品参数
+                    if (obj.event == 'show') {
+                        var index = layer.open({
+                            type: 2,
+                            title: '查看产品参数',
+                            shadeClose: true,
+                            shade: false,
+                            maxmin: true, //开启最大化最小化按钮
+                            area: ['560px', '440px'],
+                            content:"/admin/product/show-parameter?id="+data.id,
+                        });
+                    };
+                    if(obj.event == 'del'){
+                        var index = layer.open({
+                            content: '是否删除:'+data.name,
+                            yes: function(index, layero){
+                                $.ajax({
+                                    url: "/admin/api/product/del/product",
+                                    type: 'POST',
+                                    data: {
+                                        id : data.id,
+                                    },
+                                    success:function (arg){
+                                        if(arg.code === 0){
+                                            layer.msg('删除产品'+data.name+'成功');
+                                            setTimeout(function (){
+                                                window.location.reload();
+                                            },3000);
+                                        }
+                                        else{
+                                            layer.msg(arg.msg);
+                                        }
+                                    }
+                                });
+                                layer.close(index);
+                            }
+                        });
+                    }
+                })
+
+                //搜索并渲染产品查询表格
+                function search(){
+                    table.render({
+                        elem: '#product-list'
+                        ,height: 580
+                        ,url: '/admin/api/product/list/products'
+                        ,method: 'POST'
+                        ,page: true
+                        ,cols: [
+                            [
+                                { field: 'id', hide: 'true' }
+                                ,{field: 'groupName', title: '产品线'}
+                                ,{field: 'label', title: '产品分类',sort: true}
+                                ,{field: 'name', title: '产品名称'}
+                                ,{fixed: 'right', title:'操作', toolbar: '#table-edit', width:200}
+                            ]
+                        ]
+                    });
+                };
+            });
+        </script>
+    </div>
+</div>
 </body>
 </html>

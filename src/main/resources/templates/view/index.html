@@ -1,12 +1,64 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>index</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <style>
+        .search-box{
+            text-align: center;
+            margin-top: 12%;
+        }
+        .layui-input{
+            width: 40%;
+            display: inline;
+            height: 56px;
+            width: 50%;
+            font-size: 3em;
+            border: 2px solid #38f;
+            border-radius: 25px 0 0 25px ;
+            text-indent: 1em;
+        }
+        .layui-btn{
+            position: absolute;
+            height: 56px;
+            border-radius: 0 25px 25px 0;
+        }
+    </style>
 </head>
 <body>
-<h1>index</h1>
-<a href="/admin">控制台</a>
-<p sec:authorize="isAuthenticated()">已登录</p>
+    <ul class="layui-nav" lay-filter="">
+        <li class="layui-nav-item layui-this"><a href="/"><i class="layui-icon">&#xe68e;</i></a></li>
+        <li sec:authorize="hasRole('ROLE_CLOUD_DISK')" class="layui-nav-item"><a href="">云盘</a></li>
+        <li sec:authorize="hasRole('ROLE_SYSTEM_ADMIN')" class="layui-nav-item"><a href="/admin">后台管理</a></li>
+        <li sec:authorize="!isAuthenticated()" class="layui-nav-item" style="float: right;"><a href="/login">登录</a></li>
+        <li sec:authorize="isAuthenticated()" class="layui-nav-item" style="float: right;"><a href="/logout">登出</a></li>
+    </ul>
+    <div class="search-box">
+        <form class="layui-form" action="">
+            <input type="search" name="search_txt" required  lay-verify="required" autocomplete="off" class="layui-input">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="search">立即提交</button>
+        </form>
+    </div>
+    <script src="/layui/layui.js"></script>
+    <script>
+        layui.use('element', function() {
+            var element = layui.element,
+                form = layui.form;
+            form.on('submit(search)', function(data){
+                layer.open({
+                    type: 2,
+                    title: '搜索：'+data.field.search_txt,
+                    maxmin: true,
+                    area: ['1280px', '660px'],
+                    content: "https://cn.bing.com/search?q="+data.field.search_txt
+                })
+                return false;
+            });
+        })
+    </script>
 </body>
 </html>

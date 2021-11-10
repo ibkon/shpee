@@ -22,7 +22,7 @@
         <div class="layui-input-block">
             <select name="product_line" lay-verify="required">
                 <option value=""></option>
-                <option th:each="pls:${product_lines}" th:value="${pls.productGroupId}" th:text="${pls.productName}"></option>
+                <option th:each="pls:${product_lines}" th:value="${pls.productGroupId}" th:text="${pls.getProductGroupName}"></option>
             </select>
         </div>
     </div>
@@ -47,8 +47,11 @@
     <div  style="margin-top: 10px;">
         <label class="layui-form-label">产品参数</label>
         <div class="layui-input-block">
-            <textarea name="product_doc" required id="product-parameter" placeholder="请输入产品参数" class="layui-textarea"></textarea>
+            <textarea contenteditable="true" name="product_doc" required id="product-parameter" placeholder="请输入产品参数" class="layui-textarea"></textarea>
         </div>
+    </div>
+    <div  style="margin-top: 10px;text-align: center;">
+        <label style="color: #ff0000">文本请右键‘粘贴为纯文本’形式粘贴，否则无法处理</label>
     </div>
     <div class="layui-form-item" style="margin-top: 10px;">
         <div class="layui-input-block">
@@ -73,25 +76,34 @@
             height: 360,
             hideTool : ['strong','italic','underline','del','|','left','center','right','link','unlink','face','image','help']
         });
+        var isClick = true;
         form.on('submit(formDemo)', function(data){
-            $.ajax({
-                url: "/admin/api/product/add/product",
-                type: 'POST',
-                data: {
-                    product_line : data.field.product_line,
-                    product_name : data.field.product_name,
-                    product_label : data.field.product_label,
-                    product_doc  : layedit.getContent(parameter)
-                },
-                success:function (arg){
-                    if(arg.code === 0){
-                        layer.msg('添加产品成功');
+            if(isClick==false){
+                setTimeout(function (){
+                    layer.msg('点击过快');
+                    isClick = true;
+                },800);
+            }else{
+                $.ajax({
+                    url: "/admin/api/product/add/product",
+                    type: 'POST',
+                    data: {
+                        product_line : data.field.product_line,
+                        product_name : data.field.product_name,
+                        product_label : data.field.product_label,
+                        product_doc  : layedit.getContent(parameter)
+                    },
+                    success:function (arg){
+                        if(arg.code === 0){
+                            layer.msg('添加产品成功');
+                        }
+                        else{
+                            layer.msg(arg.msg);
+                        }
                     }
-                    else{
-                        layer.msg('添加产品\''+arg.msg+'\'失败');
-                    }
-                }
-            });
+                });
+                isClick = false;
+            }
             return false;
         });
 

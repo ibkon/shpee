@@ -4,20 +4,20 @@
     <cache/>
     <!--group-->
     <select id="selectGroup" parameterType="com.xentn.shpee.bean.product.TProductGroup" resultType="com.xentn.shpee.bean.product.TProductGroup">
-        SELECT PRODUCT_GROUP_ID,PRODUCT_NAME
+        SELECT PRODUCT_GROUP_ID,PRODUCT_GROUP_NAME
         FROM T_PRODUCT_GROUP
         <where>
             <if test="productGroupId!=null">
                 PRODUCT_GROUP_ID = #{productGroupId}
             </if>
-            <if test="productName!=null">
-                PRODUCT_NAME = #{productName}
+            <if test="productGroupName!=null">
+                PRODUCT_GROUP_NAME = #{productGroupName}
             </if>
         </where>
     </select>
     <insert id="insertGroup" parameterType="com.xentn.shpee.bean.product.TProductGroup">
-        INSERT INTO T_PRODUCT_GROUP(PRODUCT_GROUP_ID,PRODUCT_NAME)
-        VALUES(#{productGroupId},#{productName})
+        INSERT INTO T_PRODUCT_GROUP(PRODUCT_GROUP_ID,PRODUCT_GROUP_NAME)
+        VALUES(#{productGroupId},#{productGroupName})
     </insert>
     <!--group end-->
     <!--product-->
@@ -49,25 +49,35 @@
             </if>
         </where>
     </select>
+    <select id="selectProductById" parameterType="string" resultType="com.xentn.shpee.bean.product.TProduct">
+        SELECT PRODUCT_ID,PRODUCT_NAME,PRODUCT_GROUP_ID,PRODUCT_LABEL,PRODUCT_PARAMETER_ID,ENABLED
+        FROM T_PRODUCT
+        WHERE   PRODUCT_ID = #{pid} AND ENABLED = true
+    </select>
+    <update id="updateProduct" parameterType="com.xentn.shpee.bean.product.TProduct">
+        UPDATE T_PRODUCT
+        SET PRODUCT_NAME=#{productName},PRODUCT_GROUP_ID=#{productGroupId},PRODUCT_LABEL=#{productLabel},PRODUCT_PARAMETER_ID=#{productParameterId},ENABLED=#{enabled}
+        WHERE   PRODUCT_ID=#{productId}
+    </update>
     <!--product end-->
     <!--product parameter-->
     <insert id="insertParameter" parameterType="com.xentn.shpee.bean.product.TProduct">
         INSERT INTO T_PRODUCT_PARAMETER(PRODUCT_PARAMETER_ID,PRODUCT_PARAMETER_NEXT_ID,KEY_ITEM,PRODUCT_PARAMETER_TEXT)
         VALUES(#{ProductParameterId},#{ProductParameterNextId},#{keyItem},#{ProductParameterText})
     </insert>
-    <select id="selectParameter" parameterType="com.xentn.shpee.bean.product.TProduct" resultType="com.xentn.shpee.bean.product.TProduct">
+    <select id="selectParameter" parameterType="com.xentn.shpee.bean.product.TProductParameter" resultType="com.xentn.shpee.bean.product.TProductParameter">
         SELECT PRODUCT_PARAMETER_ID,PRODUCT_PARAMETER_NEXT_ID,KEY_ITEM,PRODUCT_PARAMETER_TEXT
         FROM T_PRODUCT_PARAMETER
         <where>
             <if test="ProductParameterId!=null">
                 PRODUCT_PARAMETER_ID = #{ProductParameterId}
             </if>
-            <if test="ProductParameterNextId!=null">
+<!--            <if test="ProductParameterNextId!=null">
                 AND PRODUCT_PARAMETER_NEXT_ID = #{ProductParameterNextId}
             </if>
             <if test="keyItem!=null">
                 AND KEY_ITEM = #{keyItem}
-            </if>
+            </if>-->
         </where>
     </select>
     <!--product parameter end-->

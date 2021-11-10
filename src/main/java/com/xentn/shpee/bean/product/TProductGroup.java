@@ -14,5 +14,5 @@ import java.io.Serializable;
 @Data
 public class TProductGroup  implements Serializable {
     private String productGroupId;
-    private String productName;
+    private String productGroupName;
 }

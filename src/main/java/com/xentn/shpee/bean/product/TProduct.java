@@ -18,5 +18,5 @@ public class TProduct  implements Serializable {
     private String  productGroupId;
     private String  productLabel;
     private String  productParameterId;
-    private boolean enabled;
+    private boolean enabled = true;
 }

@@ -9,15 +9,16 @@ spring:
       max-request-size: 10GB
 
   datasource:
-    username: root
-    password: 654321^dcba
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/mwork_dev?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: shpee
+    password: shpee
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://192.168.229.100:3306/shpee_dev?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
     type: com.zaxxer.hikari.HikariDataSource
     schema: classpath:config/create.sql
     initialization-mode: always
+
 mybatis:
-  mapper-locations: classpath:config/*_mapper.xml
+  mapper-locations: classpath:config/*mapper.xml
   type-aliases-package: com.xentn.shpee.mapper
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

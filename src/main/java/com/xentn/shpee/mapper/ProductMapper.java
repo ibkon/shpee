@@ -21,6 +21,8 @@ public interface ProductMapper {
 
     int insertProduct(TProduct product);
     List<TProduct>  selectProduct(TProduct product);
+    TProduct    selectProductById(String pid);
+    int updateProduct(TProduct product);
 
     int insertParameter(TProductParameter parameter);
     List<TProductParameter>  selectParameter(TProductParameter parameter);

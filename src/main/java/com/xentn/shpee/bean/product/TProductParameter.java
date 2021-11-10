@@ -1,6 +1,9 @@
 package com.xentn.shpee.bean.product;
 
 import lombok.Data;
+
+import java.io.Serializable;
+
 /***
  * @Description: TODO
  *
@@ -9,7 +12,7 @@ import lombok.Data;
  * @version: 1.0
  */
 @Data
-public class TProductParameter {
+public class TProductParameter implements Serializable {
     private String ProductParameterId;
     private String ProductParameterNextId;
     private boolean keyItem;

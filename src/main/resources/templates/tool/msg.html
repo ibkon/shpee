@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>show msg</title>
+    <style>
+        body{
+            font-family: 微软雅黑;
+        }
+        .shpee-err{
+            color: #ff0000;
+            text-align: center;
+            padding-top: 60px;
+        }
+    </style>
+</head>
+<body>
+    <div th:switch="${type}" style="width: 100%">
+        <div th:case="list">
+            <h2 th:text="${title}"></h2>
+            <ol style="list-style: decimal">
+                <li th:each="item:${parameterList}" th:text="${item}"></li>
+            </ol>
+        </div>
+        <h1 th:case="err" th:text="${msg}" class="shpee-err"></h1>
+        <h1 th:case="*" th:text="${msg}" class="shpee-err"></h1>
+    </div>
+</body>
+</html>

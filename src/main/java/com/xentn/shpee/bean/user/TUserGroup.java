@@ -2,6 +2,8 @@ package com.xentn.shpee.bean.user;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /***
  * @Description: user group
  *
@@ -10,7 +12,7 @@ import lombok.Data;
  * @version: 1.0
  */
 @Data
-public class TUserGroup {
+public class TUserGroup implements Serializable {
     private String groupId;
     private String groupAdminUserId;
     private String groupName;
