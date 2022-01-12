@@ -116,4 +116,8 @@ public class Supper {
         }
         return null;
     }
+
+    public String decode(String str){
+        return str;
+    }
 }

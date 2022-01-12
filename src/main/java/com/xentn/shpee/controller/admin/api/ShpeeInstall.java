@@ -39,8 +39,9 @@ public class ShpeeInstall extends Supper {
     @ResponseBody
     @PostMapping("/admin/install")
     public Map<String,Object> install(HttpServletRequest request){
+        System.err.println("in admin install.");
         if(getConfigMapper().getConfig("shpee_name")!=null){
-            return buildInfo(ShpeeInfoCode.SHPEE_PROHIBITED_OPERATION,"404");
+            return buildInfo(ShpeeInfoCode.SHPEE_PROHIBITED_OPERATION,"站点已注册");
         }
         String  shpeeName   = request.getParameter("shpee_name");
         String  adminUser   = request.getParameter("admin_user_name");

@@ -6,26 +6,89 @@
     <meta name="_csrf" th:content="${_csrf.token}">
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <style>
+        .shpee-title{
+            text-align: center;
+            color: #38f;
+            font-size: 3em;
+            padding-bottom: 1em;
+            font-weight: bold;
+        }
+        .shpee-input-box{
+            padding: 5em;
+        }
+        .shpee-input{
+            padding: 0em 1em 1em 0em;
+        }
+        .layui-form-label{
+            width: 18%;
+            font-size: 1em;
+        }
+        .layui-input{
+            width: 75%;
+            font-size: 1em;
+        }
+    </style>
 </head>
 <body>
-<form method="get" action="/admin/install">
-    <h1>初始化站点</h1>
-    站点名<input name="shpee_name" type="text"><br>
-    管理员用户名<input name="admin_user_name" type="text"><br>
-    管理员密码<input name="password" type="password"><br>
-    管理员邮箱<input name="email" type="email"><br>
-    <button type="submit">安装</button>
-</form>
-
+<div class="shpee-input-box">
+    <div class="shpee-title">站点初始化</div>
+    <form class="layui-form" action="">
+        <div class="shpee-input">
+            <label class="layui-form-label">请输入站点名称</label>
+            <input type="text" name="shpee_name" required  lay-verify="required" placeholder="请输入站点名" autocomplete="off" class="layui-input">
+        </div>
+        <div class="shpee-input">
+            <label class="layui-form-label">请输入管理用户名</label>
+            <input type="text" name="admin_user_name" required  lay-verify="required" placeholder="请输入管理用户名" autocomplete="off" class="layui-input">
+        </div>
+        <div class="shpee-input">
+            <label class="layui-form-label">请输入管理用户邮箱</label>
+            <input type="email" name="email" required  lay-verify="required" placeholder="请输入管理用户邮箱" autocomplete="off" class="layui-input">
+        </div>
+        <div class="shpee-input">
+            <label class="layui-form-label">请输入管理用户密码</label>
+            <input type="password" name="password" required lay-verify="required" placeholder="请输入管理用户名密码" autocomplete="off" class="layui-input">
+        </div>
+        <div style="margin: 0 auto;width: 88%">
+            <button class="layui-btn layui-btn-normal layui-btn-fluid" lay-submit lay-filter="install">安装</button>
+        </div>
+    </form>
+</div>
 <script src="/layui/layui.js"></script>
+<script src="/js/encode.js"></script>
 <script>
-    layui.use('upload', function () {
+    layui.use('form', function () {
         var $ = layui.jquery
-            , upload = layui.upload;
+            , form = layui.form;
         var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
         $(document).ajaxSend(function (e, xhr, options) {
             xhr.setRequestHeader(header, token);
+        });
+        form.on('submit(install)', function(data){
+            $.ajax({
+                url: "/admin/install",
+                type: 'POST',
+                data: {
+                    shpee_name : shpeeEncode(data.field.shpee_name),
+                    admin_user_name : shpeeEncode(data.field.admin_user_name),
+                    email : shpeeEncode(data.field.email),
+                    password  : shpeeEncode(data.field.password)
+                },
+                success:function (arg){
+                    if(arg.code === 0){
+                        layer.msg(arg.msg);
+                        setTimeout(function (){
+                            window.location='/login';
+                        },2000);
+                    }
+                    else{
+                        layer.msg(arg.msg);
+                    }
+                }
+            });
+            return false;
         });
     })
 </script>

@@ -34,7 +34,8 @@ public class MainController extends Supper {
             if(!isInitial){
                 return "admin/install";
             }
-            return "view/index";
+            return "admin/install";
+            //return "view/index";
         }
         if(getShpeeCache().get("user-group-id")==null){
             List<TUserGroup> userGroups  =    getUserMapper().selectUserGroups(null);
@@ -52,6 +53,7 @@ public class MainController extends Supper {
             System.err.println(user);
             System.err.println(cache.get(user.getUserGroup()));
         }
-        return "view/index";
+        return "admin/install";
+        //return "view/index";
     }
 }
